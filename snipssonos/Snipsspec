@@ -1,0 +1,45 @@
+package_name: snipssonos
+class_name: SnipsSonos
+description: Sonos skill for Snips
+intents:
+  - intent: radioOn
+    action: >
+      {%
+      if intent.radio_name != None:
+        skill.turn_on_radio(intent.radio_name)
+      %}
+  - intent: speakerOff
+    action: "pause_sonos"
+  - intent: volumeUp
+    action: >
+      {% skill.volume_up(intent.volume_higher) %}
+  - intent: volumeDown
+    action: >
+      {% skill.volume_down(intent.volume_lower) %}
+  - intent: playPlaylist
+    action: >
+      {%
+      skill.play_playlist(intent.playlist_name, _shuffle=(intent.playlist_lecture_mode is not None and intent.playlist_lecture_mode == "shuffle"))
+      %}
+  - intent: playArtist
+    action: >
+      {% skill.play_artist(intent.artist_name) %}
+  - intent: playSong
+    action: >
+      {% skill.play_song(intent.song_name) %}
+  - intent: playAlbum
+    action: >
+      {% skill.play_album(intent.album_name, _shuffle=(intent.album_lecture_mode is not None and intent.album_lecture_mode == "shuffle")) %}
+  - intent: resumeMusic
+    action: "play"
+  - intent: nextSong
+    action: "play_next_item_in_queue"
+  - intent: previousSong
+    action: "play_previous_item_in_queue"
+  - intent: addSong
+    action: "add_song"
+  - intent: getInfos
+    action: >
+      {%
+        tts_service.speak("This is {} by {} on the album {}".format(*skill.get_info()))
+      %}
