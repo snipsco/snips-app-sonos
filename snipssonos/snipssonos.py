@@ -47,6 +47,7 @@ class SnipsSonos:
         self.max_volume = MAX_VOLUME
         if spotify_refresh_token is not None:
             self.spotify = SpotifyClient(spotify_refresh_token)
+        self.previous_volume = None
 
     def pause_sonos(self):
         if self.device is None:
@@ -76,6 +77,24 @@ class SnipsSonos:
             return
         self.device.volume = volume_value
         self.device.play()
+
+    def set_to_low_volume(self):
+        if self.device.get_current_transport_info()['current_transport_state'] != "PLAYING":
+            return None
+        if self.device is None:
+            return
+        self.previous_volume = self.device.volume
+        self.device.volume = min(6, self.device.volume)
+        self.device.play()
+
+    def set_to_previous_volume(self):
+        if self.device is None:
+            return
+        if self.previous_volume is None:
+            return None
+        self.device.volume = self.previous_volume
+        if self.device.get_current_transport_info()['current_transport_state'] == "PLAYING":
+            self.device.play()
 
     def stop_sonos(self):
         if self.device is None:

@@ -1,6 +1,17 @@
 package_name: snipssonos
 class_name: SnipsSonos
 description: Sonos skill for Snips
+notifications:
+  - name: start_listening
+    action: |
+      {%
+      skill.set_to_low_volume()
+      %}
+  - name: done_listening
+    action: |
+      {%
+      skill.set_to_previous_volume()
+      %}
 intents:
   - intent: radioOn
     action: >
