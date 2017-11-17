@@ -9,7 +9,7 @@ notifications:
       %}
 intents:
   - intent: radioOn
-    action: >
+    action: |
       {%
       if intent.radio_name != None:
         skill.turn_on_radio(intent.radio_name)
@@ -18,39 +18,39 @@ intents:
   - intent: speakerInterrupt
     action: "pause_sonos"
   - intent: volumeUp
-    action: >
+    action: |
       {% skill.set_to_previous_volume(); skill.volume_up(intent.volume_higher) %}
   - intent: volumeDown
-    action: >
+    action: |
       {% skill.set_to_previous_volume(); skill.volume_down(intent.volume_lower) %}
   - intent: playPlaylist
-    action: >
+    action: |
       {%
       skill.play_playlist(intent.playlist_name, _shuffle=(intent.playlist_lecture_mode is not None and intent.playlist_lecture_mode == "shuffle")); skill.set_to_previous_volume()
       %}
   - intent: playArtist
-    action: >
+    action: |
       {% skill.play_artist(intent.artist_name); skill.set_to_previous_volume() %}
   - intent: playSong
-    action: >
+    action: |
       {% skill.play_song(intent.song_name); skill.set_to_previous_volume() %}
   - intent: playAlbum
-    action: >
+    action: |
       {% skill.play_album(intent.album_name, _shuffle=(intent.album_lecture_mode is not None and intent.album_lecture_mode == "shuffle")); skill.set_to_previous_volume() %}
   - intent: resumeMusic
-    action: >
+    action: |
       {% skill.play(); skill.set_to_previous_volume() %}
   - intent: nextSong
-    action: >
+    action: |
       {% skill.play_next_item_in_queue(); skill.set_to_previous_volume() %}
   - intent: previousSong
-    action: >
+    action: |
       {% skill.play_previous_item_in_queue(); skill.set_to_previous_volume() %}
   - intent: addSong
-    action: >
+    action: |
       {% skill.add_song(); skill.set_to_previous_volume() %}
   - intent: getInfos
-    action: >
+    action: |
       {%
         skill.set_to_previous_volume(); tts_service.speak("This is {} by {} on the album {}".format(*skill.get_info()))
       %}
