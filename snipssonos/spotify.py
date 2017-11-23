@@ -44,21 +44,28 @@ class SpotifyClient():
         # TODO: get all playlists if there are more than 50 by looping
         # and using the offset parameters
         self.refresh_access_token()
-        _r = requests.get(
-            "https://api.spotify.com/v1/me/playlists",
-            params={
-                'limit': 50
-            },
-            headers={
-                "Authorization": "Bearer {}".format(self.access_token),
-            })
-        if 'items' in _r.json():
-            items = _r.json()['items']
-        else:
-            items = []
-        self.user_playlists = {
-            playlist['name'].lower(): playlist for
-            playlist in items}
+        self.user_playlists = {}
+        n_found_playlists = 0
+        while True:
+            _r = requests.get(
+                "https://api.spotify.com/v1/me/playlists",
+                params={
+                    'limit': 50,
+                    'offset': n_found_playlists,
+                },
+                headers={
+                    "Authorization": "Bearer {}".format(self.access_token),
+                })
+            if 'items' in _r.json():
+                items = _r.json()['items']
+            else:
+                items = []
+            self.user_playlists.update({
+                playlist['name'].lower(): playlist for
+                playlist in items})
+            if len(self.user_playlists) == n_found_playlists:
+                break
+            n_found_playlists = len(self.user_playlists)
 
     def get_tracks_from_playlist(self, name):
         self.refresh_access_token()
@@ -78,31 +85,39 @@ class SpotifyClient():
             return _r.json()['items']
         return None
 
-    def _dump_favorite_artists(self, n_artists, output_name):
+    def dump_favorite(self, mode, n_items, output_name):
+        if mode not in ['artists', 'tracks']:
+            raise ValueError("mode argument should be 'artists' or 'tracks")
         self.refresh_access_token()
-        all_artists_names = []
-        n_found_artists = 0
-        while n_found_artists < n_artists:
-            _r = requests.get(
-                'https://api.spotify.com/v1/me/top/artists',
-                params={
-                    'limit': min(50, n_artists - n_found_artists),
-                    # 50 is the maximum
-                    'offset': n_found_artists
-                },
-                headers={
-                    "Authorization": "Bearer {}".format(self.access_token),
-                }
-            )
-            all_artists_names.extend(
-                [item['name'] for item in _r.json()['items']])
-            if len(all_artists_names) == n_found_artists:
-                print "Maximum number of artists reached: {}".format(
-                    n_found_artists)
-                break
-            n_found_artists = len(all_artists_names)
+        all_items = set()
+        for time_range in ['long_term', 'medium_term', 'short_term']:
+            current_items = []
+            n_found_items = 0
+            while n_found_items <= n_items:
+                _r = requests.get(
+                    'https://api.spotify.com/v1/me/top/{}'.format(mode),
+                    params={
+                        'limit': min(50, n_items - n_found_items),
+                        # 50 is the maximum
+                        'offset': n_found_items,
+                        'time_range': time_range
+                    },
+                    headers={
+                        "Authorization": "Bearer {}".format(self.access_token),
+                    }
+                )
+                current_items.extend(
+                    [item['name'] for item in _r.json()['items']])
+                if len(current_items) == n_found_items:
+                    break
+                n_found_items = len(current_items)
+            all_items.update(current_items)
         with codecs.open(output_name, 'w', 'utf-8') as f:
-            f.write(u"\n".join(all_artists_names))
+            f.write(u"\n".join(all_items))
+
+    def dump_playlists(self, output_name):
+        with codecs.open(output_name, 'w', 'utf-8') as f:
+            f.write(u"\n".join(self.user_playlists.keys()))
 
     def get_top_tracks_from_artist(self, artist):
         self.refresh_access_token()
