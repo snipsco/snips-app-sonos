@@ -11,32 +11,62 @@ intents:
   - intent: radioOn
     action: |
       {%
-      if intent.radio_name != None:
-        skill.turn_on_radio(intent.radio_name)
+      if len(snips.intent.radio_name) > 0:
+        radio_name = snips.intent.radio_name[0]
+        skill.turn_on_radio(radio_name)
       skill.set_to_previous_volume()
       %}
   - intent: speakerInterrupt
     action: "pause_sonos"
   - intent: volumeUp
     action: |
-      {% skill.set_to_previous_volume(); skill.volume_up(intent.volume_higher) %}
+      {%
+      skill.set_to_previous_volume()
+      if len(snips.intent.volume_higher) > 0:
+        volume_higher = snips.intent.volume_higher[0]
+        skill.volume_up(volume_higher)
+      %}
   - intent: volumeDown
     action: |
-      {% skill.set_to_previous_volume(); skill.volume_down(intent.volume_lower) %}
+      {%
+      skill.set_to_previous_volume()
+      if len(snips.intent.volume_lower) > 0:
+        volume_lower = snips.intent.volume_lower[0]
+        skill.volume_down(volume_lower)
+      %}
   - intent: playPlaylist
     action: |
       {%
-      skill.play_playlist(intent.playlist_name, _shuffle=(intent.playlist_lecture_mode is not None and intent.playlist_lecture_mode == "shuffle")); skill.set_to_previous_volume()
+      if len(snips.intent.playlist_name) > 0 and len(snips.intent.playlist_lecture_mode) > 0:
+        playlist_name = snips.intent.playlist_name[0]
+        playlist_lecture_mode = snips.intent.playlist_lecture_mode
+        skill.play_playlist(playlist_name, _shuffle=(playlist_lecture_mode is not None and playlist_lecture_mode == "shuffle"))
+      skill.set_to_previous_volume()
       %}
   - intent: playArtist
     action: |
-      {% skill.play_artist(intent.artist_name); skill.set_to_previous_volume() %}
+      {%
+      if len(snips.intent.artist_name) > 0:
+        artist_name = snips.intent.artist_name[0]
+        skill.play_artist(artist_name)
+      skill.set_to_previous_volume()
+      %}
   - intent: playSong
     action: |
-      {% skill.play_song(intent.song_name); skill.set_to_previous_volume() %}
+      {%
+      if len(snips.intent.song_name):
+        skill.play_song(snips.intent.song_name)
+      skill.set_to_previous_volume()
+      %}
   - intent: playAlbum
     action: |
-      {% skill.play_album(intent.album_name, _shuffle=(intent.album_lecture_mode is not None and intent.album_lecture_mode == "shuffle")); skill.set_to_previous_volume() %}
+      {%
+      if len(snips.intent.album_name) > 0 and len(snips.intent.album_lecture_mode):
+        album_name = snips.intent.album_name[0]
+        album_lecture_mode = snips.intent.album_lecture_mode[0]
+        skill.play_album(album_name, _shuffle=(album_lecture_mode is not None and album_lecture_mode == "shuffle"))
+        skill.set_to_previous_volume()
+      %}
   - intent: resumeMusic
     action: |
       {% skill.play(); skill.set_to_previous_volume() %}
