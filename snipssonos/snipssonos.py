@@ -21,7 +21,7 @@ GAIN = 4
 class SnipsSonos:
     """ Sonos skill for Snips. """
 
-    def __init__(self, spotify_refresh_token=None, speaker_index=None):
+    def __init__(self, spotify_refresh_token=None, speaker_index=None, locale=None):
         # find the device
         devices = soco.discover()
         if devices is None or len(list(devices)) == 0:
