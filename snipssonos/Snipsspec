@@ -11,9 +11,10 @@ intents:
   - intent: radioOn
     action: |
       {%
-      if len(snips.intent.radio_name) > 0:
+      if len(snips.intent.radio_name):
         radio_name = snips.intent.radio_name[0]
         skill.turn_on_radio(radio_name)
+
       skill.set_to_previous_volume()
       %}
   - intent: speakerInterrupt
@@ -22,7 +23,7 @@ intents:
     action: |
       {%
       skill.set_to_previous_volume()
-      if len(snips.intent.volume_higher) > 0:
+      if snips.intent.volume_higher:
         volume_higher = snips.intent.volume_higher[0]
         skill.volume_up(volume_higher)
       %}
@@ -30,23 +31,24 @@ intents:
     action: |
       {%
       skill.set_to_previous_volume()
-      if len(snips.intent.volume_lower) > 0:
+      if len(snips.intent.volume_lower):
         volume_lower = snips.intent.volume_lower[0]
         skill.volume_down(volume_lower)
       %}
   - intent: playPlaylist
     action: |
       {%
-      if len(snips.intent.playlist_name) > 0 and len(snips.intent.playlist_lecture_mode) > 0:
+      if len(snips.intent.playlist_name):
         playlist_name = snips.intent.playlist_name[0]
-        playlist_lecture_mode = snips.intent.playlist_lecture_mode
-        skill.play_playlist(playlist_name, _shuffle=(playlist_lecture_mode is not None and playlist_lecture_mode == "shuffle"))
+        #playlist_lecture_mode = snips.intent.playlist_lecture_mode[0] if len(snips.intent.playlist_lecture_mode) else None
+        skill.play_playlist(playlist_name, _shuffle=(len(snips.intent.playlist_lecture_mode) and snips.intent.playlist_lecture_mode[0] == "shuffle"))
+
       skill.set_to_previous_volume()
       %}
   - intent: playArtist
     action: |
       {%
-      if len(snips.intent.artist_name) > 0:
+      if len(snips.intent.artist_name):
         artist_name = snips.intent.artist_name[0]
         skill.play_artist(artist_name)
       skill.set_to_previous_volume()
@@ -61,11 +63,11 @@ intents:
   - intent: playAlbum
     action: |
       {%
-      if len(snips.intent.album_name) > 0 and len(snips.intent.album_lecture_mode):
+      if len(snips.intent.album_name):
         album_name = snips.intent.album_name[0]
-        album_lecture_mode = snips.intent.album_lecture_mode[0]
-        skill.play_album(album_name, _shuffle=(album_lecture_mode is not None and album_lecture_mode == "shuffle"))
-        skill.set_to_previous_volume()
+        skill.play_album(album_name, _shuffle=(len(snips.intent.album_lecture_mode) and snips.intent.album_lecture_mode[0] == "shuffle"))
+
+      skill.set_to_previous_volume()
       %}
   - intent: resumeMusic
     action: |
