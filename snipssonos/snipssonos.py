@@ -21,7 +21,7 @@ GAIN = 4
 class SnipsSonos:
     """ Sonos skill for Snips. """
 
-    def __init__(self, spotify_refresh_token=None, speaker_index=None, locale=None):
+    def __init__(self, spotify_refresh_token=None, speaker_index=None, locale=None, use_local_library=False):
         # find the device
         devices = soco.discover()
         if devices is None or len(list(devices)) == 0:
@@ -48,6 +48,10 @@ class SnipsSonos:
         if spotify_refresh_token is not None:
             self.spotify = SpotifyClient(spotify_refresh_token)
         self.previous_volume = None
+
+        # include option to use local library
+        if use_local_library = True
+            self.mylibrary = soco.music_library.MusicLibrary(self.device)
 
     def pause_sonos(self):
         if self.device is None:
