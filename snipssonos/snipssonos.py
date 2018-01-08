@@ -21,21 +21,26 @@ GAIN = 4
 class SnipsSonos:
     """ Sonos skill for Snips. """
 
-    def __init__(self, spotify_refresh_token=None, speaker_index=None, locale=None, use_local_library=False):
+    def __init__(self, spotify_refresh_token=None, speaker_index=None, locale=None, use_local_library=False, sonos_ip='192.168.1.72'):
         # find the device
         devices = soco.discover()
         if devices is None or len(list(devices)) == 0:
             time.sleep(1)
             devices = soco.discover()
         if devices is None or len(list(devices)) == 0:
-            return
-        try:
-            speaker_index = int(speaker_index)
-        except Exception:
-            speaker_index = 0
-        if speaker_index >= len(list(devices)):
-            speaker_index = 0
-        self.device = list(devices)[speaker_index]
+            # if no device discoverd try to connect to ip
+            if sonos_ip is not None:
+                self.device = soco.core.SoCo(sonos_ip)
+            else:
+                return
+        else:
+            try:
+                speaker_index = int(speaker_index)
+            except Exception:
+                speaker_index = 0
+            if speaker_index >= len(list(devices)):
+                speaker_index = 0
+            self.device = list(devices)[speaker_index]
         try:
             self.tunein_service = MusicService('TuneIn')
         except Exception:
@@ -50,7 +55,7 @@ class SnipsSonos:
         self.previous_volume = None
 
         # include option to use local library
-        if use_local_library = True
+        if use_local_library is True:
             self.mylibrary = soco.music_library.MusicLibrary(self.device)
 
     def pause_sonos(self):
@@ -74,7 +79,7 @@ class SnipsSonos:
         level = int(level) if level is not None else 1
         self.device.volume -= GAIN * level
         self.device.play()
-        print self.device.volume
+        print(self.device.volume)
 
     def set_volume(self, volume_value):
         if self.device is None:
@@ -191,7 +196,7 @@ class SnipsSonos:
         try:
             self.device.next()
         except Exception:
-            print "Failed to play next item, maybe last song?"
+            print("Failed to play next item, maybe last song?")
 
     def play_previous_item_in_queue(self):
         if self.device is None:
@@ -199,7 +204,7 @@ class SnipsSonos:
         try:
             self.device.previous()
         except Exception:
-            print "Failed to play previous item, maybe first song?"
+            print("Failed to play previous item, maybe first song?")
 
     def add_from_service(self, item_id, service, is_track=True):
         # The DIDL item_id is made of the track_id (url escaped), but with an 8

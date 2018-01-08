@@ -79,7 +79,7 @@ class SpotifyClient():
                     "Authorization": "Bearer {}".format(self.access_token),
                 })
         except KeyError:
-            print "Unknown playlist {}".format(name)
+            print("Unknown playlist {}".format(name))
             return None
         if 'items' in _r.json():
             return _r.json()['items']
