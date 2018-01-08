@@ -21,19 +21,18 @@ GAIN = 4
 class SnipsSonos:
     """ Sonos skill for Snips. """
 
-    def __init__(self, spotify_refresh_token=None, speaker_index=None, locale=None, use_local_library=False, sonos_ip='192.168.1.72'):
-        # find the device
-        devices = soco.discover()
-        if devices is None or len(list(devices)) == 0:
-            time.sleep(1)
-            devices = soco.discover()
-        if devices is None or len(list(devices)) == 0:
-            # if no device discoverd try to connect to ip
-            if sonos_ip is not None:
+    def __init__(self, spotify_refresh_token=None, speaker_index=None, locale=None, use_local_library=False, sonos_ip=None):
+        # if ip is provided try to connect
+        if sonos_ip is not None:
                 self.device = soco.core.SoCo(sonos_ip)
-            else:
-                return
         else:
+            # discover the device
+            devices = soco.discover()
+            if devices is None or len(list(devices)) == 0:
+                time.sleep(1)
+                devices = soco.discover()
+            if devices is None or len(list(devices)) == 0:
+                return
             try:
                 speaker_index = int(speaker_index)
             except Exception:
