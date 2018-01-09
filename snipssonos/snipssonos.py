@@ -138,6 +138,8 @@ class SnipsSonos:
         if self.device is None:
             return
         if use_local_library is True:
+            if self.my_library is None:
+                return
             playlist = self.my_library.get_playlists(search_term = name)[0]
             if playlist is None:
                 return None
@@ -146,6 +148,7 @@ class SnipsSonos:
             self.device.add_to_queue(playlist)
             if _shuffle:
                 self.device.play_mode("SHUFFLE_NOREPEAT")
+            self.device.play_from_queue(0)
         else:
             if self.spotify is None:
                 return
@@ -163,45 +166,80 @@ class SnipsSonos:
     def play_artist(self, name):
         if self.device is None:
             return
-        if self.spotify is None:
-            return
-        tracks = self.spotify.get_top_tracks_from_artist(name)
-        if tracks is None:
-            return None
-        self.device.stop()
-        self.device.clear_queue()
-        for track in tracks:
-            self.add_from_service(track['uri'], self.spotify_service, True)
-        self.device.play_from_queue(0)
+        if use_local_library is True:
+            if self.my_library is None:
+                return
+            artist = self.my_library.get_artists(search_term = name)[0]
+            if artist is None:
+                return None
+            self.device.stop()
+            self.device.clear_queue()
+            self.device.add_to_queue(artist)
+            self.device.play_from_queue(0)
+        else:
+            if self.spotify is None:
+                return
+            tracks = self.spotify.get_top_tracks_from_artist(name)
+            if tracks is None:
+                return None
+            self.device.stop()
+            self.device.clear_queue()
+            for track in tracks:
+                self.add_from_service(track['uri'], self.spotify_service, True)
+            self.device.play_from_queue(0)
 
-    def play_album(self, album, _shuffle=False):
+    def play_album(self, name, _shuffle=False):
         if self.device is None:
             return
-        if self.spotify is None:
-            return
-        tracks = self.spotify.get_tracks_from_album(album)
-        if tracks is None:
-            return None
-        self.device.stop()
-        self.device.clear_queue()
-        if _shuffle:
-            shuffle(tracks)
-        for track in tracks:
-            self.add_from_service(track['uri'], self.spotify_service, True)
-        self.device.play_from_queue(0)
+        if use_local_library is True:
+            if self.my_library is None:
+                return
+            album = self.my_library.get_albums(search_term = name)[0]
+            if album is None:
+                return None
+            self.device.stop()
+            self.device.clear_queue()
+            self.device.add_to_queue(album)
+            if _shuffle:
+                self.device.play_mode("SHUFFLE_NOREPEAT")
+            self.device.play_from_queue(0)
+        else:
+            if self.spotify is None:
+                return
+            tracks = self.spotify.get_tracks_from_album(name)
+            if tracks is None:
+                return None
+            self.device.stop()
+            self.device.clear_queue()
+            if _shuffle:
+                shuffle(tracks)
+            for track in tracks:
+                self.add_from_service(track['uri'], self.spotify_service, True)
+            self.device.play_from_queue(0)
 
     def play_song(self, name):
         if self.device is None:
             return
-        if self.spotify is None:
-            return
-        track = self.spotify.get_track(name)
-        if track is None:
-            return None
-        self.device.stop()
-        self.device.clear_queue()
-        self.add_from_service(track['uri'], self.spotify_service, True)
-        self.device.play_from_queue(0)
+        if use_local_library is True:
+            if self.my_library is None:
+                return
+            track = self.my_library.get_tracks(search_term = name)[0]
+            if artist is None:
+                return None
+            self.device.stop()
+            self.device.clear_queue()
+            self.device.add_to_queue(track)
+            self.device.play_from_queue(0)
+        else:
+            if self.spotify is None:
+                return
+            track = self.spotify.get_track(name)
+            if track is None:
+                return None
+            self.device.stop()
+            self.device.clear_queue()
+            self.add_from_service(track['uri'], self.spotify_service, True)
+            self.device.play_from_queue(0)
 
     def play_next_item_in_queue(self):
         if self.device is None:
