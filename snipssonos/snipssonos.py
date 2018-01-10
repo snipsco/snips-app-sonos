@@ -22,6 +22,7 @@ class SnipsSonos:
     """ Sonos skill for Snips. """
 
     def __init__(self, spotify_refresh_token=None, speaker_index=None, locale=None, use_local_library=False, sonos_ip=None):
+        self.local_library = use_local_library
         # if ip is provided try to connect
         if sonos_ip is not None:
                 self.device = soco.core.SoCo(sonos_ip)
@@ -44,7 +45,7 @@ class SnipsSonos:
             self.tunein_service = MusicService('TuneIn')
         except Exception:
             self.tunein_service = None
-                self.max_volume = MAX_VOLUME
+        self.max_volume = MAX_VOLUME
         if spotify_refresh_token is not None:
             self.spotify = SpotifyClient(spotify_refresh_token)
         self.previous_volume = None
@@ -137,7 +138,7 @@ class SnipsSonos:
     def play_playlist(self, name, _shuffle=False):
         if self.device is None:
             return
-        if use_local_library is True:
+        if self.local_library is True:
             if self.my_library is None:
                 return
             playlist = self.my_library.get_playlists(search_term = name)[0]
@@ -166,7 +167,7 @@ class SnipsSonos:
     def play_artist(self, name):
         if self.device is None:
             return
-        if use_local_library is True:
+        if self.local_library is True:
             if self.my_library is None:
                 return
             artist = self.my_library.get_artists(search_term = name)[0]
@@ -191,7 +192,7 @@ class SnipsSonos:
     def play_album(self, name, _shuffle=False):
         if self.device is None:
             return
-        if use_local_library is True:
+        if self.local_library is True:
             if self.my_library is None:
                 return
             album = self.my_library.get_albums(search_term = name)[0]
@@ -220,7 +221,7 @@ class SnipsSonos:
     def play_song(self, name):
         if self.device is None:
             return
-        if use_local_library is True:
+        if self.local_library is True:
             if self.my_library is None:
                 return
             track = self.my_library.get_tracks(search_term = name)[0]
