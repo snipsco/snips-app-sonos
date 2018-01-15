@@ -5,7 +5,7 @@ setup(
     version='1.0.0',
     description='Sonos skill for Snips',
     author='The Als',
-    url='https://github.com/snipsco/snips-skill-sonos',
+    url='https://github.com/darioce/snips-skill-sonos',
     download_url='',
     license='MIT',
     install_requires=['soco'],
