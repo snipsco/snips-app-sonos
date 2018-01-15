@@ -20,7 +20,7 @@ intents:
   - intent: speakerInterrupt
     action: |
       {%
-      snips.skill.stop_sonos()
+      snips.skill.pause_sonos()
       %}
   - intent: volumeUp
     action: |
