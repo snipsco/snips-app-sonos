@@ -18,7 +18,7 @@ def dump_item_list(sonos_ip_adress, mode, output_file):
     items_title = map(lambda a: a.title, items)
     # only keep unique names
     items_title = set(items_title)
-    items_title = list(items_title)
+    items_title = sorted(items_title)
     with codecs.open(output_file, 'w', 'utf-8') as f:
             f.write(u"\n".join(items_title))
 
