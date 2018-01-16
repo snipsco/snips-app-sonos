@@ -8,7 +8,7 @@ import soco
 from soco.music_services import MusicService
 
 def dump_item_list(sonos_ip_adress, mode, output_file):
-    if mode not in ['artists', 'tracks', 'albums', 'playlists']:
+    if mode not in ['artists', 'tracks', 'albums', 'sonos_playlists']:
             raise ValueError("mode argument should be 'artists', 'tracks', 'albums' or 'playlists'")
     
     device = soco.core.SoCo(sonos_ip_adress)
@@ -16,6 +16,9 @@ def dump_item_list(sonos_ip_adress, mode, output_file):
     
     items = my_library.get_music_library_information(mode, complete_result=True)
     items_title = map(lambda a: a.title, items)
+    # only keep unique names
+    items_title = set(items_title)
+    items_title = list(items_title)
     with codecs.open(output_file, 'w', 'utf-8') as f:
             f.write(u"\n".join(items_title))
 
@@ -51,7 +54,7 @@ def main():
     dump_item_list(args.sonos_ip_adress, 'tracks', args.track_file)
     
     print "Dumping all playlists to {}".format(args.playlist_file)
-    dump_item_list(args.sonos_ip_adress, 'playlists', args.playlist_file)
+    dump_item_list(args.sonos_ip_adress, 'sonos_playlists', args.playlist_file)
     
     print "Dumping all albums to {}".format(args.album_file)
     dump_item_list(args.sonos_ip_adress, 'albums', args.album_file)
