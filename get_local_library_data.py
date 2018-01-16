@@ -37,7 +37,7 @@ def main():
         "playlist_file",
         help="Name of file to dump playlists (e.g. playlists.txt)"
     )
-        parser.add_argument(
+    parser.add_argument(
         "album_file",
         help="Name of file to dump albums (e.g. albums.txt)"
     )
