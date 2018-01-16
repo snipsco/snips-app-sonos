@@ -24,9 +24,10 @@ It is recommended that you use this skill with the `Snips Skills Manager <https:
       - pip: https://github.com/snipsco/snips-skills-sonos
         package_name: snipssonos
         class_name: SnipsSonos
+        
 
-Usage
------
+Usage with Spotify
+------------------
 
 The skill allows you to control `Sonos <http://musicpartners.sonos.com/docs?q=node/442>`_ speakers. You can use it as follows:
 
@@ -38,6 +39,23 @@ The skill allows you to control `Sonos <http://musicpartners.sonos.com/docs?q=no
     sonos.play_artist("John Coltrane")
 
 The ``SPOTIFY_REFRESH_TOKEN`` is used for playing music from Spotify. You can obtain it from the `Snips Spotify Login <https://snips-spotify-login.herokuapp.com>`_ page.
+
+Useage with Sonos Local Music Library
+-------------------------------------
+
+If you would like to use your local music (e.g. on a NAS) you can specify this in the `Snipsfile <https://github.com/snipsco/snipsskills/wiki/The-Snipsfile>`_. The get_local_library_data.py allows you to pull your local artists, playlists etc. to include as custom slots in your assistant.
+
+.. code-block:: yaml
+
+    skills:
+      - pip: https://github.com/snipsco/snips-skills-sonos
+        package_name: snipssonos
+        class_name: SnipsSonos
+        params:
+                spotify_refresh_token: XXXXXXXXXX
+                speaker_index: 0
+                use_local_library: True
+                sonos_ip: XXX.XXX.XXX.XXX
 
 Copyright
 ---------
