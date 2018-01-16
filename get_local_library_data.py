@@ -51,7 +51,7 @@ def main():
     dump_item_list(args.sonos_ip_adress, 'tracks', args.track_file)
     
     print "Dumping all playlists to {}".format(args.playlist_file)
-    dump_item_list(args.sonos_ip_adress, 'playlists', args.playlist_file)
+    dump_item_list(args.sonos_ip_adress, 'sonos_playlists', args.playlist_file)
     
     print "Dumping all albums to {}".format(args.album_file)
     dump_item_list(args.sonos_ip_adress, 'albums', args.album_file)
