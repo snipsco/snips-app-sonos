@@ -48,7 +48,7 @@ If you would like to use your local music (e.g. on a NAS) you can specify this i
 .. code-block:: yaml
 
     skills:
-      - url: https://github.com/darioce/snips-skills-sonos
+      - url: https://github.com/snipsco/snips-skills-sonos
         package_name: snipssonos
         class_name: SnipsSonos
         params:

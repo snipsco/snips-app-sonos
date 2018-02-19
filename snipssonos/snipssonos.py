@@ -225,7 +225,7 @@ class SnipsSonos:
             if self.my_library is None:
                 return
             track = self.my_library.get_tracks(search_term = name)[0]
-            if artist is None:
+            if track is None:
                 return None
             self.device.stop()
             self.device.clear_queue()
