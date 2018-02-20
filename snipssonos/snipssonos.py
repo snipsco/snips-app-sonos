@@ -21,33 +21,46 @@ GAIN = 4
 class SnipsSonos:
     """ Sonos skill for Snips. """
 
-    def __init__(self, spotify_refresh_token=None, speaker_index=None, locale=None):
-        # find the device
-        devices = soco.discover()
-        if devices is None or len(list(devices)) == 0:
-            time.sleep(1)
+    def __init__(self, spotify_refresh_token=None, speaker_index=None, locale=None, use_local_library=False, sonos_ip=None):
+        self.local_library = use_local_library
+        # if ip is provided try to connect
+        if sonos_ip is not None:
+                self.device = soco.core.SoCo(sonos_ip)
+        else:
+            # discover the device
             devices = soco.discover()
-        if devices is None or len(list(devices)) == 0:
-            return
-        try:
-            speaker_index = int(speaker_index)
-        except Exception:
-            speaker_index = 0
-        if speaker_index >= len(list(devices)):
-            speaker_index = 0
-        self.device = list(devices)[speaker_index]
+            if devices is None or len(list(devices)) == 0:
+                time.sleep(1)
+                devices = soco.discover()
+            if devices is None or len(list(devices)) == 0:
+                return
+            try:
+                speaker_index = int(speaker_index)
+            except Exception:
+                speaker_index = 0
+            if speaker_index >= len(list(devices)):
+                speaker_index = 0
+            self.device = list(devices)[speaker_index]
         try:
             self.tunein_service = MusicService('TuneIn')
         except Exception:
             self.tunein_service = None
-        try:
-            self.spotify_service = MusicService('Spotify')
-        except Exception:
-            self.spotify_service = None
         self.max_volume = MAX_VOLUME
         if spotify_refresh_token is not None:
             self.spotify = SpotifyClient(spotify_refresh_token)
         self.previous_volume = None
+
+        # include option to use local library
+        if use_local_library is True:
+            try:
+                self.my_library = soco.music_library.MusicLibrary(self.device)
+            except Exception:
+                self.my_library = None
+        try:
+            self.spotify_service = MusicService('Spotify')
+        except Exception:
+            self.spotify_service = None
+
 
     def pause_sonos(self):
         if self.device is None:
@@ -70,7 +83,7 @@ class SnipsSonos:
         level = int(level) if level is not None else 1
         self.device.volume -= GAIN * level
         self.device.play()
-        print self.device.volume
+        print(self.device.volume)
 
     def set_volume(self, volume_value):
         if self.device is None:
@@ -125,61 +138,109 @@ class SnipsSonos:
     def play_playlist(self, name, _shuffle=False):
         if self.device is None:
             return
-        if self.spotify is None:
-            return
-        tracks = self.spotify.get_tracks_from_playlist(name)
-        if tracks is None:
-            return None
-        self.device.stop()
-        self.device.clear_queue()
-        if _shuffle:
-            shuffle(tracks)
-        for track in tracks:
-            self.add_from_service(track['track']['uri'], self.spotify_service, True)
-        self.device.play_from_queue(0)
+        if self.local_library is True:
+            if self.my_library is None:
+                return
+            playlist = self.my_library.get_playlists(search_term = name)[0]
+            if playlist is None:
+                return None
+            self.device.stop()
+            self.device.clear_queue()
+            self.device.add_to_queue(playlist)
+            if _shuffle:
+                self.device.play_mode("SHUFFLE_NOREPEAT")
+            self.device.play_from_queue(0)
+        else:
+            if self.spotify is None:
+                return
+            tracks = self.spotify.get_tracks_from_playlist(name)
+            if tracks is None:
+                return None
+            self.device.stop()
+            self.device.clear_queue()
+            if _shuffle:
+                shuffle(tracks)
+            for track in tracks:
+                self.add_from_service(track['track']['uri'], self.spotify_service, True)
+            self.device.play_from_queue(0)
 
     def play_artist(self, name):
         if self.device is None:
             return
-        if self.spotify is None:
-            return
-        tracks = self.spotify.get_top_tracks_from_artist(name)
-        if tracks is None:
-            return None
-        self.device.stop()
-        self.device.clear_queue()
-        for track in tracks:
-            self.add_from_service(track['uri'], self.spotify_service, True)
-        self.device.play_from_queue(0)
+        if self.local_library is True:
+            if self.my_library is None:
+                return
+            artist = self.my_library.get_artists(search_term = name)[0]
+            if artist is None:
+                return None
+            self.device.stop()
+            self.device.clear_queue()
+            self.device.add_to_queue(artist)
+            self.device.play_from_queue(0)
+        else:
+            if self.spotify is None:
+                return
+            tracks = self.spotify.get_top_tracks_from_artist(name)
+            if tracks is None:
+                return None
+            self.device.stop()
+            self.device.clear_queue()
+            for track in tracks:
+                self.add_from_service(track['uri'], self.spotify_service, True)
+            self.device.play_from_queue(0)
 
-    def play_album(self, album, _shuffle=False):
+    def play_album(self, name, _shuffle=False):
         if self.device is None:
             return
-        if self.spotify is None:
-            return
-        tracks = self.spotify.get_tracks_from_album(album)
-        if tracks is None:
-            return None
-        self.device.stop()
-        self.device.clear_queue()
-        if _shuffle:
-            shuffle(tracks)
-        for track in tracks:
-            self.add_from_service(track['uri'], self.spotify_service, True)
-        self.device.play_from_queue(0)
+        if self.local_library is True:
+            if self.my_library is None:
+                return
+            album = self.my_library.get_albums(search_term = name)[0]
+            if album is None:
+                return None
+            self.device.stop()
+            self.device.clear_queue()
+            self.device.add_to_queue(album)
+            if _shuffle:
+                self.device.play_mode("SHUFFLE_NOREPEAT")
+            self.device.play_from_queue(0)
+        else:
+            if self.spotify is None:
+                return
+            tracks = self.spotify.get_tracks_from_album(name)
+            if tracks is None:
+                return None
+            self.device.stop()
+            self.device.clear_queue()
+            if _shuffle:
+                shuffle(tracks)
+            for track in tracks:
+                self.add_from_service(track['uri'], self.spotify_service, True)
+            self.device.play_from_queue(0)
 
     def play_song(self, name):
         if self.device is None:
             return
-        if self.spotify is None:
-            return
-        track = self.spotify.get_track(name)
-        if track is None:
-            return None
-        self.device.stop()
-        self.device.clear_queue()
-        self.add_from_service(track['uri'], self.spotify_service, True)
-        self.device.play_from_queue(0)
+        if self.local_library is True:
+            if self.my_library is None:
+                return
+            track = self.my_library.get_tracks(search_term = name)[0]
+            if artist is None:
+                return None
+            self.device.stop()
+            self.device.clear_queue()
+            self.device.add_to_queue(track)
+            self.device.play_from_queue(0)
+        else:
+            if self.spotify is None:
+                return
+            track = self.spotify.get_track(name)
+            if track is None:
+                return None
+            self.device.stop()
+            self.device.clear_queue()
+            self.add_from_service(track['uri'], self.spotify_service, True)
+            self.device.play_from_queue(0)
 
     def play_next_item_in_queue(self):
         if self.device is None:
@@ -187,7 +248,7 @@ class SnipsSonos:
         try:
             self.device.next()
         except Exception:
-            print "Failed to play next item, maybe last song?"
+            print("Failed to play next item, maybe last song?")
 
     def play_previous_item_in_queue(self):
         if self.device is None:
@@ -195,7 +256,7 @@ class SnipsSonos:
         try:
             self.device.previous()
         except Exception:
-            print "Failed to play previous item, maybe first song?"
+            print("Failed to play previous item, maybe first song?")
 
     def add_from_service(self, item_id, service, is_track=True):
         # The DIDL item_id is made of the track_id (url escaped), but with an 8
