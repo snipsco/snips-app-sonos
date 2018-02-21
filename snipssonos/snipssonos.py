@@ -103,10 +103,14 @@ class SnipsSonos:
     def play_template(self, name, shuffle=False, func_name=None):
         if self.device is None:
             return
+        if (isinstance(name, list)):
+             if (not name):
+                 return
+             name = name[0]
         for provider in self.providerPlayers:
             func = getattr(provider, func_name)
             if func(self.device, name, shuffle):
-                print("playing playlist:%s" % name)
+                print("playing %s:%s" % (func_name, name))
                 return
 
     def turn_on_radio(self, radio_name):

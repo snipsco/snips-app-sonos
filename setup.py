@@ -11,7 +11,7 @@ setup(
     install_requires=['soco'],
     test_suite="tests",
     keywords=['snips', 'sonos'],
-    packages=['snipssonos'],
+    packages=['snipssonos', 'snipssonos/provider'],
     package_data={'snipssonos': ['Snipsspec']},
-    include_package_data=True,
+    include_package_data=True
 )
