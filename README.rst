@@ -3,7 +3,7 @@ Sonos skill for Snips
 
 |Build Status| |PyPI| |MIT License|
 
-A Snips Skill to control one Sonos on your local network.
+A Snips Skill to control one Sonos speaker on your local network.
 
 Snips Manager
 -------------
@@ -25,12 +25,12 @@ your `Snipsfile <https://github.com/snipsco/snipsskills/wiki/The-Snipsfile>`_:
 Usage with Sonos Local Music Library
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you would like to use your local music (e.g. on a NAS, Itune Library, ...).
-Follow the Instruction `here
+If you would like to use your local music (e.g. on a NAS, iTunes library, ...).
+Follow the instruction `here
 <https://sonos.custhelp.com/app/answers/detail/a_id/261/~/adding-and-updating-your-music-library>`_
 .
 
-| To create a nas within your raspberry pi by following
+| To create a NAS within your Raspberry Pi by following
   `this guide <https://eltechs.com/raspberry-pi-nas-guide/>`_.
 
 | To create a local playlist follow
@@ -52,9 +52,9 @@ The ``SPOTIFY_REFRESH_TOKEN`` is used for playing music from Spotify. You can
 obtain it from the
 `Snips Spotify Login <https://snips-spotify-login.herokuapp.com>`_ page.
 
-There is an issue with the library we are using to connect to the Spotify.
-To play a Spotify playlist please import your Spotify playlist to your Sonos
-Playlist.
+There is an known issue with the library used to connect to Spotify.
+To play a Spotify playlist, please import your Spotify playlists to your Sonos
+playlist.
 
 All optional parameters
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -66,16 +66,13 @@ All optional parameters
             sonos_ip: XXX.XXX.XXX.XXX
 
 spotify_refresh_token
-  | set spotify refresh token.
-  | The ``SPOTIFY_REFRESH_TOKEN`` is used for playing music from Spotify. You
-    can obtain it from the
-    `Snips Spotify Login <https://snips-spotify-login.herokuapp.com>`_ page.
+  set spotify refresh token.
 
 default_speaker
   The default speaker used with the skill.
 
 sonos_ip
-  If you already have the ip address of your Sonos, you can set it.
+  If you already have the IP address of your Sonos speaker, you can set it.
 
 Standalone
 ----------

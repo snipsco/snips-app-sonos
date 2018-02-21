@@ -1,6 +1,6 @@
 from abc import ABCMeta
 
-class ProviderPlayerTemplate():
+class A_ProviderPlayerTemplate():
     __metaclass__ = ABCMeta
     def __init__(self):
         raise NotImplementedError("Please implement the __init__ method")

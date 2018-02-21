@@ -9,7 +9,6 @@ import time
 from provider.local_player import LocalPlayer
 from provider.tune_in_player import TuneInPlayer
 from provider.spotify_player import SpotifyPlayer
-from provider.provider_player_template import ProviderPlayerTemplate
 
 MAX_VOLUME = 70
 GAIN = 4
@@ -18,7 +17,7 @@ GAIN = 4
 class SnipsSonos:
     """ Sonos skill for Snips. """
 
-    def __init__(self, spotify_refresh_token=None, speaker_index=None, locale=None, sonos_ip=None):
+    def __init__(self, spotify_refresh_token=None, default_speaker=None, locale=None, sonos_ip=None):
         # if ip is provided try to connect
         if sonos_ip is not None:
                 self.device = soco.core.SoCo(sonos_ip)
@@ -32,12 +31,12 @@ class SnipsSonos:
                 self.device = None
                 return
             try:
-                speaker_index = int(speaker_index)
+                default_speaker = int(default_speaker)
             except Exception:
-                speaker_index = 0
-            if speaker_index >= len(list(devices)):
-                speaker_index = 0
-            self.device = list(devices)[speaker_index]
+                default_speaker = 0
+            if default_speaker >= len(list(devices)):
+                default_speaker = 0
+            self.device = list(devices)[default_speaker]
         self.providerPlayers = [
             TuneInPlayer(),
             LocalPlayer(self.device),
@@ -45,8 +44,6 @@ class SnipsSonos:
         ]
         self.max_volume = MAX_VOLUME
         self.previous_volume = None
-
-        # include option to use local library
 
     def pause_sonos(self):
         if self.device is None:

@@ -1,4 +1,4 @@
-from .provider_player_template import ProviderPlayerTemplate
+from .provider_player_template import A_ProviderPlayerTemplate
 from soco.music_services import MusicService
 import soco
 import random
@@ -6,7 +6,7 @@ from soco.data_structures import DidlItem, DidlResource
 from soco.compat import quote_url
 from .spotify import SpotifyClient
 
-class SpotifyPlayer(ProviderPlayerTemplate):
+class SpotifyPlayer(A_ProviderPlayerTemplate):
 
     def __init__(self, spotify_refresh_token=None):
         try:

@@ -1,7 +1,7 @@
-from .provider_player_template import ProviderPlayerTemplate
+from .provider_player_template import A_ProviderPlayerTemplate
 from soco.music_services import MusicService
 
-class TuneInPlayer(ProviderPlayerTemplate):
+class TuneInPlayer(A_ProviderPlayerTemplate):
 
     def __init__(self):
         try:

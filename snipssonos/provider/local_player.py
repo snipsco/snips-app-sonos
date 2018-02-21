@@ -1,7 +1,7 @@
-from .provider_player_template import ProviderPlayerTemplate
+from .provider_player_template import A_ProviderPlayerTemplate
 import soco
 
-class LocalPlayer(ProviderPlayerTemplate):
+class LocalPlayer(A_ProviderPlayerTemplate):
 
     def __init__(self, device):
         try:
