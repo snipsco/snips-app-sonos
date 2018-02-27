@@ -1,4 +1,11 @@
-from abc import ABC, ABCMeta,  abstractmethod
+import abc
+from abc import ABCMeta,  abstractmethod
+import sys
+
+if sys.version_info >= (3, 4):
+    ABC = abc.ABC
+else:
+    ABC = abc.ABCMeta('ABC', (), {})
 
 class A_ProviderPlayerTemplate(ABC):
     """
