@@ -19,10 +19,7 @@ intents:
       snips.skill.set_to_previous_volume()
       %}
   - intent: speakerInterrupt
-    action: |
-      {%
-      snips.skill.pause_sonos()
-      %}
+    action: "pause_sonos()"
   - intent: volumeUp
     action: |
       {%
