@@ -47,11 +47,9 @@ class NodePlayer(A_ProviderPlayerTemplate):
             return False
         player_name = device.player_name
         name = name.replace(" ", "+")
-        print(name)
         r_str ='http://%s:5005/%s/musicsearch/%s/%s/%s'\
                 % (self.node_server, player_name,
                    self.service_name, request, name)
-        print(r_str)
         r = requests.get(r_str)
         if (r.status_code != requests.codes.ok):
             return False
