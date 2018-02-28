@@ -9,6 +9,7 @@ import time
 from provider.local_player import LocalPlayer
 from provider.tune_in_player import TuneInPlayer
 from provider.spotify_player import SpotifyPlayer
+from provider.spotify_node_player import SpotifyNodePlayer
 
 MAX_VOLUME = 70
 GAIN = 4
@@ -40,7 +41,8 @@ class SnipsSonos:
         self.providerPlayers = [
             TuneInPlayer(),
             LocalPlayer(self.device),
-            SpotifyPlayer()
+            SpotifyPlayer(spotify_refresh_token),
+            SpotifyNodePlayer()
         ]
         self.max_volume = MAX_VOLUME
         self.previous_volume = None

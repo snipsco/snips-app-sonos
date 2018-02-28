@@ -8,7 +8,7 @@ setup(
     url='https://github.com/snipsco/snips-skill-sonos',
     download_url='',
     license='MIT',
-    install_requires=['soco'],
+    install_requires=['soco', 'pynpm', 'requests'],
     test_suite="tests",
     keywords=['snips', 'sonos'],
     packages=['snipssonos', 'snipssonos/provider'],
