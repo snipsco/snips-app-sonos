@@ -9,16 +9,17 @@ import time
 from provider.local_player import LocalPlayer
 from provider.tune_in_player import TuneInPlayer
 from provider.spotify_player import SpotifyPlayer
-from provider.spotify_node_player import SpotifyNodePlayer
+from provider.node_player import NodePlayer
 
 MAX_VOLUME = 70
 GAIN = 4
 
-
 class SnipsSonos:
     """ Sonos skill for Snips. """
 
-    def __init__(self, spotify_refresh_token=None, default_speaker=None, locale=None, sonos_ip=None):
+    def __init__(self, spotify_refresh_token=None, default_speaker=None,
+                 locale=None, sonos_ip=None, jishi_server='0.0.0.0',
+                 music_service=[] ):
         # if ip is provided try to connect
         if sonos_ip is not None:
                 self.device = soco.core.SoCo(sonos_ip)
@@ -42,8 +43,11 @@ class SnipsSonos:
             TuneInPlayer(),
             LocalPlayer(self.device),
             SpotifyPlayer(spotify_refresh_token),
-            SpotifyNodePlayer()
         ]
+        if (music_service is not None):
+            node_players = map(lambda x: NodePlayer(jishi_server, service_name = x),
+                           music_service)
+        self.providerPlayers += node_players
         self.max_volume = MAX_VOLUME
         self.previous_volume = None
 

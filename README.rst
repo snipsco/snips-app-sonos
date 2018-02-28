@@ -36,8 +36,33 @@ Follow the instruction `here
 | To create a local playlist follow
   `this Gist <https://gist.github.com/scarlson/944860>`_.
 
-Usage with Spotify
-^^^^^^^^^^^^^^^^^^
+Usage with music service
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. code-block:: yaml
+
+    skills:
+      - package_name: snipssonos
+        class_name: SnipsSonos
+        pip: https://github.com/snipsco/snips-skills-sonos
+        params:
+          - music_service:
+              - spotify
+              - apple
+
+To use music services
+
+.. code-block:: console
+
+    cd ~
+    git clone https://github.com/jishi/node-sonos-http-api
+
+Follow this `instructions
+<https://github.com/jishi/node-sonos-http-api/blob/master/README.md>`_ to
+add any music sevice
+
+Usage with Spotify with Soco library
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. code-block:: yaml
 

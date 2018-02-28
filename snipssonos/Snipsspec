@@ -1,7 +1,7 @@
 package_name: snipssonos
 class_name: SnipsSonos
 description: Sonos skill for Snips
-parameters: ["spotify_refresh_token", "default_speaker", "sonos_ip"]
+parameters: ["spotify_refresh_token", "default_speaker", "sonos_ip", "jishi_server", "music_server"]
 notifications:
   - name: start_listening
     action: |
@@ -19,7 +19,7 @@ intents:
       snips.skill.set_to_previous_volume()
       %}
   - intent: speakerInterrupt
-    action: "pause_sonos()"
+    action: "pause_sonos"
   - intent: volumeUp
     action: |
       {%

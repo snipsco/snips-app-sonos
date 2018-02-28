@@ -12,7 +12,7 @@ import json
 import subprocess
 import socket
 
-class SpotifyNodePlayer(A_ProviderPlayerTemplate):
+class NodePlayer(A_ProviderPlayerTemplate):
 
     @staticmethod
     def check_server(host, port):
@@ -21,9 +21,13 @@ class SpotifyNodePlayer(A_ProviderPlayerTemplate):
         s.close()
         return result == 0
 
-    def __init__(self, node_server="0.0.0.0"):
-         self.node_server = node_server
-         if (not SpotifyNodePlayer.check_server(node_server, 5005)):
+    def __init__(self, node_server="0.0.0.0", service_name=None):
+        if (service_name is None):
+            node_server = None
+            return
+        self.service_name = service_name
+        self.node_server = node_server
+        if (not NodePlayer.check_server(node_server, 5005)):
             if not (node_server == '0.0.0.0' or node_server == 'localhost'
                     or node_server == '127.0.0.1'
                     or node_server == socket.gethostname()):
@@ -36,6 +40,7 @@ class SpotifyNodePlayer(A_ProviderPlayerTemplate):
             p = subprocess.Popen(['npm', 'install', '--production'], cwd=dir)
             p.wait()
             p = subprocess.Popen(['npm', 'start'], cwd=dir, stdout=FNULL, stderr=subprocess.STDOUT)
+            time.sleep(3)
 
     def play(self, device, name, shuffle=False, request=None):
         if (self.node_server is None):
@@ -43,8 +48,9 @@ class SpotifyNodePlayer(A_ProviderPlayerTemplate):
         player_name = device.player_name
         name = name.replace(" ", "+")
         print(name)
-        r_str ='http://%s:5005/%s/musicsearch/spotify/%s/%s'\
-                % (self.node_server, player_name, request, name)
+        r_str ='http://%s:5005/%s/musicsearch/%s/%s/%s'\
+                % (self.node_server, player_name,
+                   self.service_name, request, name)
         print(r_str)
         r = requests.get(r_str)
         if (r.status_code != requests.codes.ok):
