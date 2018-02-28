@@ -7,9 +7,10 @@ from soco.data_structures import DidlItem, DidlResource
 from soco.compat import quote_url
 import socket
 from .spotify import SpotifyClient
-from pynpm import NPMPackage
 from os.path import expanduser
 import json
+import subprocess
+import socket
 
 class SpotifyNodePlayer(A_ProviderPlayerTemplate):
 
@@ -21,13 +22,20 @@ class SpotifyNodePlayer(A_ProviderPlayerTemplate):
         return result == 0
 
     def __init__(self, node_server="0.0.0.0"):
-        self.node_server = node_server
-        if (not SpotifyNodePlayer.check_server(node_server, 5005)):
-            self.node_server = None
-        #home = expanduser("~")
-        #pkg = NPMPackage('%s/node-sonos-http-api/package.json' % home)
-        #pkg.install()
-        #pkg.start(wait = False)
+         self.node_server = node_server
+         if (not SpotifyNodePlayer.check_server(node_server, 5005)):
+            if not (node_server == '0.0.0.0' or node_server == 'localhost'
+                    or node_server == '127.0.0.1'
+                    or node_server == socket.gethostname()):
+                node_server = None
+                return
+            dir = expanduser("~") + '/node-sonos-http-api/'
+            if (not os.path.isdir(dir)):
+                node_server = None
+                return
+            p = subprocess.Popen(['npm', 'install', '--production'], cwd=dir)
+            p.wait()
+            p = subprocess.Popen(['npm', 'start'], cwd=dir, stdout=FNULL, stderr=subprocess.STDOUT)
 
     def play(self, device, name, shuffle=False, request=None):
         if (self.node_server is None):
