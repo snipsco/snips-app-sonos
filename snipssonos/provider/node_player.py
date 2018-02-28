@@ -8,9 +8,11 @@ from soco.compat import quote_url
 import socket
 from .spotify import SpotifyClient
 from os.path import expanduser
+import os
 import json
 import subprocess
 import socket
+import time
 
 class NodePlayer(A_ProviderPlayerTemplate):
 
@@ -33,18 +35,21 @@ class NodePlayer(A_ProviderPlayerTemplate):
                     or node_server == socket.gethostname()):
                 node_server = None
                 return
-            dir = expanduser("~") + '/node-sonos-http-api/'
+            dir = expanduser("/home/pi") + '/node-sonos-http-api/'
             if (not os.path.isdir(dir)):
                 node_server = None
                 return
             p = subprocess.Popen(['npm', 'install', '--production'], cwd=dir)
             p.wait()
+            FNULL = open(os.devnull, 'w')
             p = subprocess.Popen(['npm', 'start'], cwd=dir, stdout=FNULL, stderr=subprocess.STDOUT)
             time.sleep(3)
 
     def play(self, device, name, shuffle=False, request=None):
-        if (self.node_server is None):
+        if (self.node_server is None or name == 'unknownword'):
             return False
+        device.stop()
+        device.clear_queue()
         player_name = device.player_name
         name = name.replace(" ", "+")
         r_str ='http://%s:5005/%s/musicsearch/%s/%s/%s'\

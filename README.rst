@@ -54,7 +54,7 @@ To use music services
 
 .. code-block:: console
 
-    cd ~
+    cd /home/pi
     git clone https://github.com/jishi/node-sonos-http-api
 
 Follow this `instructions
