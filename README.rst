@@ -105,7 +105,7 @@ Standalone
 Installation
 ^^^^^^^^^^^^
 
-The skill is on `PyPI <https://pypi.python.org/pypi/snipshue>`_, so you can just
+The skill is on `PyPI <https://pypi.python.org/pypi/snipssonos>`_, so you can just
 install it with `pip <http://www.pip-installer.org>`_:
 
 .. code-block:: console
