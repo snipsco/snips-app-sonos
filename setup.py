@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='snipssonos',
-    version='1.0.0',
+    version='1.1.0',
     description='Sonos skill for Snips',
     author='The Als',
     url='https://github.com/snipsco/snips-skill-sonos',
