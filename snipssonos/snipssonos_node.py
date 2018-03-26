@@ -1,3 +1,4 @@
+import json
 import os
 from os.path import expanduser
 from provider.node_player import NodePlayer
@@ -5,24 +6,9 @@ import requests
 import subprocess
 import time
 
-class SnipsSonosJishi:
+class SnipsSonosNode:
     def __init__(self, node_server="0.0.0.0"):
-        self.node_server = node_server
-        if (not NodePlayer.check_server(node_server, 5005)):
-            if not (node_server == '0.0.0.0' or node_server == 'localhost'
-                    or node_server == '127.0.0.1'
-                    or node_server == socket.gethostname()):
-                self.node_server = None
-                return
-            dir = expanduser("/home/pi") + '/node-sonos-http-api/'
-            if (not os.path.isdir(dir)):
-                self.node_server = None
-                return
-            p = subprocess.Popen(['npm', 'install', '--production'], cwd=dir)
-            p.wait()
-            FNULL = open(os.devnull, 'w')
-            p = subprocess.Popen(['npm', 'start'], cwd=dir, stdout=FNULL, stderr=subprocess.STDOUT)
-            time.sleep(3)
+        self.node_server = NodePlayer.start_server(node_server)
     
     def command(self, device, value):
         if (self.node_server is None):
@@ -45,7 +31,7 @@ class SnipsSonosJishi:
         return self.command(device, "next")
     
     def previous(self, device):
-        return self.command(device, "next")
+        return self.command(device, "previous")
     
     def play(self, device):
         return self.command(device, "play")
