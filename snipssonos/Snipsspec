@@ -4,10 +4,9 @@ description: Sonos skill for Snips
 parameters: ["spotify_refresh_token", "default_speaker", "sonos_ip", "jishi_server", "music_server"]
 notifications:
   - name: start_listening
-    action: |
-      {%
-      snips.skill.set_to_low_volume()
-      %}
+    action: set_to_low_volume
+  - name: done_listening
+    action: set_to_previous_volume
 intents:
   - intent: radioOn
     action: |
@@ -15,11 +14,9 @@ intents:
       if len(snips.intent.radio_name):
         radio_name = snips.intent.radio_name[0]
         snips.skill.turn_on_radio(radio_name)
-
-      snips.skill.set_to_previous_volume()
       %}
   - intent: speakerInterrupt
-    action: "pause_sonos"
+    action: pause_sonos
   - intent: volumeUp
     action: |
       {%
@@ -27,6 +24,7 @@ intents:
       if snips.intent.volume_higher:
         volume_higher = snips.intent.volume_higher[0]
         snips.skill.volume_up(volume_higher)
+        snips.skill.previous_volume = snips.skill.device.volume
       %}
   - intent: volumeDown
     action: |
@@ -35,16 +33,14 @@ intents:
       if len(snips.intent.volume_lower):
         volume_lower = snips.intent.volume_lower[0]
         snips.skill.volume_down(volume_lower)
+        snips.skill.previous_volume = snips.skill.device.volume
       %}
   - intent: playPlaylist
     action: |
       {%
       if len(snips.intent.playlist_name):
         playlist_name = snips.intent.playlist_name[0]
-        #playlist_lecture_mode = snips.intent.playlist_lecture_mode[0] if len(snips.intent.playlist_lecture_mode) else None
         snips.skill.play_playlist(playlist_name, _shuffle=(len(snips.intent.playlist_lecture_mode) and snips.intent.playlist_lecture_mode[0] == "shuffle"))
-
-      snips.skill.set_to_previous_volume()
       %}
   - intent: playArtist
     action: |
@@ -52,14 +48,12 @@ intents:
       if len(snips.intent.artist_name):
         artist_name = snips.intent.artist_name[0]
         snips.skill.play_artist(artist_name)
-      snips.skill.set_to_previous_volume()
       %}
   - intent: playSong
     action: |
       {%
       if len(snips.intent.song_name):
         snips.skill.play_song(snips.intent.song_name)
-      snips.skill.set_to_previous_volume()
       %}
   - intent: playAlbum
     action: |
@@ -67,28 +61,18 @@ intents:
       if len(snips.intent.album_name):
         album_name = snips.intent.album_name[0]
         snips.skill.play_album(album_name, _shuffle=(len(snips.intent.album_lecture_mode) and snips.intent.album_lecture_mode[0] == "shuffle"))
-
-      snips.skill.set_to_previous_volume()
       %}
   - intent: resumeMusic
-    action: |
-      {% snips.skill.play(); snips.skill.set_to_previous_volume() %}
+    action: play
   - intent: nextSong
-    action: |
-      {% snips.skill.play_next_item_in_queue(); snips.skill.set_to_previous_volume() %}
+    action: play_next_item_in_queue
   - intent: previousSong
-    action: |
-      {% snips.skill.play_previous_item_in_queue(); snips.skill.set_to_previous_volume() %}
+    action: play_previous_item_in_queue
   - intent: addSong
-    action: |
-      {% snips.skill.add_song(); snips.skill.set_to_previous_volume() %}
+    action: add_song
   - intent: getInfos
     action: |
       {%
-        snips.skill.set_to_previous_volume(); tts_service.speak("This is {} by {} on the album {}".format(*snips.skill.get_info()))
-      %}
-  - intent: "*"
-    action: |
-      {%
-        snips.skill.set_to_previous_volume();
+      snips.skill.set_to_previous_volume();
+      tts_service.speak("This is {} by {} on the album {}".format(*snips.skill.get_info()))
       %}
