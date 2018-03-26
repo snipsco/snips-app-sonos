@@ -25,7 +25,7 @@ class NodePlayer(A_ProviderPlayerTemplate):
 
     def __init__(self, node_server="0.0.0.0", service_name=None):
         if (service_name is None):
-            node_server = None
+            self.node_server = None
             return
         self.service_name = service_name
         self.node_server = node_server

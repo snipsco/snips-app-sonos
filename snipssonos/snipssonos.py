@@ -10,6 +10,7 @@ from provider.local_player import LocalPlayer
 from provider.tune_in_player import TuneInPlayer
 from provider.spotify_player import SpotifyPlayer
 from provider.node_player import NodePlayer
+from snipssonos_jishi import SnipsSonosJishi
 
 MAX_VOLUME = 70
 GAIN = 4
@@ -21,6 +22,7 @@ class SnipsSonos:
                  locale=None, sonos_ip=None, jishi_server='0.0.0.0',
                  music_service=[] ):
         # if ip is provided try to connect
+        self.jishi = SnipsSonosJishi(jishi_server)
         if sonos_ip is not None:
                 self.device = soco.core.SoCo(sonos_ip)
         else:
@@ -54,12 +56,16 @@ class SnipsSonos:
     def pause_sonos(self):
         if self.device is None:
             return
+        if (self.jishi.pause(self.device)):
+            return
         self.device.pause()
 
     def volume_up(self, level):
         if self.device is None:
             return
         level = int(level) if level is not None else 1
+        if (self.jishi.volume_up(self.device, level)):
+            return
         current_volume = self.device.volume
         self.device.volume = min(
             current_volume + GAIN * level,
@@ -70,6 +76,8 @@ class SnipsSonos:
         if self.device is None:
             return
         level = int(level) if level is not None else 1
+        if (self.jishi.volume_down(self.device, level)):
+            return
         self.device.volume -= GAIN * level
         self.device.play()
         print(self.device.volume)
@@ -77,10 +85,14 @@ class SnipsSonos:
     def set_volume(self, volume_value):
         if self.device is None:
             return
+        if (self.jishi.set_volume(self.device, level)):
+            return
         self.device.volume = volume_value
         self.device.play()
 
     def set_to_low_volume(self):
+        if self.device is None:
+            return
         if self.device.get_current_transport_info()['current_transport_state'] != "PLAYING":
             return None
         if self.device is None:
@@ -100,6 +112,8 @@ class SnipsSonos:
 
     def stop_sonos(self):
         if self.device is None:
+            return
+        if (self.jishi.pause(self.device)):
             return
         self.device.stop()
 
@@ -134,6 +148,8 @@ class SnipsSonos:
     def play_next_item_in_queue(self):
         if self.device is None:
             return
+        if (self.jishi.next(self.device)):
+            return
         try:
             self.device.next()
         except Exception:
@@ -141,6 +157,8 @@ class SnipsSonos:
 
     def play_previous_item_in_queue(self):
         if self.device is None:
+            return
+        if (self.jishi.previous(self.device)):
             return
         try:
             self.device.previous()
@@ -160,4 +178,8 @@ class SnipsSonos:
 
     def play(self):
         # Save song in spotify
+        if self.device is None:
+            return
+        if (self.jishi.play(self.device)):
+            return
         self.device.play()
