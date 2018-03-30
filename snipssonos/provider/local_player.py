@@ -6,6 +6,7 @@ class LocalPlayer(A_ProviderPlayerTemplate):
     def __init__(self, device):
         try:
             self.my_library = soco.music_library.MusicLibrary(device)
+            self.my_library.start_library_update()
         except Exception:
             self.my_library = None
 
