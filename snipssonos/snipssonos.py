@@ -58,12 +58,14 @@ class SnipsSonos:
             return
         if (self.node.pause(self.device)):
             return
-        self.device.pause()
-
+        try:
+            self.device.pause()
+        except:
+            print("not playing")
     def volume_up(self, level):
         if self.device is None:
             return
-        level = int(level) if level is not None else 1
+        level = int(level) if level is not None else 20
         if (self.node.volume_up(self.device, level)):
             return
         current_volume = self.device.volume
@@ -75,7 +77,7 @@ class SnipsSonos:
     def volume_down(self, level):
         if self.device is None:
             return
-        level = int(level) if level is not None else 1
+        level = int(level) if level is not None else 20
         if (self.node.volume_down(self.device, level)):
             return
         self.device.volume -= GAIN * level
@@ -115,7 +117,10 @@ class SnipsSonos:
             return
         if (self.node.pause(self.device)):
             return
-        self.device.stop()
+        try:
+            self.device.stop()
+        except:
+            print("not playing")
 
     def play_template(self, name, shuffle=False, func_name=None):
         if self.device is None:

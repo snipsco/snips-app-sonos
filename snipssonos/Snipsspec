@@ -20,20 +20,22 @@ intents:
   - intent: volumeUp
     action: |
       {%
+      volume_higher = None
       snips.skill.set_to_previous_volume()
       if snips.intent.volume_higher:
         volume_higher = snips.intent.volume_higher[0]
-        snips.skill.volume_up(volume_higher)
-        snips.skill.previous_volume = snips.skill.device.volume
+      snips.skill.volume_up(volume_higher)
+      snips.skill.previous_volume = snips.skill.device.volume
       %}
   - intent: volumeDown
     action: |
       {%
+      volume_lower = None
       snips.skill.set_to_previous_volume()
       if len(snips.intent.volume_lower):
         volume_lower = snips.intent.volume_lower[0]
-        snips.skill.volume_down(volume_lower)
-        snips.skill.previous_volume = snips.skill.device.volume
+      snips.skill.volume_down(volume_lower)
+      snips.skill.previous_volume = snips.skill.device.volume
       %}
   - intent: playPlaylist
     action: |
