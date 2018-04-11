@@ -22,34 +22,38 @@ class NodePlayer(A_ProviderPlayerTemplate):
         result = s.connect_ex((host, port))
         s.close()
         return result == 0
-
-    def __init__(self, node_server="0.0.0.0", service_name=None):
-        if (service_name is None):
-            node_server = None
-            return
-        self.service_name = service_name
-        self.node_server = node_server
+    
+    connected = False
+    @staticmethod
+    def start_server(node_server):
+        if NodePlayer.connected:
+            return node_server
         if (not NodePlayer.check_server(node_server, 5005)):
             if not (node_server == '0.0.0.0' or node_server == 'localhost'
                     or node_server == '127.0.0.1'
                     or node_server == socket.gethostname()):
-                node_server = None
-                return
+                return None
             dir = expanduser("/home/pi") + '/node-sonos-http-api/'
             if (not os.path.isdir(dir)):
-                node_server = None
-                return
+                return None
             p = subprocess.Popen(['npm', 'install', '--production'], cwd=dir)
             p.wait()
             FNULL = open(os.devnull, 'w')
             p = subprocess.Popen(['npm', 'start'], cwd=dir, stdout=FNULL, stderr=subprocess.STDOUT)
             time.sleep(3)
+        NodePlayer.connected = True
+        return node_server
+
+    def __init__(self, node_server="0.0.0.0", service_name=None):
+        if (service_name is None):
+            self.node_server = None
+            return
+        self.service_name = service_name
+        self.node_server = NodePlayer.start_server(node_server)
 
     def play(self, device, name, shuffle=False, request=None):
         if (self.node_server is None or name == 'unknownword'):
             return False
-        device.stop()
-        device.clear_queue()
         player_name = device.player_name
         name = name.replace(" ", "+")
         r_str ='http://%s:5005/%s/musicsearch/%s/%s/%s'\
