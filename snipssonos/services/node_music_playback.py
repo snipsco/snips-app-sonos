@@ -5,10 +5,10 @@ PROTOCOL = "http"
 HOST = "localhost"
 PORT = 5005
 
-from exceptions import APIRequestWrongParams
+from music_playback import MusicPlaybackService
+from snipssonos.exceptions import APIRequestWrongParams
 
-
-class SnipsSonosClient:
+class SonosMusicPlaybackService(MusicPlaybackService):
     def __init__(self):
         pass
 
@@ -51,13 +51,13 @@ class SnipsSonosClient:
     def pause(self, device):
         return self.command(device, "pause")
 
-    def next_track(self, device):
+    def next_song(self, device):
         return self.command(device, "next")
 
-    def previous(self, device):
+    def previous_song(self, device):
         return self.command(device, "previous")
 
-    def play(self, device):
+    def resume(self, device):
         return self.command(device, "play")
 
     def volume_down(self, device, level):
