@@ -1,7 +1,8 @@
 import unittest
 
-from snipssonos.utils.sonos_node_api_client import SonosNodeAPIClient
-from snipssonos.exceptions import APIRequestWrongParams, APIRequestError
+from snipssonos.adapters.sonos_node_api_client import SonosNodeAPIClient
+from snipssonos.exceptions import APIRequestWrongParams
+
 
 class TestSonosNodeAPIClientAPIRequests(unittest.TestCase):
     def setUp(self):

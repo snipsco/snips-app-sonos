@@ -1,8 +1,6 @@
-import requests
-
 from device_discovery import DeviceDiscoveryService
 from device_discovery import Device
-from snipssonos.utils.sonos_node_api_client import SonosNodeAPIClient
+from snipssonos.adapters.sonos_node_api_client import SonosNodeAPIClient
 
 
 class NodeDevice(Device):

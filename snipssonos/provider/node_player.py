@@ -18,7 +18,7 @@ class NodePlayer(A_ProviderPlayerTemplate):
 
     @staticmethod
     def check_server(host, port):
-        s =  socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         result = s.connect_ex((host, port))
         s.close()
         return result == 0

@@ -2,13 +2,19 @@ import json
 import requests
 
 from snipssonos.exceptions import APIRequestWrongParams, APIRequestError
+from snipssonos.shared import request_object as request
 
 
 PROTOCOL = "http"
 HOST = "localhost"
 PORT = 5005
 
-class SonosNodeAPIClient:
+class SonosNodeAPIClient(object):
+    def __init__(self):
+        self.device = None
+
+    def for_device(self, device):
+        self.device = device
 
     def build_action_request(self, action):  # TODO, write tests
         if action and isinstance(action, str) and len(action):
@@ -41,7 +47,7 @@ class SonosNodeAPIClient:
 
         return "{}://{}:{}/{}/{}".format(PROTOCOL, HOST, str(PORT), device, action)
 
-    def command(self, device, action):
+    def execute(self, device, action):
         r_str = self.build_device_request(device, action)
 
         r = requests.get(r_str)
