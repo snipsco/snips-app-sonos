@@ -19,6 +19,12 @@ Features
 * Search for any Artist, Song, Album on Spotify with your voice
 * Control Music Playback with your voice
 
+
+TODO
+----
+* Set up unittests environment
+* Set up Tox 
+
 Copyright
 ---------
 
