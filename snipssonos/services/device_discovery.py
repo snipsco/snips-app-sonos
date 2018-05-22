@@ -1,2 +1,0 @@
-class DeviceDiscoveryService:
-    pass

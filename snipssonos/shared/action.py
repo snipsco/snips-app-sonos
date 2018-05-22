@@ -1,5 +1,5 @@
-# TODO : make this abstract
-class MusicPlayerSkill(object):
+# TODO : Make this abstract
+class SpeakerControllerAction(object):
     """
     an interface to interact with intents following the ontology of the "Music Player" assistant.
     """

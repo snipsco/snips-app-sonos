@@ -6,7 +6,7 @@ from hermes_python.hermes import Hermes
 from hermes_python.ontology import *
 import io
 
-from snipssonos.snipssonos import SonosMusicPlayerSkill
+from snipssonos.snipssonos import SonosControllerAction
 
 # Utils functions
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
@@ -34,58 +34,58 @@ def read_configuration_file(configuration_file):
 # Music management functions
 
 def addSong_callback(hermes, intentMessage):
-    hermes.skill.add_song()
+    hermes.action.add_song()
 
 def getInfos_callback(hermes, intentMessage):
-    hermes.skill.get_infos()
+    hermes.action.get_infos()
 
 def playAlbum_callback(hermes, intentMessage):
-    hermes.skill.play_album(intentMessage.slots.album_name, intentMessage.slots.album_lecture_mode)
+    hermes.action.play_album(intentMessage.slots.album_name, intentMessage.slots.album_lecture_mode)
 
 def playArtist_callback(hermes, intentMessage):
-    hermes.skill.play_artist(intentMessage.slots.artist_name)
+    hermes.action.play_artist(intentMessage.slots.artist_name)
 
 def playPlaylist_callback(hermes, intentMessage):
-    hermes.skill.play_playlist(intentMessage.slots.playlist_name, intentMessage.slots.playlist_lecture_mode)
+    hermes.action.play_playlist(intentMessage.slots.playlist_name, intentMessage.slots.playlist_lecture_mode)
 
 def playSong_callback(hermes, intentMessage):
-    hermes.skill.play_song(intentMessage.slots.song_name)
+    hermes.action.play_song(intentMessage.slots.song_name)
 
 def radioOn_callback(hermes, intentMessage):
-    hermes.skill.radio_on(intentMessage.slots.radio_name)
+    hermes.action.radio_on(intentMessage.slots.radio_name)
 
 
 # Playback functions
 
 #P0
 def previousSong_callback(hermes, intentMessage):
-    hermes.skill.previous_song()
+    hermes.action.previous_song()
 
 #P0
 def nextSong_callback(hermes, intentMessage):
-    hermes.skill.next_song()
+    hermes.action.next_song()
 
 #P0
 def resumeMusic_callback(hermes, intentMessage):
-    hermes.skill.resume_music()
+    hermes.action.resume_music()
 
 #P0
 def speakerInterrupt_callback(hermes, intentMessage):
-    hermes.skill.speaker_interrupt()
+    hermes.action.speaker_interrupt()
 
 
 def volumeDown_callback(hermes, intentMessage):
-    hermes.skill.volume_down(intentMessage.slots.volume_lower)
+    hermes.action.volume_down(intentMessage.slots.volume_lower)
 
 def volumeUp_callback(hermes, intentMessage):
-    hermes.skill.volume_up(intentMessage.slots.volume_higher)
+    hermes.action.volume_up(intentMessage.slots.volume_higher)
 
 
 if __name__ == "__main__":
 
     with Hermes(HERMES_HOST) as h:
 
-        h.skill = SonosMusicPlayerSkill()
+        h.action = SonosControllerAction()
 
         h\
             .subscribe_intent("volumeUp", volumeUp_callback) \
