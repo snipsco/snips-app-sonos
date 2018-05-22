@@ -37,7 +37,7 @@ setup(
     author="The Als",
     url='https://github.com/snipsco/snips-skill-sonos',
     packages=[
-        'snipssonos','snipssonos/provider'
+        'snipssonos'
     ],
     include_package_data=True,
     install_requires=requirements,
