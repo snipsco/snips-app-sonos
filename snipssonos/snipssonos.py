@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from shared.skill import MusicPlayerSkill
 from services.node_music_playback import NodeMusicPlaybackService
 from services.node_device_discovery import NodeDeviceDiscoveryService
