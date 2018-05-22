@@ -8,10 +8,13 @@ class VolumeUpUseCase(object):
 
 
     def execute(self, request):
-        try:
-            device = self.device_discovery_service.get()
-            self.device_transport_control_service.volume_up(device)
-            return ResponseSuccess()
+        if bool(request):
+            try:
+                device = self.device_discovery_service.get()
+                self.device_transport_control_service.volume_up(device, request.volume_increase_in_percent)
+                return ResponseSuccess()
 
-        except NoReachableDeviceException as e:
-            return ResponseFailure.build_resource_error(e)
+            except NoReachableDeviceException as e:
+                return ResponseFailure.build_resource_error(e)
+        else:
+            return ResponseFailure.build_from_invalid_request_object(request)
