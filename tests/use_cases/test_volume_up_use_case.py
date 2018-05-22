@@ -54,18 +54,14 @@ def test_use_case_with_wrong_parameter():
     device_transport_control_service = mock.Mock()
     volume_up_uc = VolumeUpUseCase(device_discovery_service, device_transport_control_service)
 
-    volume_up_request = VolumeUpRequestObject.from_dict({"volume": volume_level_is_a_string})
+    volume_up_request = VolumeUpRequestObject.from_dict({'volume_increase' : volume_level_is_a_string})
     response_object = volume_up_uc.execute(volume_up_request)
 
-    assert bool(response_object) is True
+    assert bool(response_object) is False
 
 
 def test_use_case_with_parameter_out_of_range():
-    assert True is False
-
-
-def test_use_case_with_positive_percentage(connected_device):
-    volume_level_in_percentage = 10
+    volume_increase_in_percentage = 123456789
 
     device_discovery_service = mock.Mock()
     device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
@@ -73,21 +69,64 @@ def test_use_case_with_positive_percentage(connected_device):
     device_transport_control_service = mock.Mock()
     volume_up_uc = VolumeUpUseCase(device_discovery_service, device_transport_control_service)
 
-    volume_up_request = VolumeUpRequestObject.from_dict({"volume_increase_in_percent" : volume_level_in_percentage})
+    volume_up_request = VolumeUpRequestObject.from_dict({'volume_increase': volume_increase_in_percentage})
+    response_object = volume_up_uc.execute(volume_up_request)
+
+    assert bool(response_object) is False
+    assert connected_device.volume == 10
+
+
+def test_use_case_with_positive_percentage(connected_device):
+    volume_increase_in_percentage = 10
+
+    device_discovery_service = mock.Mock()
+    device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
+
+    device_transport_control_service = mock.Mock()
+    volume_up_uc = VolumeUpUseCase(device_discovery_service, device_transport_control_service)
+
+    volume_up_request = VolumeUpRequestObject.from_dict({'volume_increase': volume_increase_in_percentage})
     response_object = volume_up_uc.execute(volume_up_request)
 
     assert bool(response_object) is True
-    device_transport_control_service.volume_up.assert_called_with(connected_device, volume_level_in_percentage)
-    # We assert that the device now has an increased volume of 10%
+    device_transport_control_service.volume_up.assert_called_with(connected_device, volume_increase_in_percentage)
+    assert connected_device.volume == 20
 
 
 
 def test_use_case_with_negative_percentage():
-    assert True is False
+    volume_increase_in_percentage = -10
+
+    device_discovery_service = mock.Mock()
+    device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
+
+    device_transport_control_service = mock.Mock()
+    volume_up_uc = VolumeUpUseCase(device_discovery_service, device_transport_control_service)
+
+    volume_up_request = VolumeUpRequestObject.from_dict({'volume_increase': volume_increase_in_percentage})
+    response_object = volume_up_uc.execute(volume_up_request)
+
+    assert bool(response_object) is False
+    assert connected_device.volume == 10
+
+
 
 
 def test_use_case_with_positive_integer():
-    assert True is False
+    volume_increase_integer = 10
+
+    device_discovery_service = mock.Mock()
+    device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
+
+    device_transport_control_service = mock.Mock()
+    volume_up_uc = VolumeUpUseCase(device_discovery_service, device_transport_control_service)
+
+    volume_up_request = VolumeUpRequestObject.from_dict({'volume_increase' : volume_increase_integer})
+    response_object = volume_up_uc.execute(volume_up_request)
+
+    assert bool(response_object) is True
+    device_transport_control_service.volume_up.assert_called_with(connected_device, volume_increase_integer)
+    assert connected_device.volume == 20
 
 
 def test_use_case_with_negative_integer():

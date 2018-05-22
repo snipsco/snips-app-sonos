@@ -11,7 +11,7 @@ class VolumeUpUseCase(object):
         if bool(request):
             try:
                 device = self.device_discovery_service.get()
-                self.device_transport_control_service.volume_up(device, request.volume_increase_in_percent)
+                self.device_transport_control_service.volume_up(device, request.volume_increase)
                 return ResponseSuccess()
 
             except NoReachableDeviceException as e:
