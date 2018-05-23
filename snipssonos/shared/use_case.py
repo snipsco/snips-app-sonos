@@ -1,8 +1,6 @@
 from snipssonos.shared.response_object import ResponseFailure
 
 class UseCase(object):
-    def __init__(self):
-        pass
 
     def execute(self, request_object):
         if not request_object:
