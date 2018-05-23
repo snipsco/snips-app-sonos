@@ -1,6 +1,8 @@
 from snipssonos.entities.entities import Entity
 
 class Device(object):
+    VOLUME_MAX = 100
+
     def __init__(self, identifier, name, volume):
         self.name = name
         self.identifier = identifier
