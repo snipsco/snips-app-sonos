@@ -15,7 +15,7 @@ def connected_device():
         volume=10
     )
 
-def test_use_case_empty_parameters():
+def test_use_case_empty_parameters(connected_device):
     device_discovery_service = mock.Mock()
     device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
 
