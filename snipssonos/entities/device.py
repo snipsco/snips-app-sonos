@@ -6,10 +6,10 @@ class Device(object):
         self.identifier = identifier
 
     @classmethod
-    def from_dict(cls, dictio):
+    def from_dict(cls, a_dictionary):
         device = cls(
-            name= dictio['name'],
-            identifier=dictio['identifier']
+            name= a_dictionary['name'],
+            identifier=a_dictionary['identifier']
         )
         return device
 
