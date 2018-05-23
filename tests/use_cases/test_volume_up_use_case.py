@@ -11,7 +11,8 @@ from snipssonos.exceptions import NoReachableDeviceException
 def connected_device():
     return Device(
         name="Anthony's Sonos",
-        identifier="RINCON_XXXX"
+        identifier="RINCON_XXXX",
+        volume=10
     )
 
 def test_use_case_empty_parameters():
@@ -60,7 +61,7 @@ def test_use_case_with_wrong_parameter():
     assert bool(response_object) is False
 
 
-def test_use_case_with_parameter_out_of_range():
+def test_use_case_with_parameter_out_of_range(connected_device):
     volume_increase_in_percentage = 123456789
 
     device_discovery_service = mock.Mock()
@@ -94,7 +95,7 @@ def test_use_case_with_positive_percentage(connected_device):
 
 
 
-def test_use_case_with_negative_percentage():
+def test_use_case_with_negative_percentage(connected_device):
     volume_increase_in_percentage = -10
 
     device_discovery_service = mock.Mock()
@@ -112,7 +113,7 @@ def test_use_case_with_negative_percentage():
 
 
 
-def test_use_case_with_positive_integer():
+def test_use_case_with_positive_integer(connected_device):
     volume_increase_integer = 10
 
     device_discovery_service = mock.Mock()
@@ -129,11 +130,11 @@ def test_use_case_with_positive_integer():
     assert connected_device.volume == 20
 
 
-def test_use_case_with_negative_integer():
+def test_use_case_with_negative_integer(connected_device):
     assert True is False
 
 
-def test_use_case_with_maximum_volume():
+def test_use_case_with_maximum_volume(connected_device):
     assert True is False
 
 
