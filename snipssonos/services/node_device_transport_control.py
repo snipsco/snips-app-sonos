@@ -1,6 +1,7 @@
 import requests
 
 from snipssonos.services.device_transport_control import DeviceTransportControlService
+from snipssonos.exceptions import NoReachableDeviceException
 
 class NodeDeviceTransportControlService(DeviceTransportControlService):
 
@@ -16,7 +17,7 @@ class NodeDeviceTransportControlService(DeviceTransportControlService):
         req = requests.get(query_url)
         if req.ok:
             return True
-        return False
+        raise NoReachableDeviceException("Could not reach your Sonos device")
 
     def generate_volume_up_query(self, room_name, volume_increment):
         return "{}{}:{}/{}/volume/{}".format(self.PROTOCOL, self.HOST, self.PORT, room_name, volume_increment)
