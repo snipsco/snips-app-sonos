@@ -1,0 +1,2 @@
+class DeviceDiscoveryService(object):
+    pass

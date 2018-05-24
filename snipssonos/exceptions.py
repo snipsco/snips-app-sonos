@@ -9,6 +9,9 @@ class ServiceException(SonosActionException):
 class DeviceDiscoveryException(ServiceException):
     """An exceptio occured with the device discovery service"""
 
+class DeviceParsingException(DeviceDiscoveryException):
+    """An error occured while trying to parse a device"""
+
 
 class NoReachableDeviceException(DeviceDiscoveryException):
     """No connected devices were found by the DeviceDiscovery service"""
