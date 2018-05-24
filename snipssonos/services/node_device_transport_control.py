@@ -11,8 +11,9 @@ class NodeDeviceTransportControlService(DeviceTransportControlService):
 
     def volume_up(self, device, volume_increment):
         room_name = device.name
+        volume_level = device.volume + volume_increment
 
-        query_url = self.generate_volume_up_query(room_name, volume_increment)
+        query_url = self.generate_volume_up_query(room_name, volume_level)
 
         req = requests.get(query_url)
         if req.ok:

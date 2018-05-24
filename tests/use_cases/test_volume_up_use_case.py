@@ -27,8 +27,10 @@ def test_use_case_empty_parameters(connected_device):
 
     device_discovery_service.get.assert_called()
     device_transport_control_service.volume_up.assert_called()
+    device_transport_control_service.volume_up.assert_called_with(connected_device, VolumeUpUseCase.DEFAULT_VOLUME_INCREMENT)
 
     assert bool(result_object) is True
+    assert connected_device.volume == 10 + VolumeUpUseCase.DEFAULT_VOLUME_INCREMENT
 
 
 def test_use_case_no_reachable_device():

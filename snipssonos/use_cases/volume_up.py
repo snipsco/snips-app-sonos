@@ -16,6 +16,6 @@ class VolumeUpUseCase(UseCase):
             self.device_transport_control_service.volume_up(device, request_object.volume_increase)
             device.increase_volume(request_object.volume_increase)
         else:
+            self.device_transport_control_service.volume_up(device, self.DEFAULT_VOLUME_INCREMENT)
             device.increase_volume(self.DEFAULT_VOLUME_INCREMENT)
-            self.device_transport_control_service.volume_up(device, request_object.volume_increase)
         return ResponseSuccess()
