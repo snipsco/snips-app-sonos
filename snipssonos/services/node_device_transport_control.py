@@ -9,9 +9,9 @@ class NodeDeviceTransportControlService(DeviceTransportControlService):
     HOST = "localhost"
     PROTOCOL = "http://"
 
-    def volume_up(self, device, volume_increment):
+    def volume_up(self, device):
         room_name = device.name
-        volume_level = device.volume + volume_increment
+        volume_level = device.volume
 
         query_url = self.generate_volume_up_query(room_name, volume_level)
 

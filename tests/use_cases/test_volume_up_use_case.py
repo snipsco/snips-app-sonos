@@ -19,6 +19,8 @@ def test_use_case_empty_parameters(connected_device):
     device_discovery_service = mock.Mock()
     device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
 
+    initial_volume = connected_device.volume
+
     device_transport_control_service = mock.Mock()
 
     volume_up_uc = VolumeUpUseCase(device_discovery_service, device_transport_control_service)
@@ -27,10 +29,11 @@ def test_use_case_empty_parameters(connected_device):
 
     device_discovery_service.get.assert_called()
     device_transport_control_service.volume_up.assert_called()
-    device_transport_control_service.volume_up.assert_called_with(connected_device, VolumeUpUseCase.DEFAULT_VOLUME_INCREMENT)
+
+    device_transport_control_service.volume_up.assert_called_with(connected_device)
 
     assert bool(result_object) is True
-    assert connected_device.volume == 10 + VolumeUpUseCase.DEFAULT_VOLUME_INCREMENT
+    assert connected_device.volume == initial_volume + VolumeUpUseCase.DEFAULT_VOLUME_INCREMENT
 
 
 def test_use_case_no_reachable_device():
@@ -81,6 +84,7 @@ def test_use_case_with_parameter_out_of_range(connected_device):
 
 def test_use_case_with_positive_percentage(connected_device):
     volume_increase_in_percentage = 10
+    initial_volume = connected_device.volume
 
     device_discovery_service = mock.Mock()
     device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
@@ -92,8 +96,8 @@ def test_use_case_with_positive_percentage(connected_device):
     response_object = volume_up_uc.execute(volume_up_request)
 
     assert bool(response_object) is True
-    device_transport_control_service.volume_up.assert_called_with(connected_device, volume_increase_in_percentage)
-    assert connected_device.volume == 20
+    device_transport_control_service.volume_up.assert_called_with(connected_device)
+    assert connected_device.volume == initial_volume + volume_increase_in_percentage
 
 
 def test_use_case_with_negative_percentage(connected_device):
@@ -114,6 +118,7 @@ def test_use_case_with_negative_percentage(connected_device):
 
 def test_use_case_with_positive_integer(connected_device):
     volume_increase_integer = 10
+    initial_volume = connected_device.volume
 
     device_discovery_service = mock.Mock()
     device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
@@ -125,8 +130,8 @@ def test_use_case_with_positive_integer(connected_device):
     response_object = volume_up_uc.execute(volume_up_request)
 
     assert bool(response_object) is True
-    device_transport_control_service.volume_up.assert_called_with(connected_device, volume_increase_integer)
-    assert connected_device.volume == 20
+    device_transport_control_service.volume_up.assert_called_with(connected_device)
+    assert connected_device.volume == initial_volume + volume_increase_integer
 
 
 def test_use_case_with_negative_integer(connected_device):

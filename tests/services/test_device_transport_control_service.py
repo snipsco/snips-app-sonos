@@ -19,7 +19,7 @@ def test_cant_use_transport_service_volume_up(connected_device):
     increment = 10
 
     with pytest.raises(NotImplementedError):
-        transport_service.volume_up(connected_device, increment)
+        transport_service.volume_up(connected_device)
 
 
 
