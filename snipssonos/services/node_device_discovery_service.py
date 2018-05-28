@@ -38,9 +38,15 @@ class NodeDeviceDiscoveryService(DeviceDiscoveryService):
         parsed_response = json.loads(json_response)
 
         try:
-            members_section = parsed_response[0]['members']
-            devices = [Device(member['uuid'], member['roomName'], member['state']['volume']) for member in members_section]
+            members_section = self.extract_member_section_from_json_payload(parsed_response)
+            devices = [self.parse_device_object_from_json_member_payload(member) for member in members_section]
         except KeyError as e:
             raise DeviceParsingException(e.message)
 
         return devices
+
+    def parse_device_object_from_json_member_payload(self, member):
+        return Device(member['uuid'], member['roomName'], int(member['state']['volume']))
+
+    def extract_member_section_from_json_payload(self, json_payload):
+        return json_payload[0]['members']
