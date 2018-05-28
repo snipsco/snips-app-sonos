@@ -23,7 +23,7 @@ def correct_intent_message():
     volume_slot = generate_volume_slot(VOLUME_INCREASE)
 
     slots_mapping = defaultdict(SlotsList)
-    slots_mapping['volume_increase'] = SlotsList([volume_slot])
+    slots_mapping['volume_higher'] = SlotsList([volume_slot])
     slots = SlotMap(slots_mapping)
 
     intent_message = IntentMessage(
@@ -46,7 +46,7 @@ def correct_intent_message_with_two_slots():
     second_volume_slot = generate_volume_slot(VOLUME_INCREASE_SECOND)
 
     slots_mapping = defaultdict(SlotsList)
-    slots_mapping['volume_increase'] = SlotsList([first_volume_slot, second_volume_slot])
+    slots_mapping['volume_higher'] = SlotsList([first_volume_slot, second_volume_slot])
     slots = SlotMap(slots_mapping)
 
     intent_message = IntentMessage(
@@ -75,7 +75,7 @@ def test_volume_up_adapter_from_correct_intent_message_generates_valid_request(c
 
     assert isinstance(valid_request, ValidRequestObject)
     assert isinstance(valid_request, VolumeUpRequestObject)
-    assert valid_request.volume_increase == correct_intent_message.slots.volume_increase.first().value
+    assert valid_request.volume_increase == correct_intent_message.slots.volume_higher.first().value
 
 
 def test_volume_up_adapter_from_intent_message_with_no_slots_generates_valid_request():
@@ -107,7 +107,7 @@ def test_volume_up_adapter_from_intent_message_with_multiple_slots_generates_inv
     fake_slot.slot_value = fake_slot_value
 
     slots_mapping = defaultdict(SlotsList)
-    slots_mapping['volume_increase'] = SlotsList([volume_slot])
+    slots_mapping['volume_higher'] = SlotsList([volume_slot])
     slots_mapping['fake_slot'] = SlotsList([fake_slot])
 
     slots = SlotMap(slots_mapping)
@@ -134,6 +134,6 @@ def test_volume_up_adapter_from_intent_message_with_slot_with_array_of_values_ge
     assert isinstance(valid_request, ValidRequestObject)
     assert isinstance(valid_request, VolumeUpRequestObject)
 
-    assert valid_request.volume_increase == correct_intent_message_with_two_slots.slots.volume_increase.first().value
+    assert valid_request.volume_increase == correct_intent_message_with_two_slots.slots.volume_higher.first().value
 
 

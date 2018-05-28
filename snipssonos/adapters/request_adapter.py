@@ -9,7 +9,7 @@ class VolumeUpRequestAdapter(object):
 
     @staticmethod
     def extract_slots_dictionary(intentMessage):
-        if len(intentMessage.slots.volume_increase):
-            return {'volume_increase': intentMessage.slots.volume_increase.first().value}
+        if len(intentMessage.slots.volume_higher):
+            return {'volume_increase': int(intentMessage.slots.volume_higher.first().value)}
         else:
             return dict()
