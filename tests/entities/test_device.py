@@ -100,3 +100,27 @@ def test_device_increment_volume_exceeds_high_range():
     assert device.volume == d.Device.VOLUME_MAX
 
 
+def test_device_decrement_volume_within_range():
+    identifier = "RINCON_XXXX"
+    name = "Sonos Device"
+    volume = 50
+
+    device = d.Device(identifier, name, volume)
+
+    decrement = 25
+
+    device.decrease_volume(decrement)
+
+    assert device.volume == 25
+
+def test_device_decrement_volume_exceeds_high_range():
+    identifier = "RINCON_XXXXXXX"
+    name = "Sonos device"
+    volume = 20
+
+    device = d.Device(identifier, name, volume)
+
+    decrement = 100
+    device.decrease_volume(decrement)
+
+    assert device.volume == d.Device.VOLUME_MIN

@@ -96,7 +96,7 @@ def test_use_case_with_positive_percentage(connected_device):
     response_object = volume_down_uc.execute(volume_down_request)
 
     assert bool(response_object) is True
-    device_transport_control_service.volume_up.assert_called_with(connected_device)
+    device_transport_control_service.volume_down.assert_called_with(connected_device)
     assert connected_device.volume == initial_volume - volume_decrease_in_percentage
 
 
@@ -130,8 +130,8 @@ def test_use_case_with_positive_integer(connected_device):
     response_object = volume_down_uc.execute(volume_down_request)
 
     assert bool(response_object) is True
-    device_transport_control_service.volume_up.assert_called_with(connected_device)
-    assert connected_device.volume == initial_volume + volume_decrease_integer
+    device_transport_control_service.volume_down.assert_called_with(connected_device)
+    assert connected_device.volume == initial_volume - volume_decrease_integer
 
 
 def test_use_case_with_negative_integer(connected_device):

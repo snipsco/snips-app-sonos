@@ -35,5 +35,8 @@ class Device(object):
     def increase_volume(self, volume_increment):
         self.volume = self.volume + volume_increment
 
+    def decrease_volume(self, volume_decrement):
+        self.volume = self.volume - volume_decrement
+
 
 Entity.register(Device)
