@@ -48,3 +48,6 @@ class VolumeDownRequestObject(ValidRequestObject):
         return cls(
             volume_decrease=a_dictionary.get('volume_decrease', None)
         )
+
+class PlaySongRequestObject(ValidRequestObject):
+    pass
