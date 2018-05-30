@@ -8,8 +8,8 @@ class NodeMusicPlaybackService(MusicPlaybackService): # TODO : Refactor this in 
     HOST = "localhost"
     PROTOCOL = "http://"
 
-    def play(self, music_item):
-
+    def play(self, device, music_item):
+        self.device = device
         query_url = self._generate_play_now_query(music_item)
         req = requests.get(query_url)
 

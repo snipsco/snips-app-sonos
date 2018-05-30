@@ -49,5 +49,21 @@ class VolumeDownRequestObject(ValidRequestObject):
             volume_decrease=a_dictionary.get('volume_decrease', None)
         )
 
-class PlaySongRequestObject(ValidRequestObject):
-    pass
+class PlayTrackRequestObject(ValidRequestObject):
+    def __init__(self, track_name):
+        self.track_name = track_name
+
+    @classmethod
+    def from_dict(cls, a_dictionary):
+        invalid_request = InvalidRequestObject()
+
+        if not('track_name' in a_dictionary):
+            invalid_request.add_error('track_name','is missing')
+
+        if invalid_request.has_errors():
+            return invalid_request
+
+        return cls(
+            track_name=a_dictionary.get('track_name', None)
+        )
+
