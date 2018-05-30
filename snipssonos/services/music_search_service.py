@@ -20,28 +20,28 @@ class MusicSearchService(object): # TODO : Make this class Abstract
         raise NotImplementedError("search_album_for_artist_and_for_playlist() method not implemented for now.")
 
     # Song
-    def search_song(self, song_name):
+    def search_track(self, track_name):
         raise NotImplementedError("search_song() method not implemented for now.")
 
-    def search_song_for_playlist(self, song_name):
+    def search_track_for_playlist(self, track_name):
         raise NotImplementedError("search_song_for_playlist() method not implemented for now.")
 
-    def search_song_for_artist(self, song_name):
+    def search_track_for_artist(self, track_name):
         raise NotImplementedError("search_song_for_artist() method not implemented for now.")
 
-    def search_song_for_artist_and_for_playlist(self, song_name):
+    def search_track_for_artist_and_for_playlist(self, track_name):
         raise NotImplementedError("search_song_for_artist_and_for_playlist() method not implemented for now.")
 
-    def search_song_for_album(self, song_name):
+    def search_track_for_album(self, track_name):
         raise NotImplementedError("search_song_for_album() method not implemented for now.")
 
-    def search_song_for_album_and_for_playlist(self, song_name):
+    def search_track_for_album_and_for_playlist(self, track_name):
         raise NotImplementedError("search_song_for_album_and_for_playlist() method not implemented for now.")
 
-    def search_song_for_album_and_for_artist(self, song_name):
+    def search_track_for_album_and_for_artist(self, track_name):
         raise NotImplementedError("search_song_for_album_and_for_artist() method not implemented for now.")
 
-    def search_song_for_album_and_for_artist_and_for_playlist(self, song_name):
+    def search_track_for_album_and_for_artist_and_for_playlist(self, track_name):
         raise NotImplementedError("search_song_for_album_and_for_artist_and_for_playlist() method not implemented for now.")
 
     # Playlist

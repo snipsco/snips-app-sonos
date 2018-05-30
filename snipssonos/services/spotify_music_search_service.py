@@ -1,6 +1,8 @@
 import base64
+import json
 import requests
 
+from snipssonos.entities.track import Track
 from snipssonos.exceptions import MusicSearchProviderConnectionError, MusicSearchCredentialsError
 from snipssonos.services.music_search_service import MusicSearchService
 
@@ -13,10 +15,22 @@ class SpotifyMusicSearchService(MusicSearchService):
 
         self.client = SpotifyClient(self.client_id, self.client_secret)
 
-    def search_song(self, song_name):
-        pass
+    def search_track(self, song_name):
+        song_search_query = SpotifyAPIQueryBuilder()\
+            .add_song_result_type() \
+            .add_search_term(song_name)
 
+        raw_response = self.client.execute_query(song_search_query)
+        tracks = self._parse_track_results(raw_response)
+        return tracks
 
+    def _parse_track_results(self, raw_response):
+        response = json.loads(raw_response)
+        tracks = response['tracks']
+
+        tracks = [Track(item['uri']) for item in tracks['items']]
+
+        return tracks
 
 
 class SpotifyClient(object):
@@ -71,15 +85,67 @@ class SpotifyClient(object):
         except requests.exceptions.ConnectionError as e:
             raise MusicSearchProviderConnectionError
 
+    def authenticate(self):
+        self.access_token = self.retrieve_access_token()
+
     def execute_query(self, query):
         try:
+            self.authenticate()
             headers = self._get_authorization_headers_from_access_token()
             response = requests.get(
-                query,
+                self.SEARCH_ENDPOINT,
+                params=query.to_dict(),
                 headers=headers)
-            return response
+            if response.ok:
+                return response.text
+            else:
+                raise MusicSearchProviderConnectionError
         except requests.exceptions.ConnectionError as e:
             raise MusicSearchProviderConnectionError
+
+
+class SpotifyAPIQueryBuilder(object):
+    def __init__(self):
+        self.keyword = ""
+        self.field_filters = []
+        self.result_type = None
+
+    def add_search_term(self, term):
+        if len(term):
+            self.keyword = term
+        return self
+
+    def add_result_type(self, result_type):
+        self.result_type = result_type
+        return self
+
+    def add_song_result_type(self):
+        self.add_result_type("track")
+        return self
+
+    def add_field_filter(self, music_field_key, music_field_value):
+        self.field_filters.append((music_field_key, music_field_value))
+        return self
+
+    def _get_query_from_field_filters(self):
+        return ''.join(["{}:{} ".format(field_filter[0], field_filter[1]) for field_filter in self.field_filters]).strip()
+
+    def to_dict(self):
+        params_dictionary = {}
+
+        if len(self.field_filters):
+            query = self._get_query_from_field_filters()
+            params_dictionary.update({'q': query})
+        else:
+            query = self.keyword
+            params_dictionary.update({'q': query})
+
+
+        if self.result_type:
+            params_dictionary.update({'type': self.result_type})
+
+        return params_dictionary
+
 
 
 
@@ -218,39 +284,3 @@ class SpotifyClient(object):
             )
         except Exception:
             return None"""
-
-
-class SpotifyAPIQueryBuilder(object):
-    def __init__(self):
-        self.keyword = ""
-        self.field_filters = []
-        self.result_type = None
-
-    def add_search_term(self, term):
-        if len(term):
-            self.keyword = term
-
-    def add_result_type(self, result_type):
-        self.result_type = result_type
-
-    def add_field_filter(self, music_field_key, music_field_value):
-        self.field_filters.append((music_field_key, music_field_value))
-
-    def _get_query_from_field_filters(self):
-        return ''.join(["{}:{} ".format(field_filter[0], field_filter[1]) for field_filter in self.field_filters]).strip()
-
-    def to_dict(self):
-        params_dictionary = {}
-
-        if len(self.field_filters):
-            query = self._get_query_from_field_filters()
-            params_dictionary.update({'q': query})
-        else:
-            query = self.keyword
-            params_dictionary.update({'q': query})
-
-
-        if self.result_type:
-            params_dictionary.update({'type': self.result_type})
-
-        return params_dictionary
