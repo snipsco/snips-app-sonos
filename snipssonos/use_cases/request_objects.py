@@ -49,6 +49,57 @@ class VolumeDownRequestObject(ValidRequestObject):
             volume_decrease=a_dictionary.get('volume_decrease', None)
         )
 
+
+class VolumeSetRequestObject(ValidRequestObject):
+    def __init__(self,  volume_level=None):
+        self.volume_level = volume_level
+
+    @classmethod
+    def from_dict(cls, a_dictionary):
+        invalid_request = InvalidRequestObject()
+
+        if not('volume_level' in a_dictionary):
+            invalid_request.add_error('volume_level', 'is missing')
+
+        if 'volume_level' in a_dictionary and not isinstance(a_dictionary['volume_level'], int):
+            invalid_request.add_error('volume_level', 'must be an integer')
+
+        if 'volume_level' in a_dictionary and isinstance(a_dictionary['volume_level'], int) and a_dictionary['volume_level'] < 0:
+            invalid_request.add_error('volume_level', 'must be positive')
+
+        if 'volume_level' in a_dictionary and isinstance(a_dictionary['volume_level'], int) and a_dictionary['volume_level'] > 100:
+            invalid_request.add_error('volume_level', 'must be lower than 100')
+
+        if invalid_request.has_errors():
+            return invalid_request
+
+        return cls(
+            volume_level=a_dictionary.get('volume_level', None)
+        )
+
+class ResumeMusicRequestObject(ValidRequestObject):
+
+    @classmethod
+    def from_dict(cls, a_dictionary):
+        invalid_request = InvalidRequestObject()
+
+        if invalid_request.has_errors():
+            return invalid_request
+
+        return cls()
+
+
+class SpeakerInterruptRequestObject(ValidRequestObject):
+
+    @classmethod
+    def from_dict(cls, a_dictionary):
+        invalid_request = InvalidRequestObject()
+
+        if invalid_request.has_errors():
+            return invalid_request
+        return cls()
+
+
 class PlayTrackRequestObject(ValidRequestObject):
     def __init__(self, track_name):
         self.track_name = track_name
@@ -88,3 +139,6 @@ class PlayArtistRequestObject(ValidRequestObject):
             track_name=a_dictionary.get('track_name', None)
         )
 
+
+class PlayMusicRequestObject(ValidRequestObject):
+    pass

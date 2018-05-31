@@ -36,7 +36,20 @@ def test_generate_url_query_for_volume_up(connected_device):
 
     transport_service = NodeDeviceTransportControlService()
 
-    assert transport_service.generate_volume_up_query(room_name, volume_level) == "http://localhost:5005/Antho/volume/10"
+    assert transport_service._generate_volume_query(room_name, volume_level) == "http://localhost:5005/Antho/volume/10"
+
+def test_generate_url_query_for_resume(connected_device):
+    PROTOCOL = NodeDeviceTransportControlService.PROTOCOL
+    HOST = NodeDeviceTransportControlService.HOST
+    PORT = NodeDeviceTransportControlService.PORT
+
+    room_name = connected_device.name
+    volume_level = 10
+
+    transport_service = NodeDeviceTransportControlService()
+
+    assert transport_service._generate_resume_query(room_name) == "http://localhost:5005/Antho/play"
+
 
 
 @mock.patch('snipssonos.services.node_device_transport_control.requests')
@@ -48,7 +61,7 @@ def test_volume_up_method_performs_correct_api_query(mocked_requests, connected_
     transport_service.volume_up(connected_device)
 
     mocked_requests.get.assert_called_with(
-        transport_service.generate_volume_up_query(connected_device.name, connected_device.volume))
+        transport_service._generate_volume_query(connected_device.name, connected_device.volume))
 
 @mock.patch('snipssonos.services.node_device_transport_control.requests')
 def test_volume_up_method_failure_raises_exception(mocked_requests, connected_device):

@@ -96,7 +96,7 @@ def test_volume_up_adapter_from_intent_message_with_no_slots_generates_valid_req
     assert isinstance(valid_request, ValidRequestObject)
     assert valid_request.volume_increase is None
 
-
+@pytest.mark.skip(reason="Waiting for next iteration to move parameters validation to constructor")
 def test_volume_up_adapter_from_intent_message_with_multiple_slots_generates_invalid_request():
     VOLUME_INCREASE = 10
     volume_slot = generate_volume_slot(VOLUME_INCREASE)

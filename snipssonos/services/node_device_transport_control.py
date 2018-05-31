@@ -9,17 +9,45 @@ class NodeDeviceTransportControlService(DeviceTransportControlService):
     HOST = "localhost"
     PROTOCOL = "http://"
 
-    def volume_up(self, device):
+    BASE_URL = "{}{}:{}".format(PROTOCOL, HOST, PORT)
+
+    def pause(self, device):
         room_name = device.name
-        volume_level = device.volume
+        query_url = self._generate_pause_query(room_name)
+        return self._process_query(query_url)
 
-        query_url = self.generate_volume_up_query(room_name, volume_level)
+    def resume(self, device):
+        room_name = device.name
+        query_url = self._generate_resume_query(room_name)
 
+        return self._process_query(query_url)
+
+    def _generate_pause_query(self, room_name):
+        return "{}/{}/pause".format(self.BASE_URL, room_name)
+
+    def _generate_resume_query(self, room_name):
+        return "{}/{}/play".format(self.BASE_URL, room_name)
+
+    def _generate_volume_query(self, room_name, volume_level):
+        return "{}/{}/volume/{}".format(self.BASE_URL, room_name, volume_level)
+
+    def _process_query(self, query_url):
         req = requests.get(query_url)
         if req.ok:
             return True
         raise NoReachableDeviceException("Could not reach your Sonos device")
 
-    def generate_volume_up_query(self, room_name, volume_increment):
-        return "{}{}:{}/{}/volume/{}".format(self.PROTOCOL, self.HOST, self.PORT, room_name, volume_increment)
+    def volume_up(self, device):
+        return self.set_volume(device)
+
+    def volume_down(self, device):
+        return self.set_volume(device)
+
+    def set_volume(self, device):
+        room_name = device.name
+        volume_level = device.volume
+
+        query_url = self._generate_volume_query(room_name, volume_level)
+
+        return self._process_query(query_url)
 
