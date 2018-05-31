@@ -2,7 +2,7 @@ import mock
 import pytest
 import requests
 
-from snipssonos.services.spotify_music_search_service import SpotifyClient, SpotifyMusicSearchService, SpotifyAPIQueryBuilder
+from snipssonos.services.spotify_music_search_service import SpotifyClient, SpotifyMusicSearchService, SpotifyAPISearchQueryBuilder
 from snipssonos.exceptions import MusicSearchCredentialsError, MusicSearchProviderConnectionError
 
 
@@ -42,10 +42,10 @@ def test_spotify_client_encodes_base_64_raises_exception_with_empty_credentials(
         client = SpotifyClient(client_id, client_secret)
 
 
-# Testing Spotify API Query Builder
+# Testing Spotify API Search Query Builder
 def test_spotify_api_query_builder_add_search_term():
-    qb = SpotifyAPIQueryBuilder()
-    qb.add_search_term('roadhouse blues')
+    qb = SpotifyAPISearchQueryBuilder()
+    qb.add_generic_search_term('roadhouse blues')
 
     actual_dict = qb.to_dict()
 
@@ -54,8 +54,8 @@ def test_spotify_api_query_builder_add_search_term():
 
 
 def test_spotify_api_query_builder_add_field_filter():
-    qb = SpotifyAPIQueryBuilder()
-    qb.add_search_term('roadhouse blues')
+    qb = SpotifyAPISearchQueryBuilder()
+    qb.add_generic_search_term('roadhouse blues')
     qb.add_field_filter('artist','antho')
     qb.add_field_filter('album', 'this is an album')
 
@@ -64,10 +64,9 @@ def test_spotify_api_query_builder_add_field_filter():
     expected_dict = {'q': 'artist:antho album:this is an album'}
     assert actual_dict['q'] == expected_dict['q']
 
-
 def test_spotify_api_query_builder_add_result_type():
-    qb = SpotifyAPIQueryBuilder()
-    qb.add_search_term('roadhouse blues')
+    qb = SpotifyAPISearchQueryBuilder()
+    qb.add_generic_search_term('roadhouse blues')
     qb.add_result_type('track')
 
     actual_dict = qb.to_dict()
@@ -76,7 +75,38 @@ def test_spotify_api_query_builder_add_result_type():
     assert actual_dict['q'] == expected_dict['q']
     assert actual_dict['type'] == expected_dict['type']
 
+def test_spotify_api_query_builder_add_track_result_type():
+    qb = SpotifyAPISearchQueryBuilder()
+    qb.add_generic_search_term('roadhouse blues')
+    qb.add_track_result_type()
 
+    actual_dict = qb.to_dict()
+
+    expected_dict = {'q': 'roadhouse blues', 'type': 'track'}
+    assert actual_dict['q'] == expected_dict['q']
+    assert actual_dict['type'] == expected_dict['type']
+
+def test_spotify_api_query_builder_add_artist_filter():
+    qb = SpotifyAPISearchQueryBuilder()
+    qb.add_generic_search_term('roadhouse blues')
+    qb.add_artist_filter("antho")
+
+    actual_query_dict = qb.to_dict()
+
+    expected_query_dict = {'q': 'artist:antho'}
+    assert actual_query_dict['q'] == expected_query_dict['q']
+
+def test_spotify_api_query_builder_add_track_filter():
+    qb = SpotifyAPISearchQueryBuilder()
+    qb.add_generic_search_term('roadhouse blues')
+    qb.add_track_filter("pernety")
+
+    actual_query_dict = qb.to_dict()
+
+    expected_query_dict = {'q': 'track:pernety'}
+    assert actual_query_dict['q'] == expected_query_dict['q']
+
+# Testing Spotify Music Service
 def test_correct_parsing_of_tracks_for_correct_response():
     raw_response = """{
   "tracks" : {
@@ -1451,6 +1481,6 @@ def test_correct_parsing_of_tracks_with_empty_response():
 }"""
 
     client = SpotifyMusicSearchService("client_id", "client_secret")
-    tracks = client.parse_track_results(raw_empty_response)
+    tracks = client._parse_track_results(raw_empty_response)
 
     assert len(tracks) == 0

@@ -16,11 +16,23 @@ class SpotifyMusicSearchService(MusicSearchService):
         self.client = SpotifyClient(self.client_id, self.client_secret)
 
     def search_track(self, song_name):
-        song_search_query = SpotifyAPIQueryBuilder()\
-            .add_song_result_type() \
-            .add_search_term(song_name)
+        song_search_query = SpotifyAPISearchQueryBuilder()\
+            .add_track_result_type() \
+            .add_generic_search_term(song_name)
 
         raw_response = self.client.execute_query(song_search_query)
+        tracks = self._parse_track_results(raw_response)
+        return tracks
+
+    def search_track_for_artist(self, artist_name, track_name=None):
+        track_by_artist_search_query = SpotifyAPISearchQueryBuilder()\
+            .add_track_result_type()\
+            .add_field_filter("artist", artist_name)
+
+        if track_name:
+            track_by_artist_search_query.add_track_filter(track_name)
+
+        raw_response = self.client.execute_query(track_by_artist_search_query)
         tracks = self._parse_track_results(raw_response)
         return tracks
 
@@ -104,22 +116,34 @@ class SpotifyClient(object):
             raise MusicSearchProviderConnectionError
 
 
-class SpotifyAPIQueryBuilder(object):
+class SpotifyAPISearchQueryBuilder(object):
     def __init__(self):
         self.keyword = ""
         self.field_filters = []
         self.result_type = None
 
-    def add_search_term(self, term):
+    def add_generic_search_term(self, term):
         if len(term):
             self.keyword = term
+        return self
+
+    def add_track_filter(self, track_name):
+        self.add_field_filter("track", track_name)
+        return self
+
+    def add_artist_filter(self, artist_name):
+        self.add_field_filter("artist", artist_name)
+        return self
+
+    def add_album_filter(self, album_name):
+        self.add_field_filter("album", album_name)
         return self
 
     def add_result_type(self, result_type):
         self.result_type = result_type
         return self
 
-    def add_song_result_type(self):
+    def add_track_result_type(self):
         self.add_result_type("track")
         return self
 
@@ -145,142 +169,3 @@ class SpotifyAPIQueryBuilder(object):
             params_dictionary.update({'type': self.result_type})
 
         return params_dictionary
-
-
-
-
-
-    """def get_user_playlists(self):
-        # TODO: get all playlists if there are more than 50 by looping
-        # and using the offset parameters
-        self.refresh_access_token()
-        self.user_playlists = {}
-        n_found_playlists = 0
-        while True:
-            _r = requests.get(
-                "https://api.spotify.com/v1/me/playlists",
-                params={
-                    'limit': 50,
-                    'offset': n_found_playlists,
-                },
-                headers={
-                    "Authorization": "Bearer {}".format(self.access_token),
-                })
-            if 'items' in _r.json():
-                items = _r.json()['items']
-            else:
-                items = []
-            self.user_playlists.update({
-                playlist['name'].lower(): playlist for
-                playlist in items})
-            if len(self.user_playlists) == n_found_playlists:
-                break
-            n_found_playlists = len(self.user_playlists)
-
-    def get_tracks_from_playlist(self, name):
-        self.refresh_access_token()
-        try:
-            _r = requests.get(
-                self.user_playlists[name]['tracks']['href'],
-                params={
-                    'limit': 100
-                },
-                headers={
-                    "Authorization": "Bearer {}".format(self.access_token),
-                })
-        except KeyError:
-            print "Unknown playlist {}".format(name)
-            return None
-        if 'items' in _r.json():
-            return _r.json()['items']
-        return None
-
-    def get_top_tracks_from_artist(self, artist):
-        self.refresh_access_token()
-        # First get artist id
-        try:
-            _r = requests.get(
-                'https://api.spotify.com/v1/search',
-                params={
-                    'q': artist,
-                    'type': 'artist'
-                },
-                headers={
-                    "Authorization": "Bearer {}".format(self.access_token)
-                }
-            )
-            _id = _r.json()['artists']['items'][0]['id']
-            # Get list of top tracks from artist
-            _r = requests.get(
-                'https://api.spotify.com/v1/artists/{}/top-tracks'.format(_id),
-                params={
-                    'country': 'fr'
-                },
-                headers={
-                    "Authorization": "Bearer {}".format(self.access_token)
-                }
-            )
-            return _r.json()['tracks']
-        except Exception:
-            return None
-
-    def get_track(self, song):
-        self.refresh_access_token()
-        try:
-            _r = requests.get(
-                'https://api.spotify.com/v1/search',
-                params={
-                    'q': song,
-                    'type': 'track'
-                },
-                headers={
-                    "Authorization": "Bearer {}".format(self.access_token)
-                }
-            )
-            # return best match
-            return _r.json()['tracks']['items'][0]
-        except Exception:
-            return None
-
-    def get_tracks_from_album(self, album):
-        self.refresh_access_token()
-        try:
-            _r = requests.get(
-                'https://api.spotify.com/v1/search',
-                params={
-                    'q': album,
-                    'type': 'album'
-                },
-                headers={
-                    "Authorization": "Bearer {}".format(self.access_token)
-                }
-            )
-            # return best match
-            album = _r.json()['albums']['items'][0]
-            _r = requests.get(
-                'https://api.spotify.com/v1/albums/{}/tracks'.format(album['id']),
-                params={},
-                headers={
-                    "Authorization": "Bearer {}".format(self.access_token)
-                }
-            )
-            return _r.json()['items']
-        except Exception:
-            return None
-
-    def add_song(self, artist, song):
-        self.refresh_access_token()
-        # First, get the id of the song
-        track = self.get_track("track:" + '"' + song + '"' + ' artist:' + '"' + artist + '"')
-        try:
-            requests.put(
-                'https://api.spotify.com/v1/me/tracks',
-                params={
-                    "ids": track['id']
-                },
-                headers={
-                    "Authorization": "Bearer {}".format(self.access_token)
-                }
-            )
-        except Exception:
-            return None"""

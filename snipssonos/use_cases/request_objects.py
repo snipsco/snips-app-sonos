@@ -67,3 +67,24 @@ class PlayTrackRequestObject(ValidRequestObject):
             track_name=a_dictionary.get('track_name', None)
         )
 
+
+class PlayArtistRequestObject(ValidRequestObject):
+    def __init__(self, artist_name, track_name=None):
+        self.artist_name = artist_name
+        self.track_name = track_name
+
+    @classmethod
+    def from_dict(cls, a_dictionary):
+        invalid_request = InvalidRequestObject()
+
+        if not('artist_name' in a_dictionary):
+            invalid_request.add_error('artist_name','is missing')
+
+        if invalid_request.has_errors():
+            return invalid_request
+
+        return cls(
+            artist_name=a_dictionary.get('artist_name', None),
+            track_name=a_dictionary.get('track_name', None)
+        )
+
