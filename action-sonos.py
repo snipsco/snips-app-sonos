@@ -49,74 +49,150 @@ def read_configuration_file(configuration_file):
     except (IOError, ConfigParser.Error) as e:
         return dict()
 
+
 # Music management functions
 
 def addSong_callback(hermes, intentMessage):
-    hermes.action.add_song()
+    raise NotImplementedError("addSong_callback() not implemented")
+
 
 def getInfos_callback(hermes, intentMessage):
-    hermes.action.get_infos()
+    raise NotImplementedError("getInfos_callback() not implemented")
+
 
 def playAlbum_callback(hermes, intentMessage):
-    hermes.action.play_album(intentMessage.slots.album_name, intentMessage.slots.album_lecture_mode)
+    raise NotImplementedError("playAlbum_callback() not implemented")
 
-def playArtist_callback(hermes, intentMessage):
-    hermes.action.play_artist(intentMessage.slots.artist_name)
 
 def playPlaylist_callback(hermes, intentMessage):
-    hermes.action.play_playlist(intentMessage.slots.playlist_name, intentMessage.slots.playlist_lecture_mode)
+    raise NotImplementedError("playPlaylist_callback() not implemented")
 
-def playSong_callback(hermes, intentMessage):
-    hermes.action.play_song(intentMessage.slots.song_name)
 
 def radioOn_callback(hermes, intentMessage):
-    hermes.action.radio_on(intentMessage.slots.radio_name)
+    raise NotImplementedError("radioOn_callback() not implemented")
 
 
-# Playback functions
-
-#P0
 def previousSong_callback(hermes, intentMessage):
-    hermes.action.previous_song()
+    raise NotImplementedError("previousSong_callback() not implemented")
 
-#P0
+
 def nextSong_callback(hermes, intentMessage):
-    hermes.action.next_song()
+    raise NotImplementedError("nextSong_callback() not implemented")
 
-#P0
-def resumeMusic_callback(hermes, intentMessage):
-    hermes.action.resume_music()
 
-#P0
+def resumeMusic_callback(hermes, intentMessage):  # Playback functions
+    usecase = ResumeMusicUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
+    resume_music_request = ResumeMusicRequestAdapter.from_intent_message(intentMessage)
+
+    response = usecase.execute(resume_music_request)
+    if not response:
+        print response.value
+        hermes.publish_end_session(intentMessage.session_id, "An error occured.")
+    else:
+        print response
+        hermes.publish_end_session(intentMessage.session_id, "")
+
+
 def speakerInterrupt_callback(hermes, intentMessage):
-    hermes.action.speaker_interrupt()
+    usecase = SpeakerInterruptUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
+    speaker_interrupt_request = SpeakerInterruptRequestAdapter.from_intent_message(intentMessage)
+
+    response = usecase.execute(speaker_interrupt_request)
+    if not response:
+        print response.value
+        hermes.publish_end_session(intentMessage.session_id, "An error occured.")
+    else:
+        print response
+        hermes.publish_end_session(intentMessage.session_id, "")
 
 
 def volumeDown_callback(hermes, intentMessage):
-    hermes.action.volume_down(intentMessage.slots.volume_lower)
+    usecase = VolumeDownUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
+    volume_down_request = VolumeDownRequestAdapter.from_intent_message(intentMessage)
+
+    response = usecase.execute(volume_down_request)
+    if not response:
+        print response.value
+        hermes.publish_end_session(intentMessage.session_id, "An error occured.")
+    else:
+        print response
+        hermes.publish_end_session(intentMessage.session_id, "")
+
 
 def volumeUp_callback(hermes, intentMessage):
-    hermes.action.volume_up(intentMessage.slots.volume_higher)
+    usecase = VolumeUpUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
+    volume_up_request = VolumeUpRequestAdapter.from_intent_message(intentMessage)
+
+    response = usecase.execute(volume_up_request)
+    if not response:
+        print response.value
+        hermes.publish_end_session(intentMessage.session_id, "An error occured.")
+    else:
+        print response
+        hermes.publish_end_session(intentMessage.session_id, "")
+
+
+def volumeSet_callback(hermes, intentMessage):
+    usecase = VolumeSetUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
+    volume_set_request = VolumeSetRequestAdapter.from_intent_message(intentMessage)
+
+    response = usecase.execute(volume_set_request)
+    if not response:
+        print response.value
+        hermes.publish_end_session(intentMessage.session_id, "An error occured.")
+    else:
+        print response
+        hermes.publish_end_session(intentMessage.session_id, "")
+
+
+def playSong_callback(hermes, intentMessage):
+    use_case = PlayTrackUseCase(hermes.device_discovery_service, hermes.music_search_service,
+                                hermes.music_playback_service)
+    play_track_request = PlayTrackRequestAdapter.from_intent_message(intentMessage)
+
+    response = use_case.execute(play_track_request)
+
+    if not response:
+        print response.value
+        hermes.publish_end_session(intentMessage.session_id, "An error occured")
+    else:
+        print response
+        hermes.publish_end_session(intentMessage.session_id, "")
+
+
+def playArtist_callback(hermes, intentMessage):
+    use_case = PlayArtistUseCase(hermes.device_discovery_service, hermes.music_search_service,
+                                 hermes.music_playback_service)
+    play_artist_request = PlayArtistRequestAdapter.from_intent_message(intentMessage)
+
+    print play_artist_request
+    response = use_case.execute(play_artist_request)
+
+    if not response:
+        print response.value
+        hermes.publish_end_session(intentMessage.session_id, "An error occured")
+    else:
+        print response
+        hermes.publish_end_session(intentMessage.session_id, "")
 
 
 if __name__ == "__main__":
+    configuration = read_configuration_file("config.ini")
+    client_id = configuration['secret']['client_id']
+    client_secret = configuration['secret']['client_secret']
 
     with Hermes(HERMES_HOST) as h:
-
         h.action = SonosControllerAction()
+        h.device_discovery_service = NodeDeviceDiscoveryService()
+        h.device_transport_control_service = NodeDeviceTransportControlService()
+        h.music_search_service = SpotifyMusicSearchService(client_id, client_secret)
+        h.music_playback_service = NodeMusicPlaybackService()
 
-        h\
+        h \
+            .subscribe_intent("playMusic", playArtist_callback) \
             .subscribe_intent("volumeUp", volumeUp_callback) \
-            .subscribe_intent("previousSong", previousSong_callback) \
-            .subscribe_intent("playSong", playSong_callback) \
-            .subscribe_intent("playArtist", playArtist_callback) \
-            .subscribe_intent("getInfos", getInfos_callback) \
-            .subscribe_intent("speakerInterrupt", speakerInterrupt_callback) \
-            .subscribe_intent("resumeMusic", resumeMusic_callback) \
-            .subscribe_intent("addSong", addSong_callback) \
-            .subscribe_intent("nextSong", nextSong_callback) \
-            .subscribe_intent("radioOn", radioOn_callback) \
-            .subscribe_intent("playAlbum", playAlbum_callback) \
             .subscribe_intent("volumeDown", volumeDown_callback) \
-            .subscribe_intent("playPlaylist", playPlaylist_callback) \
+            .subscribe_intent("volumeSet", volumeSet_callback) \
+            .subscribe_intent("resumeMusic", resumeMusic_callback) \
+            .subscribe_intent("speakerInterrupt", speakerInterrupt_callback) \
             .loop_forever()
