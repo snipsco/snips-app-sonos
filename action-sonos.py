@@ -2,11 +2,27 @@
 # -*-: coding utf-8 -*-
 
 import ConfigParser
+import io
+import traceback
+
 from hermes_python.hermes import Hermes
 from hermes_python.ontology import *
-import io
 
 from snipssonos.snipssonos import SonosControllerAction
+from snipssonos.use_cases.volume_up import VolumeUpUseCase
+from snipssonos.use_cases.volume_down import VolumeDownUseCase
+from snipssonos.use_cases.volume_set import VolumeSetUseCase
+from snipssonos.use_cases.play_track import PlayTrackUseCase
+from snipssonos.use_cases.play_artist import PlayArtistUseCase
+from snipssonos.use_cases.resume_music import ResumeMusicUseCase
+from snipssonos.use_cases.speaker_interrupt import SpeakerInterruptUseCase
+from snipssonos.adapters.request_adapter import VolumeUpRequestAdapter, PlayTrackRequestAdapter, \
+    PlayArtistRequestAdapter, VolumeSetRequestAdapter, VolumeDownRequestAdapter, ResumeMusicRequestAdapter, \
+    SpeakerInterruptRequestAdapter
+from snipssonos.services.node_device_discovery_service import NodeDeviceDiscoveryService
+from snipssonos.services.node_device_transport_control import NodeDeviceTransportControlService
+from snipssonos.services.node_music_playback_service import NodeMusicPlaybackService
+from snipssonos.services.spotify_music_search_service import SpotifyMusicSearchService
 
 # Utils functions
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
@@ -17,9 +33,11 @@ HOSTNAME = "raspi-dev-antho.local"
 HERMES_HOST = "{}:1883".format(HOSTNAME)
 MOPIDY_HOST = HOSTNAME
 
+
 class SnipsConfigParser(ConfigParser.SafeConfigParser):
     def to_dict(self):
-        return {section : {option_name : option for option_name, option in self.items(section)} for section in self.sections()}
+        return {section: {option_name: option for option_name, option in self.items(section)} for section in
+                self.sections()}
 
 
 def read_configuration_file(configuration_file):
