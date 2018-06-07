@@ -205,7 +205,7 @@ if __name__ == "__main__":
         h.music_playback_service = NodeMusicPlaybackService()
 
         h \
-            .subscribe_session_started(hotword_detected_callack)
+            .subscribe_session_started(hotword_detected_callack) \
             .subscribe_intent("playMusic3", playArtist_callback) \
             .subscribe_intent("volumeUp3", volumeUp_callback) \
             .subscribe_intent("volumeDown3", volumeDown_callback) \
