@@ -12,6 +12,6 @@ class VolumeSetUseCase(UseCase):
         device = self.device_discovery_service.get()
         if request_object.volume_level:
             device.volume = request_object.volume_level
-            self.device_transport_control_service.volume_set(device)
+            self.device_transport_control_service.set_volume(device)
 
         return ResponseSuccess()

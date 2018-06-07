@@ -95,7 +95,7 @@ def test_use_case_with_positive_percentage(connected_device):
 
     assert bool(volume_set_request) is True
     assert bool(response_object) is True
-    device_transport_control_service.volume_set.assert_called_with(connected_device)
+    device_transport_control_service.set_volume.assert_called_with(connected_device)
     assert connected_device.volume == new_volume_level
 
 
@@ -130,7 +130,7 @@ def test_use_case_with_positive_integer(connected_device):
 
     assert bool(volume_set_request) is True
     assert bool(response_object) is True
-    device_transport_control_service.volume_set.assert_called_with(connected_device)
+    device_transport_control_service.set_volume.assert_called_with(connected_device)
     assert connected_device.volume == volume_level
 
 
