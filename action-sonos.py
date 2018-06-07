@@ -49,6 +49,10 @@ def read_configuration_file(configuration_file):
     except (IOError, ConfigParser.Error) as e:
         return dict()
 
+def hotword_detected_callack(hermes, intentMessage):
+    pass
+
+
 
 # Music management functions
 
@@ -201,11 +205,12 @@ if __name__ == "__main__":
         h.music_playback_service = NodeMusicPlaybackService()
 
         h \
+            .subscribe_session_started(hotword_detected_callack)
             .subscribe_intent("playMusic3", playArtist_callback) \
             .subscribe_intent("volumeUp3", volumeUp_callback) \
             .subscribe_intent("volumeDown3", volumeDown_callback) \
             .subscribe_intent("volumeSet3", volumeSet_callback) \
             .subscribe_intent("muteSound3", mute_callback) \
-            .subscribe_intent("resumeMusic", resumeMusic_callback) \
-            .subscribe_intent("speakerInterrupt", speakerInterrupt_callback) \
+            .subscribe_intent("resumeMusic3", resumeMusic_callback) \
+            .subscribe_intent("speakerInterrupt3", speakerInterrupt_callback) \
             .loop_forever()
