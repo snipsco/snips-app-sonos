@@ -8,17 +8,17 @@ import traceback
 from hermes_python.hermes import Hermes
 from hermes_python.ontology import *
 
-from snipssonos.snipssonos import SonosControllerAction
 from snipssonos.use_cases.volume_up import VolumeUpUseCase
 from snipssonos.use_cases.volume_down import VolumeDownUseCase
 from snipssonos.use_cases.volume_set import VolumeSetUseCase
+from snipssonos.use_cases.mute import MuteUseCase
 from snipssonos.use_cases.play_track import PlayTrackUseCase
 from snipssonos.use_cases.play_artist import PlayArtistUseCase
 from snipssonos.use_cases.resume_music import ResumeMusicUseCase
 from snipssonos.use_cases.speaker_interrupt import SpeakerInterruptUseCase
 from snipssonos.adapters.request_adapter import VolumeUpRequestAdapter, PlayTrackRequestAdapter, \
     PlayArtistRequestAdapter, VolumeSetRequestAdapter, VolumeDownRequestAdapter, ResumeMusicRequestAdapter, \
-    SpeakerInterruptRequestAdapter
+    SpeakerInterruptRequestAdapter, MuteRequestAdapter
 from snipssonos.services.node_device_discovery_service import NodeDeviceDiscoveryService
 from snipssonos.services.node_device_transport_control import NodeDeviceTransportControlService
 from snipssonos.services.node_music_playback_service import NodeMusicPlaybackService
@@ -28,7 +28,7 @@ from snipssonos.services.spotify_music_search_service import SpotifyMusicSearchS
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
 
-HOSTNAME = "localhost"
+HOSTNAME = "sonos-antho.local"
 
 HERMES_HOST = "{}:1883".format(HOSTNAME)
 MOPIDY_HOST = HOSTNAME
@@ -145,6 +145,19 @@ def volumeSet_callback(hermes, intentMessage):
         hermes.publish_end_session(intentMessage.session_id, "")
 
 
+def mute_callback(hermes, intentMessage):
+    usecase = MuteUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
+    mute_request = MuteRequestAdapter.from_intent_message(intentMessage)
+
+    response = usecase.execute(mute_request)
+    if not response:
+        print response.value
+        hermes.publish_end_session(intentMessage.session_id, "An error occured.")
+    else:
+        print response
+        hermes.publish_end_session(intentMessage.session_id, "")
+
+
 def playSong_callback(hermes, intentMessage):
     use_case = PlayTrackUseCase(hermes.device_discovery_service, hermes.music_search_service,
                                 hermes.music_playback_service)
@@ -182,17 +195,17 @@ if __name__ == "__main__":
     client_secret = configuration['secret']['client_secret']
 
     with Hermes(HERMES_HOST) as h:
-        h.action = SonosControllerAction()
         h.device_discovery_service = NodeDeviceDiscoveryService()
         h.device_transport_control_service = NodeDeviceTransportControlService()
         h.music_search_service = SpotifyMusicSearchService(client_id, client_secret)
         h.music_playback_service = NodeMusicPlaybackService()
 
         h \
-            .subscribe_intent("playMusic", playArtist_callback) \
+            .subscribe_intent("playMusic3", playArtist_callback) \
             .subscribe_intent("volumeUp", volumeUp_callback) \
             .subscribe_intent("volumeDown", volumeDown_callback) \
             .subscribe_intent("volumeSet", volumeSet_callback) \
+            .subscribe_intent("muteSound3", mute_callback) \
             .subscribe_intent("resumeMusic", resumeMusic_callback) \
             .subscribe_intent("speakerInterrupt", speakerInterrupt_callback) \
             .loop_forever()

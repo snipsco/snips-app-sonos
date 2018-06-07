@@ -1,5 +1,5 @@
 from snipssonos.use_cases.request_objects import VolumeUpRequestObject, PlayTrackRequestObject, PlayArtistRequestObject, \
-    VolumeSetRequestObject, VolumeDownRequestObject, ResumeMusicRequestObject, SpeakerInterruptRequestObject
+    VolumeSetRequestObject, VolumeDownRequestObject, ResumeMusicRequestObject, SpeakerInterruptRequestObject, MuteRequestObject
 
 class VolumeUpRequestAdapter(object):
 
@@ -37,6 +37,18 @@ class VolumeSetRequestAdapter(object):
             return {'volume_level': int(intentMessage.slots.volume_set_fr.first().value)}
         else:
             return dict()
+
+
+class MuteRequestAdapter(object):
+    @classmethod
+    def from_intent_message(cls, intentMessage):
+        slots_dict = cls.extract_slots_dictionary(intentMessage)
+        return MuteRequestObject.from_dict(slots_dict)
+
+    @staticmethod
+    def extract_slots_dictionary(intentMessage):
+        return dict()
+
 
 
 class ResumeMusicRequestAdapter(object):
