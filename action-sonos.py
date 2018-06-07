@@ -202,8 +202,8 @@ if __name__ == "__main__":
 
         h \
             .subscribe_intent("playMusic3", playArtist_callback) \
-            .subscribe_intent("volumeUp", volumeUp_callback) \
-            .subscribe_intent("volumeDown", volumeDown_callback) \
+            .subscribe_intent("volumeUp3", volumeUp_callback) \
+            .subscribe_intent("volumeDown3", volumeDown_callback) \
             .subscribe_intent("volumeSet3", volumeSet_callback) \
             .subscribe_intent("muteSound3", mute_callback) \
             .subscribe_intent("resumeMusic", resumeMusic_callback) \
