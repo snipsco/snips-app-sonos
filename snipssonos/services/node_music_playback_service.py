@@ -9,7 +9,7 @@ class NodeMusicPlaybackService(MusicPlaybackService): # TODO : Refactor this in 
     PROTOCOL = "http://"
 
     def play(self, device, music_item):
-        self.device = device
+        self.device = device if device else self.device
         query_url = self._generate_play_now_query(music_item)
         req = requests.get(query_url)
 

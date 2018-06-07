@@ -13,3 +13,6 @@ class DeviceTransportControlService(object): # TODO : Make this class abstract
 
     def set_volume(self, device):
         raise NotImplementedError("set_volume() is not implemented")
+
+    def mute(self, device):
+        raise NotImplementedError("mute() is not implemented")

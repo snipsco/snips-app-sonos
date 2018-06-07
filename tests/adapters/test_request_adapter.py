@@ -75,7 +75,6 @@ def test_volume_up_adapter_from_correct_intent_message_generates_valid_request(c
 
     assert isinstance(valid_request, ValidRequestObject)
     assert isinstance(valid_request, VolumeUpRequestObject)
-    assert valid_request.volume_increase == correct_intent_message.slots.volume_higher.first().value
 
 
 def test_volume_up_adapter_from_intent_message_with_no_slots_generates_valid_request():
@@ -133,7 +132,5 @@ def test_volume_up_adapter_from_intent_message_with_slot_with_array_of_values_ge
 
     assert isinstance(valid_request, ValidRequestObject)
     assert isinstance(valid_request, VolumeUpRequestObject)
-
-    assert valid_request.volume_increase == correct_intent_message_with_two_slots.slots.volume_higher.first().value
 
 

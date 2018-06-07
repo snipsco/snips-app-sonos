@@ -31,6 +31,10 @@ class NodeDeviceTransportControlService(DeviceTransportControlService):
     def _generate_volume_query(self, room_name, volume_level):
         return "{}/{}/volume/{}".format(self.BASE_URL, room_name, volume_level)
 
+    def _generate_mute_query(self, room_name):
+        return "{}/{}/mute".format(self.BASE_URL, room_name)
+
+
     def _process_query(self, query_url):
         req = requests.get(query_url)
         if req.ok:
@@ -49,5 +53,10 @@ class NodeDeviceTransportControlService(DeviceTransportControlService):
 
         query_url = self._generate_volume_query(room_name, volume_level)
 
+        return self._process_query(query_url)
+
+    def mute(self, device):
+        room_name = device.name
+        query_url = self._generate_mute_query(room_name)
         return self._process_query(query_url)
 

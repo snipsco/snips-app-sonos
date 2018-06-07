@@ -77,6 +77,19 @@ class VolumeSetRequestObject(ValidRequestObject):
             volume_level=a_dictionary.get('volume_level', None)
         )
 
+
+class MuteRequestObject(ValidRequestObject):
+
+    @classmethod
+    def from_dict(cls, a_dictionary):
+        invalid_request = InvalidRequestObject()
+
+        if invalid_request.has_errors():
+            return invalid_request
+
+        return cls()
+
+
 class ResumeMusicRequestObject(ValidRequestObject):
 
     @classmethod
