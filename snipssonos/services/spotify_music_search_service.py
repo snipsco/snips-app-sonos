@@ -55,7 +55,7 @@ class SpotifyMusicSearchService(MusicSearchService):
             .add_field_filter("playlist", playlist_name)
 
         raw_response = self.client.execute_query(track_by_artist_in_playlist_search_query)
-        artists = self._parse_artist_results(raw_response)
+        artists = self._parse_artists_results(raw_response)
 
         return artists
 
@@ -68,7 +68,6 @@ class SpotifyMusicSearchService(MusicSearchService):
         playlists = self._parse_playlist_results(raw_response)
 
         return playlists
-
 
     def _parse_track_results(self, raw_response):
         response = json.loads(raw_response)
