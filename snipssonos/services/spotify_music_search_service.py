@@ -3,6 +3,7 @@ import json
 import requests
 
 from snipssonos.entities.track import Track
+from snipssonos.entities.playlist import Playlist
 from snipssonos.exceptions import MusicSearchProviderConnectionError, MusicSearchCredentialsError
 from snipssonos.services.music_search_service import MusicSearchService
 
@@ -36,6 +37,16 @@ class SpotifyMusicSearchService(MusicSearchService):
         tracks = self._parse_track_results(raw_response)
         return tracks
 
+    def search_playlist(self, playlist_name):
+        playlist_search_query = SpotifyAPISearchQueryBuilder()\
+            .add_playlist_result_type() \
+            .add_generic_search_term(playlist_name)
+
+        raw_response = self.client.execute_query(playlist_search_query)
+        playlists = self._parse_playlist_results(raw_response)
+
+        return playlists
+
     def _parse_track_results(self, raw_response):
         response = json.loads(raw_response)
         tracks = response['tracks']
@@ -43,6 +54,13 @@ class SpotifyMusicSearchService(MusicSearchService):
         tracks = [Track(item['uri']) for item in tracks['items']]
 
         return tracks
+
+    def _parse_playlist_results(self, raw_response):
+        response = json.loads(raw_response)
+        playlists = response['playlists']
+
+        playlists = [Playlist(item['uri'], item['name']) for item in playlists['items']]
+        return playlists
 
 
 class SpotifyClient(object):
@@ -144,8 +162,16 @@ class SpotifyAPISearchQueryBuilder(object):
         return self
 
     def add_track_result_type(self):
-        self.add_result_type("track")
-        return self
+        return self.add_result_type("track")
+
+    def add_playlist_result_type(self):
+        return self.add_result_type("playlist")
+
+    def add_artist_result_type(self):
+        return self.add_result_type("artist")
+
+    def add_album_result_type(self):
+        return self.add_result_type("album")
 
     def add_field_filter(self, music_field_key, music_field_value):
         self.field_filters.append((music_field_key, music_field_value))

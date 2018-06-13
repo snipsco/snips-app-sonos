@@ -1,3 +1,4 @@
+#coding:utf-8
 import mock
 import pytest
 import requests
@@ -1485,3 +1486,679 @@ def test_correct_parsing_of_tracks_with_empty_response():
     tracks = client._parse_track_results(raw_empty_response)
 
     assert len(tracks) == 0
+
+def test_correct_parsing_of_playlists_for_correct_response():
+    raw_response = """{
+  "playlists" : {
+    "href" : "https://api.spotify.com/v1/search?query=piano&type=playlist&offset=0&limit=20",
+    "items" : [ {
+      "collaborative" : false,
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/user/spotify/playlist/37i9dQZF1DX4sWSpwq3LiO"
+      },
+      "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DX4sWSpwq3LiO",
+      "id" : "37i9dQZF1DX4sWSpwq3LiO",
+      "images" : [ {
+        "height" : 300,
+        "url" : "https://i.scdn.co/image/56228f9353b23405516a6ea8af1c22083f450b57",
+        "width" : 300
+      } ],
+      "name" : "Peaceful Piano",
+      "owner" : {
+        "display_name" : "Spotify",
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/user/spotify"
+        },
+        "href" : "https://api.spotify.com/v1/users/spotify",
+        "id" : "spotify",
+        "type" : "user",
+        "uri" : "spotify:user:spotify"
+      },
+      "primary_color" : null,
+      "public" : null,
+      "snapshot_id" : "4sBWNB92X+AGScL/YiGdWkelWsGy4GmPoIRf+P0nCJYF8NdA58l4sB6DIQYRFAy8Lls5NACknEg=",
+      "tracks" : {
+        "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DX4sWSpwq3LiO/tracks",
+        "total" : 162
+      },
+      "type" : "playlist",
+      "uri" : "spotify:user:spotify:playlist:37i9dQZF1DX4sWSpwq3LiO"
+    }, {
+      "collaborative" : false,
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/user/spotify/playlist/37i9dQZF1DX7K31D69s4M1"
+      },
+      "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DX7K31D69s4M1",
+      "id" : "37i9dQZF1DX7K31D69s4M1",
+      "images" : [ {
+        "height" : 300,
+        "url" : "https://i.scdn.co/image/8e41b9e65e524399236160c309e2131b666024e7",
+        "width" : 300
+      } ],
+      "name" : "Piano in the Background",
+      "owner" : {
+        "display_name" : "Spotify",
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/user/spotify"
+        },
+        "href" : "https://api.spotify.com/v1/users/spotify",
+        "id" : "spotify",
+        "type" : "user",
+        "uri" : "spotify:user:spotify"
+      },
+      "primary_color" : null,
+      "public" : null,
+      "snapshot_id" : "7/44jmIvRQ/W2E6qSLqBuZYidziSeKkOgsrZZ5Q6HWWTFP9JMt1SOR6DIQYRFAy8Lls5NACknEg=",
+      "tracks" : {
+        "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DX7K31D69s4M1/tracks",
+        "total" : 143
+      },
+      "type" : "playlist",
+      "uri" : "spotify:user:spotify:playlist:37i9dQZF1DX7K31D69s4M1"
+    }, {
+      "collaborative" : false,
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/user/spotify/playlist/37i9dQZF1DWVIzZt2GAU4X"
+      },
+      "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DWVIzZt2GAU4X",
+      "id" : "37i9dQZF1DWVIzZt2GAU4X",
+      "images" : [ {
+        "height" : 300,
+        "url" : "https://i.scdn.co/image/39c6e14a389d77093aa39b9378384fa8b190caa5",
+        "width" : 300
+      } ],
+      "name" : "Piano Ballads",
+      "owner" : {
+        "display_name" : "Spotify",
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/user/spotify"
+        },
+        "href" : "https://api.spotify.com/v1/users/spotify",
+        "id" : "spotify",
+        "type" : "user",
+        "uri" : "spotify:user:spotify"
+      },
+      "primary_color" : null,
+      "public" : null,
+      "snapshot_id" : "NqLn4p64q7SGzINopoorqa+BBCb2b6iMt+ZRxYQ5FG2hbeYyNhusYh6DIQYRFAy8Lls5NACknEg=",
+      "tracks" : {
+        "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DWVIzZt2GAU4X/tracks",
+        "total" : 66
+      },
+      "type" : "playlist",
+      "uri" : "spotify:user:spotify:playlist:37i9dQZF1DWVIzZt2GAU4X"
+    }, {
+      "collaborative" : false,
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/user/spotify/playlist/37i9dQZF1DX47ov4h4oSjW"
+      },
+      "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DX47ov4h4oSjW",
+      "id" : "37i9dQZF1DX47ov4h4oSjW",
+      "images" : [ {
+        "height" : 300,
+        "url" : "https://i.scdn.co/image/9e2b8d4ba5e448b630785d18ba79b1c31b764f95",
+        "width" : 300
+      } ],
+      "name" : "Piano Study",
+      "owner" : {
+        "display_name" : "Spotify",
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/user/spotify"
+        },
+        "href" : "https://api.spotify.com/v1/users/spotify",
+        "id" : "spotify",
+        "type" : "user",
+        "uri" : "spotify:user:spotify"
+      },
+      "primary_color" : null,
+      "public" : null,
+      "snapshot_id" : "FLSVmwENDTEvu+FziqYOBJ/ivLzodCksQQQx8qiicIEbCqnggBbwWx6DIQYRFAy8Lls5NACknEg=",
+      "tracks" : {
+        "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DX47ov4h4oSjW/tracks",
+        "total" : 90
+      },
+      "type" : "playlist",
+      "uri" : "spotify:user:spotify:playlist:37i9dQZF1DX47ov4h4oSjW"
+    }, {
+      "collaborative" : false,
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/user/spotify/playlist/37i9dQZF1DWVvXA824aCbn"
+      },
+      "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DWVvXA824aCbn",
+      "id" : "37i9dQZF1DWVvXA824aCbn",
+      "images" : [ {
+        "height" : 300,
+        "url" : "https://i.scdn.co/image/dcbcac389728ae4ca1ca06310ba474f14db38b81",
+        "width" : 300
+      } ],
+      "name" : "The Piano Bar",
+      "owner" : {
+        "display_name" : "Spotify",
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/user/spotify"
+        },
+        "href" : "https://api.spotify.com/v1/users/spotify",
+        "id" : "spotify",
+        "type" : "user",
+        "uri" : "spotify:user:spotify"
+      },
+      "primary_color" : null,
+      "public" : null,
+      "snapshot_id" : "NqLn4p64q7SGzINopoorqVtCkfjH71x1lG6ntIDOauLgfPo/4ux2nh6DIQYRFAy8Lls5NACknEg=",
+      "tracks" : {
+        "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DWVvXA824aCbn/tracks",
+        "total" : 41
+      },
+      "type" : "playlist",
+      "uri" : "spotify:user:spotify:playlist:37i9dQZF1DWVvXA824aCbn"
+    }, {
+      "collaborative" : false,
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/user/spotify/playlist/37i9dQZF1DZ06evO07w8CY"
+      },
+      "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DZ06evO07w8CY",
+      "id" : "37i9dQZF1DZ06evO07w8CY",
+      "images" : [ {
+        "height" : null,
+        "url" : "https://thisis-images.scdn.co/37i9dQZF1DZ06evO07w8CY-default.jpg",
+        "width" : null
+      } ],
+      "name" : "This Is The Piano Guys",
+      "owner" : {
+        "display_name" : "Spotify",
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/user/spotify"
+        },
+        "href" : "https://api.spotify.com/v1/users/spotify",
+        "id" : "spotify",
+        "type" : "user",
+        "uri" : "spotify:user:spotify"
+      },
+      "primary_color" : null,
+      "public" : null,
+      "snapshot_id" : "t2f1aJ3ZqCziN6WXWsV2+VJx9TQYm7opdMm0LgxDgzb7S5WsEo8aEGIueGU9y0v0rF3iKiF/VLM=",
+      "tracks" : {
+        "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DZ06evO07w8CY/tracks",
+        "total" : 34
+      },
+      "type" : "playlist",
+      "uri" : "spotify:user:spotify:playlist:37i9dQZF1DZ06evO07w8CY"
+    }, {
+      "collaborative" : false,
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/user/spotify/playlist/37i9dQZF1DXa8Xx03D65RT"
+      },
+      "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DXa8Xx03D65RT",
+      "id" : "37i9dQZF1DXa8Xx03D65RT",
+      "images" : [ {
+        "height" : 300,
+        "url" : "https://i.scdn.co/image/f7509a331bf20013718ef1815f75e03cdbff3167",
+        "width" : 300
+      } ],
+      "name" : "Piano de Fondo",
+      "owner" : {
+        "display_name" : "Spotify",
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/user/spotify"
+        },
+        "href" : "https://api.spotify.com/v1/users/spotify",
+        "id" : "spotify",
+        "type" : "user",
+        "uri" : "spotify:user:spotify"
+      },
+      "primary_color" : null,
+      "public" : null,
+      "snapshot_id" : "1eozhmwNDUGuhUrM+5ItLmmYR7cMZqnlKXn+dbkB/aQPHMSZo0OJ8h6DIQYRFAy8Lls5NACknEg=",
+      "tracks" : {
+        "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DXa8Xx03D65RT/tracks",
+        "total" : 67
+      },
+      "type" : "playlist",
+      "uri" : "spotify:user:spotify:playlist:37i9dQZF1DXa8Xx03D65RT"
+    }, {
+      "collaborative" : false,
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/user/mooncyclemusic/playlist/04Bx6c3eZmYdWZRkQrLB7l"
+      },
+      "href" : "https://api.spotify.com/v1/users/mooncyclemusic/playlists/04Bx6c3eZmYdWZRkQrLB7l",
+      "id" : "04Bx6c3eZmYdWZRkQrLB7l",
+      "images" : [ {
+        "height" : null,
+        "url" : "https://pl.scdn.co/images/pl/default/f0e9ce9c9ac850bea0fc16031a5edb0325ea9dee",
+        "width" : null
+      } ],
+      "name" : "Piano Relaxation",
+      "owner" : {
+        "display_name" : "Piano Relaxation",
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/user/mooncyclemusic"
+        },
+        "href" : "https://api.spotify.com/v1/users/mooncyclemusic",
+        "id" : "mooncyclemusic",
+        "type" : "user",
+        "uri" : "spotify:user:mooncyclemusic"
+      },
+      "primary_color" : null,
+      "public" : null,
+      "snapshot_id" : "WPavVVHIMF33JNrWUV/e2Ud4F0UIyXz0daW0GiO1+bLAfN1Uy/Vm+/MWlqzVHSAc",
+      "tracks" : {
+        "href" : "https://api.spotify.com/v1/users/mooncyclemusic/playlists/04Bx6c3eZmYdWZRkQrLB7l/tracks",
+        "total" : 149
+      },
+      "type" : "playlist",
+      "uri" : "spotify:user:mooncyclemusic:playlist:04Bx6c3eZmYdWZRkQrLB7l"
+    }, {
+      "collaborative" : false,
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/user/doublejmusicltd/playlist/0OOZzfr4olaGarfeaydGZf"
+      },
+      "href" : "https://api.spotify.com/v1/users/doublejmusicltd/playlists/0OOZzfr4olaGarfeaydGZf",
+      "id" : "0OOZzfr4olaGarfeaydGZf",
+      "images" : [ {
+        "height" : null,
+        "url" : "https://pl.scdn.co/images/pl/default/90d94986be579a8ed1f7c685d74b7fa3c1567ec4",
+        "width" : null
+      } ],
+      "name" : "Relaxing Piano ♫",
+      "owner" : {
+        "display_name" : "Double J Music",
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/user/doublejmusicltd"
+        },
+        "href" : "https://api.spotify.com/v1/users/doublejmusicltd",
+        "id" : "doublejmusicltd",
+        "type" : "user",
+        "uri" : "spotify:user:doublejmusicltd"
+      },
+      "primary_color" : null,
+      "public" : null,
+      "snapshot_id" : "QdrIN7kK4BLWuEuinfTWtoIPkWOnmK50TAPZ4J5KodqFsYvX7JD42TocPyK67bAa",
+      "tracks" : {
+        "href" : "https://api.spotify.com/v1/users/doublejmusicltd/playlists/0OOZzfr4olaGarfeaydGZf/tracks",
+        "total" : 339
+      },
+      "type" : "playlist",
+      "uri" : "spotify:user:doublejmusicltd:playlist:0OOZzfr4olaGarfeaydGZf"
+    }, {
+      "collaborative" : false,
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/user/spotify/playlist/37i9dQZF1DWUqIzZNMSCv3"
+      },
+      "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DWUqIzZNMSCv3",
+      "id" : "37i9dQZF1DWUqIzZNMSCv3",
+      "images" : [ {
+        "height" : 300,
+        "url" : "https://i.scdn.co/image/b41c71e276d101b9ad3b2af58355141edd43ee91",
+        "width" : 300
+      } ],
+      "name" : "Gentle Piano Concertos",
+      "owner" : {
+        "display_name" : "Spotify",
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/user/spotify"
+        },
+        "href" : "https://api.spotify.com/v1/users/spotify",
+        "id" : "spotify",
+        "type" : "user",
+        "uri" : "spotify:user:spotify"
+      },
+      "primary_color" : null,
+      "public" : null,
+      "snapshot_id" : "NqLn4p64q7SGzINopoorqSkHKtb6TZt5LsxDENi+ZfMOiuNFw1Qhih6DIQYRFAy8Lls5NACknEg=",
+      "tracks" : {
+        "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DWUqIzZNMSCv3/tracks",
+        "total" : 50
+      },
+      "type" : "playlist",
+      "uri" : "spotify:user:spotify:playlist:37i9dQZF1DWUqIzZNMSCv3"
+    }, {
+      "collaborative" : false,
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/user/spotify/playlist/37i9dQZF1DWZVU32KsYGUK"
+      },
+      "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DWZVU32KsYGUK",
+      "id" : "37i9dQZF1DWZVU32KsYGUK",
+      "images" : [ {
+        "height" : 300,
+        "url" : "https://i.scdn.co/image/0685417d34825ba9ddcfa3dd749057cb9e3fcaa9",
+        "width" : 300
+      } ],
+      "name" : "Piano Dinner",
+      "owner" : {
+        "display_name" : "Spotify",
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/user/spotify"
+        },
+        "href" : "https://api.spotify.com/v1/users/spotify",
+        "id" : "spotify",
+        "type" : "user",
+        "uri" : "spotify:user:spotify"
+      },
+      "primary_color" : null,
+      "public" : null,
+      "snapshot_id" : "gd0s2KpO/HolX+eMeFhhg+oTioPeJOH0z5qsguRNj18qAHS8xUdZ2B6DIQYRFAy8Lls5NACknEg=",
+      "tracks" : {
+        "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DWZVU32KsYGUK/tracks",
+        "total" : 132
+      },
+      "type" : "playlist",
+      "uri" : "spotify:user:spotify:playlist:37i9dQZF1DWZVU32KsYGUK"
+    }, {
+      "collaborative" : false,
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/user/musiclabcollective/playlist/635MqX5a2yZk9ezHzxci6p"
+      },
+      "href" : "https://api.spotify.com/v1/users/musiclabcollective/playlists/635MqX5a2yZk9ezHzxci6p",
+      "id" : "635MqX5a2yZk9ezHzxci6p",
+      "images" : [ {
+        "height" : null,
+        "url" : "https://pl.scdn.co/images/pl/default/a57c8b61e3cf24deb5247c78a89858c288be7e2a",
+        "width" : null
+      } ],
+      "name" : "Piano Pop",
+      "owner" : {
+        "display_name" : "Music Lab Collective",
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/user/musiclabcollective"
+        },
+        "href" : "https://api.spotify.com/v1/users/musiclabcollective",
+        "id" : "musiclabcollective",
+        "type" : "user",
+        "uri" : "spotify:user:musiclabcollective"
+      },
+      "primary_color" : null,
+      "public" : null,
+      "snapshot_id" : "1UIF38pOdpke4ES9q/O1wMjZS78/MRongkFKCam2bwOKRF4UTXQjbQc/iaMVivhF",
+      "tracks" : {
+        "href" : "https://api.spotify.com/v1/users/musiclabcollective/playlists/635MqX5a2yZk9ezHzxci6p/tracks",
+        "total" : 73
+      },
+      "type" : "playlist",
+      "uri" : "spotify:user:musiclabcollective:playlist:635MqX5a2yZk9ezHzxci6p"
+    }, {
+      "collaborative" : false,
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/user/1210415129/playlist/5VItICXtFUzgoAmqy7QRFL"
+      },
+      "href" : "https://api.spotify.com/v1/users/1210415129/playlists/5VItICXtFUzgoAmqy7QRFL",
+      "id" : "5VItICXtFUzgoAmqy7QRFL",
+      "images" : [ {
+        "height" : 640,
+        "url" : "https://mosaic.scdn.co/640/06c1cc020e8d9effb3563b3d04d62146981140cba862dbb5236b8fa3488aeebbe66057db5e1a6df6bc043a749c87edb227e069be5bea3a16ffe9b60ff7b8fe5eb2886501ba7ab8d588844915acf415a2",
+        "width" : 640
+      }, {
+        "height" : 300,
+        "url" : "https://mosaic.scdn.co/300/06c1cc020e8d9effb3563b3d04d62146981140cba862dbb5236b8fa3488aeebbe66057db5e1a6df6bc043a749c87edb227e069be5bea3a16ffe9b60ff7b8fe5eb2886501ba7ab8d588844915acf415a2",
+        "width" : 300
+      }, {
+        "height" : 60,
+        "url" : "https://mosaic.scdn.co/60/06c1cc020e8d9effb3563b3d04d62146981140cba862dbb5236b8fa3488aeebbe66057db5e1a6df6bc043a749c87edb227e069be5bea3a16ffe9b60ff7b8fe5eb2886501ba7ab8d588844915acf415a2",
+        "width" : 60
+      } ],
+      "name" : "Jazz Piano",
+      "owner" : {
+        "display_name" : "Sam Suechting",
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/user/1210415129"
+        },
+        "href" : "https://api.spotify.com/v1/users/1210415129",
+        "id" : "1210415129",
+        "type" : "user",
+        "uri" : "spotify:user:1210415129"
+      },
+      "primary_color" : null,
+      "public" : null,
+      "snapshot_id" : "rkICy+DXuTSyKvEOFuysVh7/0BZK2rx8DXBdlWq68ldejjs2WeQ9cBFYIVfi5cKM",
+      "tracks" : {
+        "href" : "https://api.spotify.com/v1/users/1210415129/playlists/5VItICXtFUzgoAmqy7QRFL/tracks",
+        "total" : 93
+      },
+      "type" : "playlist",
+      "uri" : "spotify:user:1210415129:playlist:5VItICXtFUzgoAmqy7QRFL"
+    }, {
+      "collaborative" : false,
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/user/11163257666/playlist/11nwDESL3yhELUjeo1N7Do"
+      },
+      "href" : "https://api.spotify.com/v1/users/11163257666/playlists/11nwDESL3yhELUjeo1N7Do",
+      "id" : "11nwDESL3yhELUjeo1N7Do",
+      "images" : [ {
+        "height" : null,
+        "url" : "https://pl.scdn.co/images/pl/default/a3932ff44ea34d948f0c0c473a6106e444da8767",
+        "width" : null
+      } ],
+      "name" : "Concentration (Piano, Classic & Instrumental)",
+      "owner" : {
+        "display_name" : "Fabio Fuchs",
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/user/11163257666"
+        },
+        "href" : "https://api.spotify.com/v1/users/11163257666",
+        "id" : "11163257666",
+        "type" : "user",
+        "uri" : "spotify:user:11163257666"
+      },
+      "primary_color" : null,
+      "public" : null,
+      "snapshot_id" : "ersh+DJQQy34KGc6GGUGJ9nCE23gcDdu1TDPE0geEv1AhqsasfVIXwB6ZLyHFhO/",
+      "tracks" : {
+        "href" : "https://api.spotify.com/v1/users/11163257666/playlists/11nwDESL3yhELUjeo1N7Do/tracks",
+        "total" : 357
+      },
+      "type" : "playlist",
+      "uri" : "spotify:user:11163257666:playlist:11nwDESL3yhELUjeo1N7Do"
+    }, {
+      "collaborative" : false,
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/user/jjhernan2008/playlist/28gpVmmE0CF23tK1iU4mPZ"
+      },
+      "href" : "https://api.spotify.com/v1/users/jjhernan2008/playlists/28gpVmmE0CF23tK1iU4mPZ",
+      "id" : "28gpVmmE0CF23tK1iU4mPZ",
+      "images" : [ {
+        "height" : 640,
+        "url" : "https://i.scdn.co/image/11048a60ad7977948763ed5715dc303a45ac6513",
+        "width" : 640
+      } ],
+      "name" : "Classic Piano",
+      "owner" : {
+        "display_name" : null,
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/user/jjhernan2008"
+        },
+        "href" : "https://api.spotify.com/v1/users/jjhernan2008",
+        "id" : "jjhernan2008",
+        "type" : "user",
+        "uri" : "spotify:user:jjhernan2008"
+      },
+      "primary_color" : null,
+      "public" : null,
+      "snapshot_id" : "NNNheejjNEfJNR8ogB9sTrv6I1t81TMmwr7Hn52gYU1+LPmCQG/cYO80t76ORIc0",
+      "tracks" : {
+        "href" : "https://api.spotify.com/v1/users/jjhernan2008/playlists/28gpVmmE0CF23tK1iU4mPZ/tracks",
+        "total" : 112
+      },
+      "type" : "playlist",
+      "uri" : "spotify:user:jjhernan2008:playlist:28gpVmmE0CF23tK1iU4mPZ"
+    }, {
+      "collaborative" : false,
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/user/sonyclassicalandjazzsweden/playlist/7hXPli2ds4vLmFiZ8wmMkz"
+      },
+      "href" : "https://api.spotify.com/v1/users/sonyclassicalandjazzsweden/playlists/7hXPli2ds4vLmFiZ8wmMkz",
+      "id" : "7hXPli2ds4vLmFiZ8wmMkz",
+      "images" : [ {
+        "height" : null,
+        "url" : "https://pl.scdn.co/images/pl/default/5f60b4b871de472c9f51029d59c8c93495140efd",
+        "width" : null
+      } ],
+      "name" : "Piano Classics",
+      "owner" : {
+        "display_name" : "Sony Classical & Jazz Sweden",
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/user/sonyclassicalandjazzsweden"
+        },
+        "href" : "https://api.spotify.com/v1/users/sonyclassicalandjazzsweden",
+        "id" : "sonyclassicalandjazzsweden",
+        "type" : "user",
+        "uri" : "spotify:user:sonyclassicalandjazzsweden"
+      },
+      "primary_color" : null,
+      "public" : null,
+      "snapshot_id" : "6TJzYeis6GteztvBzhGkOqGbA24hIKQlCN5D4H7CRyRzgdWjI/Iz/XVKbmicIFs4",
+      "tracks" : {
+        "href" : "https://api.spotify.com/v1/users/sonyclassicalandjazzsweden/playlists/7hXPli2ds4vLmFiZ8wmMkz/tracks",
+        "total" : 115
+      },
+      "type" : "playlist",
+      "uri" : "spotify:user:sonyclassicalandjazzsweden:playlist:7hXPli2ds4vLmFiZ8wmMkz"
+    }, {
+      "collaborative" : false,
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/user/spotify/playlist/37i9dQZF1DWVEerxa93vDU"
+      },
+      "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DWVEerxa93vDU",
+      "id" : "37i9dQZF1DWVEerxa93vDU",
+      "images" : [ {
+        "height" : 300,
+        "url" : "https://i.scdn.co/image/da8b80b844f3ddcf3ed2703b803447aa51df947f",
+        "width" : 300
+      } ],
+      "name" : "Piano Comfort",
+      "owner" : {
+        "display_name" : "Spotify",
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/user/spotify"
+        },
+        "href" : "https://api.spotify.com/v1/users/spotify",
+        "id" : "spotify",
+        "type" : "user",
+        "uri" : "spotify:user:spotify"
+      },
+      "primary_color" : null,
+      "public" : null,
+      "snapshot_id" : "NqLn4p64q7SGzINopoorqd31YS9BycBBDNuXizLDD8+4SWRZtsqs5h6DIQYRFAy8Lls5NACknEg=",
+      "tracks" : {
+        "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DWVEerxa93vDU/tracks",
+        "total" : 58
+      },
+      "type" : "playlist",
+      "uri" : "spotify:user:spotify:playlist:37i9dQZF1DWVEerxa93vDU"
+    }, {
+      "collaborative" : false,
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/user/spotify/playlist/37i9dQZF1DX561TxkFttR4"
+      },
+      "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DX561TxkFttR4",
+      "id" : "37i9dQZF1DX561TxkFttR4",
+      "images" : [ {
+        "height" : 300,
+        "url" : "https://i.scdn.co/image/814e37aba2ccf8b580a149e115559fe73838dca0",
+        "width" : 300
+      } ],
+      "name" : "88 Keys",
+      "owner" : {
+        "display_name" : "Spotify",
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/user/spotify"
+        },
+        "href" : "https://api.spotify.com/v1/users/spotify",
+        "id" : "spotify",
+        "type" : "user",
+        "uri" : "spotify:user:spotify"
+      },
+      "primary_color" : null,
+      "public" : null,
+      "snapshot_id" : "eu9GDvXeB+E8qIHW8uf4QFtCkfjH71x1poWUIeHV9JO7gFugS3elBh6DIQYRFAy8Lls5NACknEg=",
+      "tracks" : {
+        "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DX561TxkFttR4/tracks",
+        "total" : 88
+      },
+      "type" : "playlist",
+      "uri" : "spotify:user:spotify:playlist:37i9dQZF1DX561TxkFttR4"
+    }, {
+      "collaborative" : false,
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/user/spotify/playlist/37i9dQZF1DXah8e1pvF5oE"
+      },
+      "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DXah8e1pvF5oE",
+      "id" : "37i9dQZF1DXah8e1pvF5oE",
+      "images" : [ {
+        "height" : 300,
+        "url" : "https://i.scdn.co/image/6990f2c5870f5cb7bd33c685bf98a287d09632a4",
+        "width" : 300
+      } ],
+      "name" : "Piano 100: Spotify Picks",
+      "owner" : {
+        "display_name" : "Spotify",
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/user/spotify"
+        },
+        "href" : "https://api.spotify.com/v1/users/spotify",
+        "id" : "spotify",
+        "type" : "user",
+        "uri" : "spotify:user:spotify"
+      },
+      "primary_color" : null,
+      "public" : null,
+      "snapshot_id" : "NqLn4p64q7SGzINopoorqVez6VUsVc4dpqCWCr28am61dtBpQ55eXh6DIQYRFAy8Lls5NACknEg=",
+      "tracks" : {
+        "href" : "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DXah8e1pvF5oE/tracks",
+        "total" : 100
+      },
+      "type" : "playlist",
+      "uri" : "spotify:user:spotify:playlist:37i9dQZF1DXah8e1pvF5oE"
+    }, {
+      "collaborative" : false,
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/user/1249865348/playlist/2Xid72NwAWo7QxoAfUCzA1"
+      },
+      "href" : "https://api.spotify.com/v1/users/1249865348/playlists/2Xid72NwAWo7QxoAfUCzA1",
+      "id" : "2Xid72NwAWo7QxoAfUCzA1",
+      "images" : [ {
+        "height" : 640,
+        "url" : "https://mosaic.scdn.co/640/14a3ce5def3f45d4f24e8cb52edc90faf9b2f7d4245057e02c7b8384647ea8bdf43973ac8465d69229da43d7a03fbd5574a2b84f262480b589a897ef2dbd7ef241de5adb73b54b1a2f0c995c96564126",
+        "width" : 640
+      }, {
+        "height" : 300,
+        "url" : "https://mosaic.scdn.co/300/14a3ce5def3f45d4f24e8cb52edc90faf9b2f7d4245057e02c7b8384647ea8bdf43973ac8465d69229da43d7a03fbd5574a2b84f262480b589a897ef2dbd7ef241de5adb73b54b1a2f0c995c96564126",
+        "width" : 300
+      }, {
+        "height" : 60,
+        "url" : "https://mosaic.scdn.co/60/14a3ce5def3f45d4f24e8cb52edc90faf9b2f7d4245057e02c7b8384647ea8bdf43973ac8465d69229da43d7a03fbd5574a2b84f262480b589a897ef2dbd7ef241de5adb73b54b1a2f0c995c96564126",
+        "width" : 60
+      } ],
+      "name" : "Disney Piano",
+      "owner" : {
+        "display_name" : "Trotter Bolton",
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/user/1249865348"
+        },
+        "href" : "https://api.spotify.com/v1/users/1249865348",
+        "id" : "1249865348",
+        "type" : "user",
+        "uri" : "spotify:user:1249865348"
+      },
+      "primary_color" : null,
+      "public" : null,
+      "snapshot_id" : "YOUM7T6PcFQZ/URvHQOPQF4JXcbXW3Dik7pHnQLIecq+6dAfwWNM42+UR9AV9Wu2",
+      "tracks" : {
+        "href" : "https://api.spotify.com/v1/users/1249865348/playlists/2Xid72NwAWo7QxoAfUCzA1/tracks",
+        "total" : 93
+      },
+      "type" : "playlist",
+      "uri" : "spotify:user:1249865348:playlist:2Xid72NwAWo7QxoAfUCzA1"
+    } ],
+    "limit" : 20,
+    "next" : "https://api.spotify.com/v1/search?query=piano&type=playlist&offset=20&limit=20",
+    "offset" : 0,
+    "previous" : null,
+    "total" : 105560
+  }
+}"""
+
+    client = SpotifyMusicSearchService("client_id", "client_secret")
+    playlists = client._parse_playlist_results(raw_response)
+
+    assert len(playlists) == 20
+    assert playlists[0].name == "Peaceful Piano"
+    assert playlists[0].uri == "spotify:user:spotify:playlist:37i9dQZF1DX4sWSpwq3LiO"
