@@ -18,8 +18,8 @@ class PlayPlaylistUseCase(UseCase):
             if len(results_playlists):
                 first_playlist = results_playlists[0]
                 self.music_playback_service.play(device, first_playlist)
+                tts_feedback = "Playing the playlist : {}".format(first_playlist.name)
             else:
                 return ResponseFailure.build_resource_error(TTS_GENERIC_ERROR)
 
-        tts_feedback = "Playing the playlist : {}".format("") # TODO : complete me
         return ResponseSuccess(feedback=tts_feedback)
