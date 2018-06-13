@@ -16,9 +16,10 @@ class PlayPlaylistUseCase(UseCase):
         if request_object.playlist_name:
             results_playlists = self.music_search_service.search_playlist(request_object.playlist_name)
             if len(results_playlists):
-                first_result = results_playlists[0]
-                self.music_playback_service.play(device, first_result)
+                first_playlist = results_playlists[0]
+                self.music_playback_service.play(device, first_playlist)
             else:
                 return ResponseFailure.build_resource_error(TTS_GENERIC_ERROR)
 
-        return ResponseSuccess()
+        tts_feedback = "Playing the playlist : {}".format("") # TODO : complete me
+        return ResponseSuccess(feedback=tts_feedback)

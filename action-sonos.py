@@ -14,11 +14,12 @@ from snipssonos.use_cases.volume_set import VolumeSetUseCase
 from snipssonos.use_cases.mute import MuteUseCase
 from snipssonos.use_cases.play_track import PlayTrackUseCase
 from snipssonos.use_cases.play_artist import PlayArtistUseCase
+from snipssonos.use_cases.play_music import PlayMusicUseCase
 from snipssonos.use_cases.resume_music import ResumeMusicUseCase
 from snipssonos.use_cases.speaker_interrupt import SpeakerInterruptUseCase
 from snipssonos.adapters.request_adapter import VolumeUpRequestAdapter, PlayTrackRequestAdapter, \
     PlayArtistRequestAdapter, VolumeSetRequestAdapter, VolumeDownRequestAdapter, ResumeMusicRequestAdapter, \
-    SpeakerInterruptRequestAdapter, MuteRequestAdapter
+    SpeakerInterruptRequestAdapter, MuteRequestAdapter, PlayMusicRequestAdapter
 from snipssonos.services.node_device_discovery_service import NodeDeviceDiscoveryService
 from snipssonos.services.node_device_transport_control import NodeDeviceTransportControlService
 from snipssonos.services.node_music_playback_service import NodeMusicPlaybackService
@@ -191,6 +192,21 @@ def playArtist_callback(hermes, intentMessage):
     else:
         print response
         hermes.publish_end_session(intentMessage.session_id, "")
+
+def playMusic_callback(hermes, intentMessage):
+    use_case = PlayMusicUseCase(hermes.device_discovery_service, hermes.music_search_service,
+                                 hermes.music_playback_service)
+    play_music_request = PlayMusicRequestAdapter.from_intent_message(intentMessage)
+
+    print play_music_request
+    response = use_case.execute(play_music_request)
+
+    if not response:
+        print response
+        hermes.publish_end_session(intentMessage.session_id, response.feedback)
+    else:
+        print response
+        hermes.publish_end_session(intentMessage.session_id, response.feedback)
 
 
 if __name__ == "__main__":
