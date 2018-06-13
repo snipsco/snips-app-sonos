@@ -2,6 +2,7 @@ import base64
 import json
 import requests
 
+from snipssonos.entities.artist import Artist
 from snipssonos.entities.track import Track
 from snipssonos.entities.playlist import Playlist
 from snipssonos.exceptions import MusicSearchProviderConnectionError, MusicSearchCredentialsError
@@ -37,6 +38,27 @@ class SpotifyMusicSearchService(MusicSearchService):
         tracks = self._parse_track_results(raw_response)
         return tracks
 
+
+    def search_artist(self, artist_name):
+        artist_search_query = SpotifyAPISearchQueryBuilder()\
+            .add_artist_result_type() \
+            .add_generic_search_term(artist_name)
+
+        raw_response = self.client.execute_query(artist_search_query)
+        artists = self._parse_artist_results(raw_response)
+        return artists
+
+    def search_artist_for_playlist(self, artist_name, playlist_name):
+        track_by_artist_in_playlist_search_query = SpotifyAPISearchQueryBuilder()\
+            .add_artist_result_type()\
+            .add_field_filter("artist", artist_name)\
+            .add_field_filter("playlist", playlist_name)
+
+        raw_response = self.client.execute_query(track_by_artist_in_playlist_search_query)
+        artists = self._parse_artist_results(raw_response)
+
+        return artists
+
     def search_playlist(self, playlist_name):
         playlist_search_query = SpotifyAPISearchQueryBuilder()\
             .add_playlist_result_type() \
@@ -46,6 +68,7 @@ class SpotifyMusicSearchService(MusicSearchService):
         playlists = self._parse_playlist_results(raw_response)
 
         return playlists
+
 
     def _parse_track_results(self, raw_response):
         response = json.loads(raw_response)
@@ -61,6 +84,13 @@ class SpotifyMusicSearchService(MusicSearchService):
 
         playlists = [Playlist(item['uri'], item['name']) for item in playlists['items']]
         return playlists
+
+    def _parse_artists_results(self, raw_response):
+        response = json.loads(raw_response)
+        artists = response['artists']
+
+        artists = [Artist(item['uri'], item['name']) for item in artists['items']]
+        return artists
 
 
 class SpotifyClient(object):

@@ -88,6 +88,41 @@ def test_spotify_api_query_builder_add_track_result_type():
     assert actual_dict['q'] == expected_dict['q']
     assert actual_dict['type'] == expected_dict['type']
 
+def test_spotify_api_query_builder_add_album_result_type():
+    qb = SpotifyAPISearchQueryBuilder()
+    qb.add_generic_search_term('roadhouse blues')
+    qb.add_album_result_type()
+
+    actual_dict = qb.to_dict()
+
+    expected_dict = {'q': 'roadhouse blues', 'type': 'album'}
+    assert actual_dict['q'] == expected_dict['q']
+    assert actual_dict['type'] == expected_dict['type']
+
+def test_spotify_api_query_builder_add_artist_result_type():
+    qb = SpotifyAPISearchQueryBuilder()
+    qb.add_generic_search_term('roadhouse blues')
+    qb.add_artist_result_type()
+
+    actual_dict = qb.to_dict()
+
+    expected_dict = {'q': 'roadhouse blues', 'type': 'artist'}
+    assert actual_dict['q'] == expected_dict['q']
+    assert actual_dict['type'] == expected_dict['type']
+
+def test_spotify_api_query_builder_add_playlist_result_type():
+    qb = SpotifyAPISearchQueryBuilder()
+    qb.add_generic_search_term('roadhouse blues')
+    qb.add_playlist_result_type()
+
+    actual_dict = qb.to_dict()
+
+    expected_dict = {'q': 'roadhouse blues', 'type': 'playlist'}
+    assert actual_dict['q'] == expected_dict['q']
+    assert actual_dict['type'] == expected_dict['type']
+
+
+
 def test_spotify_api_query_builder_add_artist_filter():
     qb = SpotifyAPISearchQueryBuilder()
     qb.add_generic_search_term('roadhouse blues')
@@ -2162,3 +2197,55 @@ def test_correct_parsing_of_playlists_for_correct_response():
     assert len(playlists) == 20
     assert playlists[0].name == "Peaceful Piano"
     assert playlists[0].uri == "spotify:user:spotify:playlist:37i9dQZF1DX4sWSpwq3LiO"
+
+def test_correct_parsing_of_artists_for_correct_response():
+    raw_response = """{
+  "artists" : {
+    "href" : "https://api.spotify.com/v1/search?query=tornado+wallace&type=artist&offset=0&limit=20",
+    "items" : [ {
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/artist/6GNWPphcJ5CtIwCJVV1lLT"
+      },
+      "followers" : {
+        "href" : null,
+        "total" : 6720
+      },
+      "genres" : [ "balearic", "deep house", "deep soul house", "float house" ],
+      "href" : "https://api.spotify.com/v1/artists/6GNWPphcJ5CtIwCJVV1lLT",
+      "id" : "6GNWPphcJ5CtIwCJVV1lLT",
+      "images" : [ {
+        "height" : 1000,
+        "url" : "https://i.scdn.co/image/5a78e67813195043c81c3c7c756281abbb4e839a",
+        "width" : 1000
+      }, {
+        "height" : 640,
+        "url" : "https://i.scdn.co/image/f5b0d16ec4d7ead4e89c0ef6ff7c5ae3aefd4946",
+        "width" : 640
+      }, {
+        "height" : 200,
+        "url" : "https://i.scdn.co/image/65ab6430fe0e2efa92e61385b73a573d50187658",
+        "width" : 200
+      }, {
+        "height" : 64,
+        "url" : "https://i.scdn.co/image/c85d6fb2d74a3eadba944c95b9436bc2481f3e38",
+        "width" : 64
+      } ],
+      "name" : "Tornado Wallace",
+      "popularity" : 35,
+      "type" : "artist",
+      "uri" : "spotify:artist:6GNWPphcJ5CtIwCJVV1lLT"
+    } ],
+    "limit" : 20,
+    "next" : null,
+    "offset" : 0,
+    "previous" : null,
+    "total" : 1
+  }
+}"""
+
+    client = SpotifyMusicSearchService("client_id", "client_secret")
+    artists = client._parse_artists_results(raw_response)
+
+    assert len(artists) == 1
+    assert artists[0].name == "Tornado Wallace"
+    assert artists[0].uri == "spotify:artist:6GNWPphcJ5CtIwCJVV1lLT"
