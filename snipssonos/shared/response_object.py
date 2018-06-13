@@ -1,6 +1,7 @@
 class ResponseSuccess(object):
-    def __init__(self, value=None):
+    def __init__(self, value=None, feedback=None):
         self.value = value
+        self.feedback = feedback
 
     def __nonzero__(self):
         return True

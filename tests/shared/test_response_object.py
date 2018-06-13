@@ -16,6 +16,10 @@ def response_type():
 def response_message():
     return 'This is a response error'
 
+@pytest.fixture
+def response_feedback():
+    return "Hello, I'm a feedback."
+
 def test_response_success_is_true(response_value):
     r = reso.ResponseSuccess(None)
 
@@ -30,6 +34,12 @@ def test_response_success_contains_value(response_value):
     r = reso.ResponseSuccess(response_value)
 
     assert r.value == response_value
+
+def test_response_success_contains_feedback(response_feedback):
+    r = reso.ResponseSuccess(feedback=response_feedback)
+
+    assert r.value is None
+    assert r.feedback == response_feedback
 
 def test_response_failure_contains_message(response_type, response_message):
     r = reso.ResponseFailure(response_type, response_message)
