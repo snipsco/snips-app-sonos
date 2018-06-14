@@ -2249,3 +2249,263 @@ def test_correct_parsing_of_artists_for_correct_response():
     assert len(artists) == 1
     assert artists[0].name == "Tornado Wallace"
     assert artists[0].uri == "spotify:artist:6GNWPphcJ5CtIwCJVV1lLT"
+
+
+def test_correct_parsing_of_albums_for_correct_response():
+    raw_response = """{
+    "albums": {
+        "href": "https://api.spotify.com/v1/search?query=kids+see+ghosts&type=album&offset=0&limit=20",
+        "items": [
+            {
+                "album_type": "album",
+                "artists": [
+                    {
+                        "external_urls": {
+                            "spotify": "https://open.spotify.com/artist/2hPgGN4uhvXAxiXQBIXOmE"
+                        },
+                        "href": "https://api.spotify.com/v1/artists/2hPgGN4uhvXAxiXQBIXOmE",
+                        "id": "2hPgGN4uhvXAxiXQBIXOmE",
+                        "name": "KIDS SEE GHOSTS",
+                        "type": "artist",
+                        "uri": "spotify:artist:2hPgGN4uhvXAxiXQBIXOmE"
+                    },
+                    {
+                        "external_urls": {
+                            "spotify": "https://open.spotify.com/artist/5K4W6rqBFWDnAN6FQUkS6x"
+                        },
+                        "href": "https://api.spotify.com/v1/artists/5K4W6rqBFWDnAN6FQUkS6x",
+                        "id": "5K4W6rqBFWDnAN6FQUkS6x",
+                        "name": "Kanye West",
+                        "type": "artist",
+                        "uri": "spotify:artist:5K4W6rqBFWDnAN6FQUkS6x"
+                    },
+                    {
+                        "external_urls": {
+                            "spotify": "https://open.spotify.com/artist/0fA0VVWsXO9YnASrzqfmYu"
+                        },
+                        "href": "https://api.spotify.com/v1/artists/0fA0VVWsXO9YnASrzqfmYu",
+                        "id": "0fA0VVWsXO9YnASrzqfmYu",
+                        "name": "Kid Cudi",
+                        "type": "artist",
+                        "uri": "spotify:artist:0fA0VVWsXO9YnASrzqfmYu"
+                    }
+                ],
+                "available_markets": [
+                    "AD",
+                    "AR",
+                    "AT",
+                    "AU",
+                    "BE",
+                    "BG",
+                    "BO",
+                    "BR",
+                    "CA",
+                    "CH",
+                    "CL",
+                    "CO",
+                    "CR",
+                    "CY",
+                    "CZ",
+                    "DE",
+                    "DK",
+                    "DO",
+                    "EC",
+                    "EE",
+                    "ES",
+                    "FI",
+                    "FR",
+                    "GB",
+                    "GR",
+                    "GT",
+                    "HK",
+                    "HN",
+                    "HU",
+                    "ID",
+                    "IE",
+                    "IL",
+                    "IS",
+                    "IT",
+                    "JP",
+                    "LI",
+                    "LT",
+                    "LU",
+                    "LV",
+                    "MC",
+                    "MT",
+                    "MX",
+                    "MY",
+                    "NI",
+                    "NL",
+                    "NO",
+                    "NZ",
+                    "PA",
+                    "PE",
+                    "PH",
+                    "PL",
+                    "PT",
+                    "PY",
+                    "RO",
+                    "SE",
+                    "SG",
+                    "SK",
+                    "SV",
+                    "TH",
+                    "TR",
+                    "TW",
+                    "US",
+                    "UY",
+                    "VN",
+                    "ZA"
+                ],
+                "external_urls": {
+                    "spotify": "https://open.spotify.com/album/6pwuKxMUkNg673KETsXPUV"
+                },
+                "href": "https://api.spotify.com/v1/albums/6pwuKxMUkNg673KETsXPUV",
+                "id": "6pwuKxMUkNg673KETsXPUV",
+                "images": [
+                    {
+                        "height": 640,
+                        "url": "https://i.scdn.co/image/64cc5671890ba19c6c42a533eed08da56d29bdca",
+                        "width": 640
+                    },
+                    {
+                        "height": 300,
+                        "url": "https://i.scdn.co/image/7d4761ee372386c43bd1e4ea225f0ccfc412f18b",
+                        "width": 300
+                    },
+                    {
+                        "height": 64,
+                        "url": "https://i.scdn.co/image/f7a7a792c714f732233481a949045d3d5aef6fd3",
+                        "width": 64
+                    }
+                ],
+                "name": "KIDS SEE GHOSTS",
+                "release_date": "2018-06-08",
+                "release_date_precision": "day",
+                "type": "album",
+                "uri": "spotify:album:6pwuKxMUkNg673KETsXPUV"
+            },
+            {
+                "album_type": "single",
+                "artists": [
+                    {
+                        "external_urls": {
+                            "spotify": "https://open.spotify.com/artist/152TnUw2GtZ0O4VN82VGql"
+                        },
+                        "href": "https://api.spotify.com/v1/artists/152TnUw2GtZ0O4VN82VGql",
+                        "id": "152TnUw2GtZ0O4VN82VGql",
+                        "name": "K West",
+                        "type": "artist",
+                        "uri": "spotify:artist:152TnUw2GtZ0O4VN82VGql"
+                    }
+                ],
+                "available_markets": [
+                    "AD",
+                    "AR",
+                    "AT",
+                    "AU",
+                    "BE",
+                    "BG",
+                    "BO",
+                    "BR",
+                    "CA",
+                    "CH",
+                    "CL",
+                    "CO",
+                    "CR",
+                    "CY",
+                    "CZ",
+                    "DE",
+                    "DK",
+                    "DO",
+                    "EC",
+                    "EE",
+                    "ES",
+                    "FI",
+                    "FR",
+                    "GB",
+                    "GR",
+                    "GT",
+                    "HK",
+                    "HN",
+                    "HU",
+                    "ID",
+                    "IE",
+                    "IL",
+                    "IS",
+                    "IT",
+                    "JP",
+                    "LI",
+                    "LT",
+                    "LU",
+                    "LV",
+                    "MC",
+                    "MT",
+                    "MX",
+                    "MY",
+                    "NI",
+                    "NL",
+                    "NO",
+                    "NZ",
+                    "PA",
+                    "PE",
+                    "PH",
+                    "PL",
+                    "PT",
+                    "PY",
+                    "RO",
+                    "SE",
+                    "SG",
+                    "SK",
+                    "SV",
+                    "TH",
+                    "TR",
+                    "TW",
+                    "US",
+                    "UY",
+                    "VN",
+                    "ZA"
+                ],
+                "external_urls": {
+                    "spotify": "https://open.spotify.com/album/2pNmgGgbF4x6XQ5y8lG2eY"
+                },
+                "href": "https://api.spotify.com/v1/albums/2pNmgGgbF4x6XQ5y8lG2eY",
+                "id": "2pNmgGgbF4x6XQ5y8lG2eY",
+                "images": [
+                    {
+                        "height": 640,
+                        "url": "https://i.scdn.co/image/5a2065299a4ad5cb4386362587582a7764371835",
+                        "width": 640
+                    },
+                    {
+                        "height": 300,
+                        "url": "https://i.scdn.co/image/3f76c707a0dbb4b3b272173631c8f2e786501493",
+                        "width": 300
+                    },
+                    {
+                        "height": 64,
+                        "url": "https://i.scdn.co/image/ab5f14674ae1f606711056fb279a4ff278d49f86",
+                        "width": 64
+                    }
+                ],
+                "name": "Kids See Ghosts",
+                "release_date": "2018-06-08",
+                "release_date_precision": "day",
+                "type": "album",
+                "uri": "spotify:album:2pNmgGgbF4x6XQ5y8lG2eY"
+            }
+        ],
+        "limit": 20,
+        "next": null,
+        "offset": 0,
+        "previous": null,
+        "total": 2
+    }
+}"""
+
+    client = SpotifyMusicSearchService("client_id", "client_secret")
+    artists = client._parse_album_results(raw_response)
+
+    assert len(artists) == 2
+    assert artists[0].name == "KIDS SEE GHOSTS"
+    assert artists[0].uri == "spotify:album:6pwuKxMUkNg673KETsXPUV"
