@@ -12,12 +12,17 @@ class PlayArtistUseCase(UseCase):
 
         device = self.device_discovery_service.get()
 
+        results_track = list()
+
+        if request_object.playlist_name and request_object.artist_name:
+            results_track = self.music_search_service.search_artist_for_playlist(request_object.artist_name, request_object.playlist_name)
+
         if request_object.artist_name:
-            results_track = self.music_search_service.search_track_for_artist(request_object.artist_name, request_object.track_name)
-            if len(results_track):
-                first_result = results_track[0]
-                self.music_playback_service.play(device, first_result)
-            else:
-                return ResponseFailure.build_resource_error("An error happened")
+            results_track = self.music_search_service.search_artist(request_object.artist_name)
+        if len(results_track):
+            first_result = results_track[0]
+            self.music_playback_service.play(device, first_result)
+        else:
+            return ResponseFailure.build_resource_error("An error happened")
 
         return ResponseSuccess()

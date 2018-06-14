@@ -114,8 +114,12 @@ class SpeakerInterruptRequestObject(ValidRequestObject):
 
 
 class PlayTrackRequestObject(ValidRequestObject):
-    def __init__(self, track_name):
+    def __init__(self, track_name, artist_name=None, album_name=None, playlist_name=None):
         self.track_name = track_name
+        self.artist_name = artist_name
+        self.album_name = album_name
+        self.playlist_name = playlist_name
+
 
     @classmethod
     def from_dict(cls, a_dictionary):
@@ -128,14 +132,17 @@ class PlayTrackRequestObject(ValidRequestObject):
             return invalid_request
 
         return cls(
-            track_name=a_dictionary.get('track_name', None)
+            track_name=a_dictionary.get('track_name', None),
+            artist_name=a_dictionary.get('artist_name', None),
+            album_name=a_dictionary.get('album_name', None),
+            playlist_name=a_dictionary.get('playlist_name', None),
         )
 
 
 class PlayArtistRequestObject(ValidRequestObject):
-    def __init__(self, artist_name, track_name=None):
+    def __init__(self, artist_name, playlist_name=None):
         self.artist_name = artist_name
-        self.track_name = track_name
+        self.playlist_name = playlist_name
 
     @classmethod
     def from_dict(cls, a_dictionary):
@@ -149,9 +156,70 @@ class PlayArtistRequestObject(ValidRequestObject):
 
         return cls(
             artist_name=a_dictionary.get('artist_name', None),
-            track_name=a_dictionary.get('track_name', None)
+            playlist_name=a_dictionary.get('playlist_name', None)
+        )
+
+
+class PlayPlaylistRequestObject(ValidRequestObject):
+    def __init__(self, playlist_name):
+        self.playlist_name = playlist_name
+
+    @classmethod
+    def from_dict(cls, a_dictionary):
+        invalid_request = InvalidRequestObject()
+
+        if not('playlist_name' in a_dictionary):
+            invalid_request.add_error('playlist_name','is missing')
+
+        if invalid_request.has_errors():
+            return invalid_request
+
+        return cls(
+            playlist_name=a_dictionary.get('playlist_name', None)
+        )
+
+
+class PlayAlbumRequestObject(ValidRequestObject):
+    def __init__(self, album_name, artist_name=None, playlist_name=None):
+        self.album_name = album_name
+        self.artist_name = artist_name
+        self.playlist_name = playlist_name
+
+    @classmethod
+    def from_dict(cls, a_dictionary):
+        invalid_request = InvalidRequestObject()
+
+        if not('album_name' in a_dictionary):
+            invalid_request.add_error('album_name','is missing')
+
+        if invalid_request.has_errors():
+            return invalid_request
+
+        return cls(
+            album_name=a_dictionary.get('album_name', None),
+            artist_name=a_dictionary.get('artist_name', None),
+            playlist_name=a_dictionary.get('playlist_name', None)
         )
 
 
 class PlayMusicRequestObject(ValidRequestObject):
-    pass
+    def __init__(self, track_name=None, artist_name=None, album_name=None, playlist_name=None):
+        self.track_name = track_name
+        self.artist_name = artist_name
+        self.album_name = album_name
+        self.playlist_name = playlist_name
+
+
+    @classmethod
+    def from_dict(cls, a_dictionary):
+        invalid_request = InvalidRequestObject()
+
+        if invalid_request.has_errors():
+            return invalid_request
+
+        return cls(
+            track_name=a_dictionary.get('track_name', None),
+            artist_name=a_dictionary.get('artist_name', None),
+            album_name=a_dictionary.get('album_name', None),
+            playlist_name=a_dictionary.get('playlist_name', None),
+        )

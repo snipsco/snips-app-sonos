@@ -14,11 +14,14 @@ from snipssonos.use_cases.volume_set import VolumeSetUseCase
 from snipssonos.use_cases.mute import MuteUseCase
 from snipssonos.use_cases.play_track import PlayTrackUseCase
 from snipssonos.use_cases.play_artist import PlayArtistUseCase
+from snipssonos.use_cases.play_music import PlayMusicUseCase
+from snipssonos.use_cases.play_playlist import PlayPlaylistUseCase
+from snipssonos.use_cases.play_album import PlayAlbumUseCase
 from snipssonos.use_cases.resume_music import ResumeMusicUseCase
 from snipssonos.use_cases.speaker_interrupt import SpeakerInterruptUseCase
 from snipssonos.adapters.request_adapter import VolumeUpRequestAdapter, PlayTrackRequestAdapter, \
     PlayArtistRequestAdapter, VolumeSetRequestAdapter, VolumeDownRequestAdapter, ResumeMusicRequestAdapter, \
-    SpeakerInterruptRequestAdapter, MuteRequestAdapter
+    SpeakerInterruptRequestAdapter, MuteRequestAdapter, PlayPlaylistRequestAdapter, PlayAlbumRequestAdapter, PlayMusicRequestAdapter
 from snipssonos.services.node_device_discovery_service import NodeDeviceDiscoveryService
 from snipssonos.services.node_device_transport_control import NodeDeviceTransportControlService
 from snipssonos.services.node_music_playback_service import NodeMusicPlaybackService
@@ -49,9 +52,9 @@ def read_configuration_file(configuration_file):
     except (IOError, ConfigParser.Error) as e:
         return dict()
 
+
 def hotword_detected_callack(hermes, intentMessage):
     pass
-
 
 
 # Music management functions
@@ -65,11 +68,35 @@ def getInfos_callback(hermes, intentMessage):
 
 
 def playAlbum_callback(hermes, intentMessage):
-    raise NotImplementedError("playAlbum_callback() not implemented")
+    use_case = PlayAlbumUseCase(hermes.device_discovery_service, hermes.music_search_service,
+                                   hermes.music_playback_service)
+    play_album_request = PlayAlbumRequestAdapter.from_intent_message(intentMessage)
+
+    print play_album_request
+    response = use_case.execute(play_album_request)
+
+    if not response:
+        print response
+        hermes.publish_end_session(intentMessage.session_id, response.message)
+    else:
+        print response
+        hermes.publish_end_session(intentMessage.session_id, response.feedback)
 
 
 def playPlaylist_callback(hermes, intentMessage):
-    raise NotImplementedError("playPlaylist_callback() not implemented")
+    use_case = PlayPlaylistUseCase(hermes.device_discovery_service, hermes.music_search_service,
+                                   hermes.music_playback_service)
+    play_playlist_request = PlayPlaylistRequestAdapter.from_intent_message(intentMessage)
+
+    print play_playlist_request
+    response = use_case.execute(play_playlist_request)
+
+    if not response:
+        print response
+        hermes.publish_end_session(intentMessage.session_id, response.message)
+    else:
+        print response
+        hermes.publish_end_session(intentMessage.session_id, response.feedback)
 
 
 def radioOn_callback(hermes, intentMessage):
@@ -162,7 +189,7 @@ def mute_callback(hermes, intentMessage):
         hermes.publish_end_session(intentMessage.session_id, "")
 
 
-def playSong_callback(hermes, intentMessage):
+def playTrack_callback(hermes, intentMessage):
     use_case = PlayTrackUseCase(hermes.device_discovery_service, hermes.music_search_service,
                                 hermes.music_playback_service)
     play_track_request = PlayTrackRequestAdapter.from_intent_message(intentMessage)
@@ -193,6 +220,22 @@ def playArtist_callback(hermes, intentMessage):
         hermes.publish_end_session(intentMessage.session_id, "")
 
 
+def playMusic_callback(hermes, intentMessage):
+    use_case = PlayMusicUseCase(hermes.device_discovery_service, hermes.music_search_service,
+                                hermes.music_playback_service)
+    play_music_request = PlayMusicRequestAdapter.from_intent_message(intentMessage)
+
+    print play_music_request
+    response = use_case.execute(play_music_request)
+
+    if not response:
+        print response
+        hermes.publish_end_session(intentMessage.session_id, response.feedback)
+    else:
+        print response
+        hermes.publish_end_session(intentMessage.session_id, response.feedback)
+
+
 if __name__ == "__main__":
     configuration = read_configuration_file("config.ini")
     client_id = configuration['secret']['client_id']
@@ -206,11 +249,11 @@ if __name__ == "__main__":
 
         h \
             .subscribe_session_started(hotword_detected_callack) \
-            .subscribe_intent("playMusic3", playArtist_callback) \
-            .subscribe_intent("volumeUp3", volumeUp_callback) \
-            .subscribe_intent("volumeDown3", volumeDown_callback) \
-            .subscribe_intent("volumeSet3", volumeSet_callback) \
-            .subscribe_intent("muteSound3", mute_callback) \
-            .subscribe_intent("resumeMusic3", resumeMusic_callback) \
-            .subscribe_intent("speakerInterrupt3", speakerInterrupt_callback) \
+            .subscribe_intent("playMusic4", playMusic_callback) \
+            .subscribe_intent("volumeUp4", volumeUp_callback) \
+            .subscribe_intent("volumeDown4", volumeDown_callback) \
+            .subscribe_intent("volumeSet4", volumeSet_callback) \
+            .subscribe_intent("muteSound4", mute_callback) \
+            .subscribe_intent("resumeMusic4", resumeMusic_callback) \
+            .subscribe_intent("speakerInterrupt4", speakerInterrupt_callback) \
             .loop_forever()
