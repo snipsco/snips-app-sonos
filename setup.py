@@ -9,22 +9,6 @@ except ImportError:
 
 with open('README.rst') as readme_file:
     readme = readme_file.read()
-"""
-parsed_requirements = parse_requirements(
-    'requirements/prod.txt',
-    session=pip.download.PipSession()
-)
-
-parsed_test_requirements = parse_requirements(
-    'requirements/test.txt',
-    session=pip.download.PipSession()
-)
-
-
-requirements = [str(ir.req) for ir in parsed_requirements]
-test_requirements = [str(tr.req) for tr in parsed_test_requirements]
-
-"""
 
 required = [
     "apiwrapper", 
@@ -37,6 +21,7 @@ extras_require = {
         "pytest",
         "coverage",
         "pytest-cov",
+    	"hermes-python",
     ],
 }
 
