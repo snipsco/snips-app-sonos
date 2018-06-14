@@ -31,7 +31,7 @@ from snipssonos.services.spotify_music_search_service import SpotifyMusicSearchS
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
 
-HOSTNAME = "sonos-antho.local"
+HOSTNAME ="localhost"
 
 HERMES_HOST = "{}:1883".format(HOSTNAME)
 MOPIDY_HOST = HOSTNAME
