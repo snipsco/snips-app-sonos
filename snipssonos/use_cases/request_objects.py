@@ -260,3 +260,21 @@ class PlayMusicRequestObject(ValidRequestObject):
 
 class PlayMusicRequestFactory(RequestObjectFactory):
     request_object_class = PlayMusicRequestObject
+
+
+class InjectEntitiesRequestObject(ValidRequestObject):
+    def __init__(self, entity_name):
+        self.entity_name = entity_name
+
+    @classmethod
+    def from_dict(cls, a_dictionary):
+        invalid_request = InvalidRequestObject()
+
+        if not('entity_name' in a_dictionary):
+            invalid_request.add_error('entity_name', 'is missing')
+
+        if invalid_request.has_errors():
+            return invalid_request
+        return cls(
+            entity_name=a_dictionary.get('artist_name', None)
+        )
