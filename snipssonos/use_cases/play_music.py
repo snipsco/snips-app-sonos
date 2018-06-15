@@ -7,6 +7,8 @@ from snipssonos.use_cases.play_artist import PlayArtistUseCase
 from snipssonos.use_cases.play_album import PlayAlbumUseCase
 from snipssonos.use_cases.play_playlist import PlayPlaylistUseCase
 
+import logging
+
 class PlayMusicUseCase(UseCase):
 
     def __init__(self,  device_discovery_service, music_search_service, music_playback_service):
@@ -26,77 +28,77 @@ class PlayMusicUseCase(UseCase):
 
     def extract_sub_use_case_from_parameters(self, track_name, artist_name, album_name, playlist_name):
         if not(track_name) and not(album_name) and not(artist_name) and playlist_name:
-            print 'playlist'
+            logging.info('playlist')
             return PlayPlaylistUseCase(self.device_discovery_service, self.music_search_service,
                                        self.music_playback_service)
 
         if not(track_name) and not(album_name) and artist_name and not(playlist_name):
-            print 'artist'
+            logging.info('artist')
             return PlayArtistUseCase(self.device_discovery_service, self.music_search_service,
                                      self.music_playback_service)
 
         if not (track_name) and not (album_name) and artist_name and playlist_name:
-            print 'artist-playlist'
+            logging.info('artist-playlist')
             return PlayArtistUseCase(self.device_discovery_service, self.music_search_service,
                                      self.music_playback_service)
 
         if not(track_name) and album_name and not(artist_name) and not(playlist_name):
-            print 'album'
+            logging.info('album')
             return PlayAlbumUseCase(self.device_discovery_service, self.music_search_service,
                                      self.music_playback_service)
 
         if not(track_name) and album_name and not(artist_name) and playlist_name:
-            print 'album-playlist'
+            logging.info('album-playlist')
             return PlayAlbumUseCase(self.device_discovery_service, self.music_search_service,
                                      self.music_playback_service)
 
         if not(track_name) and album_name and artist_name and not(playlist_name):
-            print 'album-artist'
+            logging.info('album-artist')
             return PlayAlbumUseCase(self.device_discovery_service, self.music_search_service,
                                      self.music_playback_service)
 
         if not(track_name) and album_name and artist_name and playlist_name:
-            print 'album-artist-playlist'
+            logging.info('album-artist-playlist')
             return PlayAlbumUseCase(self.device_discovery_service, self.music_search_service,
                                      self.music_playback_service)
 
         if track_name and not(album_name) and not(artist_name) and not(playlist_name):
-            print 'song'
+            logging.info('song')
             return PlayTrackUseCase(self.device_discovery_service, self.music_search_service,
                                      self.music_playback_service)
 
         if track_name and not(album_name) and not(artist_name) and playlist_name:
-            print 'song-playlist'
+            logging.info('song-playlist')
             return PlayTrackUseCase(self.device_discovery_service, self.music_search_service,
                                      self.music_playback_service)
 
         if track_name and not(album_name) and artist_name and not(playlist_name):
-            print 'song-artist'
+            logging.info('song-artist')
             return PlayTrackUseCase(self.device_discovery_service, self.music_search_service,
                                      self.music_playback_service)
 
         if track_name and not(album_name) and artist_name and playlist_name:
-            print 'sont-artist-playlist'
+            logging.info('sont-artist-playlist')
             return PlayTrackUseCase(self.device_discovery_service, self.music_search_service,
                                      self.music_playback_service)
 
         if track_name and album_name and not(artist_name) and not(playlist_name):
-            print 'song-album'
+            logging.info('song-album')
             return PlayTrackUseCase(self.device_discovery_service, self.music_search_service,
                                      self.music_playback_service)
 
         if track_name and album_name and not(artist_name) and playlist_name:
-            print 'song-album-playlist'
+            logging.info('song-album-playlist')
             return PlayTrackUseCase(self.device_discovery_service, self.music_search_service,
                                      self.music_playback_service)
 
         if track_name and album_name and artist_name and not(playlist_name):
-            print 'song-album-artist'
+            logging.info('song-album-artist')
             return PlayTrackUseCase(self.device_discovery_service, self.music_search_service,
                                      self.music_playback_service)
 
         if track_name and album_name and artist_name and playlist_name:
-            print 'song-album-artist-playlist'
+            logging.info('song-album-artist-playlist')
             return PlayTrackUseCase(self.device_discovery_service, self.music_search_service,
                                      self.music_playback_service)
 
