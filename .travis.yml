@@ -1,5 +1,4 @@
 language: python
-os: osx  # This is temporary, we will remove this once we are able to build hermes-python on linux
 matrix:
   include:
     - python: 2.7
