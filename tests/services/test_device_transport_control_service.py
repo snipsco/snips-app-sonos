@@ -1,9 +1,7 @@
 import pytest
 
 from snipssonos.entities.device import Device
-from snipssonos.services.device_transport_control import DeviceTransportControlService
-from snipssonos.use_cases.volume_down import VolumeDownUseCase
-
+from snipssonos.services.device.device_transport_control import DeviceTransportControlService
 
 @pytest.fixture
 def connected_device():

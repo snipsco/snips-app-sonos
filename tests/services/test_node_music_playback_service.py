@@ -3,7 +3,7 @@ import pytest
 
 from snipssonos.entities.device import Device
 from snipssonos.entities.track import Track
-from snipssonos.services.node_music_playback_service import NodeMusicPlaybackService
+from snipssonos.services.node.node_music_playback_service import NodeMusicPlaybackService
 
 
 @pytest.fixture

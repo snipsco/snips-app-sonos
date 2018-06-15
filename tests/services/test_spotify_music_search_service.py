@@ -1,10 +1,8 @@
-# coding:utf-8
 import mock
 import pytest
 import requests
 
-from snipssonos.services.spotify_music_search_service import SpotifyClient, SpotifyMusicSearchService, \
-    SpotifyAPISearchQueryBuilder
+from snipssonos.services.spotify.spotify_music_search_service import SpotifyClient, SpotifyMusicSearchService, SpotifyAPISearchQueryBuilder
 from snipssonos.exceptions import MusicSearchCredentialsError, MusicSearchProviderConnectionError
 
 
