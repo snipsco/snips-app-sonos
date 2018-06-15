@@ -9,6 +9,7 @@ import traceback
 from hermes_python.hermes import Hermes
 from hermes_python.ontology import *
 
+from snipssonos.helpers.snips_config_parser import read_configuration_file
 from snipssonos.use_cases.volume_up import VolumeUpUseCase
 from snipssonos.use_cases.volume_down import VolumeDownUseCase
 from snipssonos.use_cases.volume_set import VolumeSetUseCase
@@ -26,44 +27,23 @@ from snipssonos.adapters.request_adapter import VolumeUpRequestAdapter, PlayTrac
     PlayArtistRequestAdapter, VolumeSetRequestAdapter, VolumeDownRequestAdapter, ResumeMusicRequestAdapter, \
     SpeakerInterruptRequestAdapter, MuteRequestAdapter, PlayPlaylistRequestAdapter, PlayAlbumRequestAdapter, \
     PlayMusicRequestAdapter, NextTrackRequestAdapter
-from snipssonos.services.node_device_discovery_service import NodeDeviceDiscoveryService
-from snipssonos.services.node_device_transport_control import NodeDeviceTransportControlService
-from snipssonos.services.node_music_playback_service import NodeMusicPlaybackService
-from snipssonos.services.spotify_music_search_service import SpotifyMusicSearchService
+from snipssonos.services.node.node_device_discovery_service import NodeDeviceDiscoveryService
+from snipssonos.services.node.node_device_transport_control import NodeDeviceTransportControlService
+from snipssonos.services.node.node_music_playback_service import NodeMusicPlaybackService
+from snipssonos.services.spotify.spotify_music_search_service import SpotifyMusicSearchService
 
 from snipssonos.shared.feedback import FR_TTS_SHORT_ERROR
 
 # Utils functions
-CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
 
-HOSTNAME = "sonos-antho.local"
+HOSTNAME = "localhost"
 
 HERMES_HOST = "{}:1883".format(HOSTNAME)
 MOPIDY_HOST = HOSTNAME
 
 # Logging config
 logging.basicConfig(level=logging.INFO)
-
-class SnipsConfigParser(ConfigParser.SafeConfigParser):
-    def to_dict(self):
-        return {section: {option_name: option for option_name, option in self.items(section)} for section in
-                self.sections()}
-
-
-def read_configuration_file(configuration_file):
-    try:
-        with io.open(configuration_file, encoding=CONFIGURATION_ENCODING_FORMAT) as f:
-            conf_parser = SnipsConfigParser()
-            conf_parser.readfp(f)
-            return conf_parser.to_dict()
-    except (IOError, ConfigParser.Error) as e:
-        return dict()
-
-
-def hotword_detected_callack(hermes, intentMessage):
-    pass
-
 
 # Music management functions
 
@@ -266,7 +246,6 @@ if __name__ == "__main__":
         h.music_playback_service = NodeMusicPlaybackService()
 
         h \
-            .subscribe_session_started(hotword_detected_callack) \
             .subscribe_intent("playMusic4", playMusic_callback) \
             .subscribe_intent("volumeUp4", volumeUp_callback) \
             .subscribe_intent("volumeDown4", volumeDown_callback) \
