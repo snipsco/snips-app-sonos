@@ -20,6 +20,3 @@ def test_returns_invalid_request_object_for_wrong_param_type_dictionary():
     play_track_request = reqo.PlayTrackRequestObject.from_dict({'song_name': 1})
 
     assert bool(play_track_request) is False
-
-
-

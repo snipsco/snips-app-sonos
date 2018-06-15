@@ -1,5 +1,6 @@
 from snipssonos.entities.entities import Entity
 
+
 class Track(object):
     def __init__(self, uri):
         self.uri = uri

@@ -3,6 +3,7 @@ class SpeakerControllerAction(object):
     """
     an interface to interact with intents following the ontology of the "Music Player" assistant.
     """
+
     def __init__(self):
         pass
 

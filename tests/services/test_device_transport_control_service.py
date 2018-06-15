@@ -5,14 +5,14 @@ from snipssonos.services.device_transport_control import DeviceTransportControlS
 from snipssonos.use_cases.volume_down import VolumeDownUseCase
 
 
-
 @pytest.fixture
 def connected_device():
     return Device.from_dict({
-        'name':'Antho',
+        'name': 'Antho',
         'identifier': 'RINCON_XXXXXX',
-        'volume':10
+        'volume': 10
     })
+
 
 def test_cant_use_transport_service_volume_up(connected_device):
     transport_service = DeviceTransportControlService()
@@ -20,12 +20,9 @@ def test_cant_use_transport_service_volume_up(connected_device):
     with pytest.raises(NotImplementedError):
         transport_service.volume_up(connected_device)
 
+
 def test_cant_use_transport_service_volume_down(connected_device):
     transport_service = DeviceTransportControlService()
 
     with pytest.raises(NotImplementedError):
         transport_service.volume_down(connected_device)
-
-
-
-

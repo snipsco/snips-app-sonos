@@ -13,6 +13,7 @@ class InvalidRequestObject(object):
     def has_errors(self):
         return bool(len(self.errors))
 
+
 class ValidRequestObject(object):
     def __nonzero__(self):
         return True
