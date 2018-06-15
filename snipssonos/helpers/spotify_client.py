@@ -103,10 +103,12 @@ class SpotifyClient(object):
 
 
 class SpotifyAPISearchQueryBuilder(object):
-    def __init__(self):
+    def __init__(self, is_user_data=False):
         self.keyword = ""
         self.field_filters = []
+        self.user_filters = {}
         self.result_type = None
+        self.is_user_data = is_user_data
 
     def add_generic_search_term(self, term):
         if len(term):
@@ -139,11 +141,11 @@ class SpotifyAPISearchQueryBuilder(object):
         :param time_range: long_term (last 4 years), medium_term (last 6 months) or short_term (last 4 weeks)
         :return:
         """
-        self.add_field_filter("time_range", time_range)
+        self.user_filters.update({'time_range': time_range})
         return self
 
     def add_limit(self, limit):
-        self.add_field_filter("limit", limit)
+        self.user_filters.update({'limit': limit})
         return self
 
     def add_track_result_type(self):
@@ -168,15 +170,17 @@ class SpotifyAPISearchQueryBuilder(object):
 
     def to_dict(self):
         params_dictionary = {}
-
-        if len(self.field_filters):
-            query = self._get_query_from_field_filters()
-            params_dictionary.update({'q': query})
+        if self.is_user_data:
+            params_dictionary = self.user_filters
         else:
-            query = self.keyword
-            params_dictionary.update({'q': query})
+            if len(self.field_filters):
+                query = self._get_query_from_field_filters()
+                params_dictionary.update({'q': query})
+            else:
+                query = self.keyword
+                params_dictionary.update({'q': query})
 
-        if self.result_type:
-            params_dictionary.update({'type': self.result_type})
+            if self.result_type:
+                params_dictionary.update({'type': self.result_type})
 
         return params_dictionary
