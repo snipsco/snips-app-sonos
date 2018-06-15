@@ -2,6 +2,7 @@
 # -*-: coding utf-8 -*-
 
 import ConfigParser
+import logging
 import io
 import traceback
 
@@ -21,21 +22,26 @@ from snipssonos.use_cases.resume_music import ResumeMusicUseCase
 from snipssonos.use_cases.speaker_interrupt import SpeakerInterruptUseCase
 from snipssonos.adapters.request_adapter import VolumeUpRequestAdapter, PlayTrackRequestAdapter, \
     PlayArtistRequestAdapter, VolumeSetRequestAdapter, VolumeDownRequestAdapter, ResumeMusicRequestAdapter, \
-    SpeakerInterruptRequestAdapter, MuteRequestAdapter, PlayPlaylistRequestAdapter, PlayAlbumRequestAdapter, PlayMusicRequestAdapter
+    SpeakerInterruptRequestAdapter, MuteRequestAdapter, PlayPlaylistRequestAdapter, PlayAlbumRequestAdapter, \
+    PlayMusicRequestAdapter
 from snipssonos.services.node_device_discovery_service import NodeDeviceDiscoveryService
 from snipssonos.services.node_device_transport_control import NodeDeviceTransportControlService
 from snipssonos.services.node_music_playback_service import NodeMusicPlaybackService
 from snipssonos.services.spotify_music_search_service import SpotifyMusicSearchService
 
+from snipssonos.shared.feedback import FR_TTS_SHORT_ERROR
+
 # Utils functions
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
 
-HOSTNAME ="localhost"
+HOSTNAME = "localhost"
 
 HERMES_HOST = "{}:1883".format(HOSTNAME)
 MOPIDY_HOST = HOSTNAME
 
+# Logging config
+logging.basicConfig(level=logging.INFO)
 
 class SnipsConfigParser(ConfigParser.SafeConfigParser):
     def to_dict(self):
@@ -69,17 +75,17 @@ def getInfos_callback(hermes, intentMessage):
 
 def playAlbum_callback(hermes, intentMessage):
     use_case = PlayAlbumUseCase(hermes.device_discovery_service, hermes.music_search_service,
-                                   hermes.music_playback_service)
+                                hermes.music_playback_service)
     play_album_request = PlayAlbumRequestAdapter.from_intent_message(intentMessage)
 
-    print play_album_request
+    logging.info(play_album_request)
     response = use_case.execute(play_album_request)
 
     if not response:
-        print response
+        logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, response.message)
     else:
-        print response
+        logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, response.feedback)
 
 
@@ -88,14 +94,14 @@ def playPlaylist_callback(hermes, intentMessage):
                                    hermes.music_playback_service)
     play_playlist_request = PlayPlaylistRequestAdapter.from_intent_message(intentMessage)
 
-    print play_playlist_request
+    logging.info(play_playlist_request)
     response = use_case.execute(play_playlist_request)
 
     if not response:
-        print response
+        logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, response.message)
     else:
-        print response
+        logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, response.feedback)
 
 
@@ -117,10 +123,10 @@ def resumeMusic_callback(hermes, intentMessage):  # Playback functions
 
     response = usecase.execute(resume_music_request)
     if not response:
-        print response.value
-        hermes.publish_end_session(intentMessage.session_id, "An error occured.")
+        logging.info(response.value)
+        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
     else:
-        print response
+        logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, "")
 
 
@@ -130,10 +136,10 @@ def speakerInterrupt_callback(hermes, intentMessage):
 
     response = usecase.execute(speaker_interrupt_request)
     if not response:
-        print response.value
-        hermes.publish_end_session(intentMessage.session_id, "An error occured.")
+        logging.info(response.value)
+        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
     else:
-        print response
+        logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, "")
 
 
@@ -143,10 +149,10 @@ def volumeDown_callback(hermes, intentMessage):
 
     response = usecase.execute(volume_down_request)
     if not response:
-        print response.value
-        hermes.publish_end_session(intentMessage.session_id, "An error occured.")
+        logging.info(response.value)
+        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
     else:
-        print response
+        logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, "")
 
 
@@ -156,10 +162,10 @@ def volumeUp_callback(hermes, intentMessage):
 
     response = usecase.execute(volume_up_request)
     if not response:
-        print response.value
-        hermes.publish_end_session(intentMessage.session_id, "An error occured.")
+        logging.info(response.value)
+        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
     else:
-        print response
+        logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, "")
 
 
@@ -169,10 +175,10 @@ def volumeSet_callback(hermes, intentMessage):
 
     response = usecase.execute(volume_set_request)
     if not response:
-        print response.value
-        hermes.publish_end_session(intentMessage.session_id, "An error occured.")
+        logging.info(response.value)
+        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
     else:
-        print response
+        logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, "")
 
 
@@ -182,10 +188,10 @@ def mute_callback(hermes, intentMessage):
 
     response = usecase.execute(mute_request)
     if not response:
-        print response.value
-        hermes.publish_end_session(intentMessage.session_id, "An error occured.")
+        logging.info(response.value)
+        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
     else:
-        print response
+        logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, "")
 
 
@@ -197,10 +203,10 @@ def playTrack_callback(hermes, intentMessage):
     response = use_case.execute(play_track_request)
 
     if not response:
-        print response.value
-        hermes.publish_end_session(intentMessage.session_id, "An error occured")
+        logging.info(response.value)
+        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
     else:
-        print response
+        logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, "")
 
 
@@ -209,14 +215,15 @@ def playArtist_callback(hermes, intentMessage):
                                  hermes.music_playback_service)
     play_artist_request = PlayArtistRequestAdapter.from_intent_message(intentMessage)
 
-    print play_artist_request
+
+    logging.info(play_artist_request)
     response = use_case.execute(play_artist_request)
 
     if not response:
-        print response.value
-        hermes.publish_end_session(intentMessage.session_id, "An error occured")
+        logging.info(response.value)
+        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
     else:
-        print response
+        logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, "")
 
 
@@ -225,16 +232,14 @@ def playMusic_callback(hermes, intentMessage):
                                 hermes.music_playback_service)
     play_music_request = PlayMusicRequestAdapter.from_intent_message(intentMessage)
 
-    print play_music_request
+
+    logging.info(play_music_request)
     response = use_case.execute(play_music_request)
 
     if not response:
-        print response
-        hermes.publish_end_session(intentMessage.session_id, response.feedback)
+        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
     else:
-        print response
         hermes.publish_end_session(intentMessage.session_id, response.feedback)
-
 
 if __name__ == "__main__":
     configuration = read_configuration_file("config.ini")
