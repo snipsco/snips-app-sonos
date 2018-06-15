@@ -18,16 +18,17 @@ class SpotifyCustomService:
         self.client.set_top_artist()
         artists_results = []
         for time_range in self.TIME_RANGES:
-            top_artist_by_time_range_query = SpotifyAPISearchQueryBuilder()
+            top_artist_by_time_range_query = SpotifyAPISearchQueryBuilder(is_user_data=True)
             top_artist_by_time_range_query = top_artist_by_time_range_query\
-                .add_time_range(time_range)
-                # .add_limit(50)
+                .add_time_range(time_range)\
+                .add_limit(50)
 
-            raw_response = self.client.execute_query(None) # TODO fix query builder
-            artists = self.parse_artist_results(raw_response)
-            artists_results.append(artists)
-
+            raw_response = self.client.execute_query(top_artist_by_time_range_query)
+            artists_results += self.parse_artist_results(raw_response)
         return artists_results
+
+    def reset_user_endpoint(self):
+        self.client.set_user_endpoint()
 
     # def fetch_top_tracks(self, time_range=None):
     # def fetch_playlist(self):
@@ -35,7 +36,7 @@ class SpotifyCustomService:
     @staticmethod
     def parse_artist_results(raw_response):
         response = json.loads(raw_response)
-        artists = [Artist(item['name']) for item in response['items']]
+        artists = [Artist(item['uri'], item['name']) for item in response['items']]
 
         return artists
 
