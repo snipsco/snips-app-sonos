@@ -11,6 +11,7 @@ class InjectEntitiesUseCase(UseCase):
     def process_request(self, request_object):
         if request_object.entity_name:
             results_artist = self.music_custom_service.fetch_top_artist()
+            self.music_custom_service.reset_user_endpoint()
             if len(results_artist):
                 self.inject_entities_service.publish_entities(request_object.entity_name, results_artist)
             else:
