@@ -1,3 +1,4 @@
 apiwrapper
 hermes_python
 requests
+paho-mqtt
