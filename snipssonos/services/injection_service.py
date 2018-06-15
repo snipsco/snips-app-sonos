@@ -39,7 +39,7 @@ class InjectEntitiesService:
 
     def parse_data(self):
         return {
-            'artistNameFR': [artist.name for artist in self.data],
+            'snips/artist': [artist.name for artist in self.data],
             'song_name': {},
             'playlist_name': {}
         }[self.entity_name]
@@ -53,7 +53,7 @@ if __name__ == "__main__":
     HOSTNAME = "localhost"
 
     inject = InjectEntitiesService(HOSTNAME)
-    inject_entities_request = InjectEntitiesRequestObject("artistNameFR")
+    inject_entities_request = InjectEntitiesRequestObject("snips/artist")
 
     artists = [Artist(None, 'pau fabregat'), Artist(None, 'blabla')]
 

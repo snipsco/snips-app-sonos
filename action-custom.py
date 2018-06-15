@@ -10,7 +10,7 @@ from snipssonos.use_cases.inject_entities import InjectEntitiesUseCase
 
 HERMES_HOST = "localhost"
 SECONDS_IN_A_DAY = 86400.0
-ARTIST_ENTITY_NAME = "artistNameFR"
+ARTIST_ENTITY_NAME = "snips/artist"
 
 if __name__ == "__main__":
     configuration = read_configuration_file("config.ini")
