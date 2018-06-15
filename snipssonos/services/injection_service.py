@@ -30,29 +30,31 @@ class InjectEntitiesService:
         payload = dict()
         payload["operations"] = [
                 [
-                    "add", entities_payload
+                    "addFromVanilla", entities_payload
                 ]
             ]
+        payload["crossLanguage"] = "en"
 
         return json.dumps(payload)
 
     def parse_data(self):
         return {
-            'artist_name': [artist.name for artist in self.data],
+            'artistNameFR': [artist.name for artist in self.data],
             'song_name': {},
             'playlist_name': {}
         }[self.entity_name]
 
 
+# TODO erase, just for test
 if __name__ == "__main__":
     from snipssonos.use_cases.request_objects import InjectEntitiesRequestObject
     from snipssonos.entities.artist import Artist
 
-    HOSTNAME = "192.168.170.114"
+    HOSTNAME = "localhost"
 
     inject = InjectEntitiesService(HOSTNAME)
-    inject_entities_request = InjectEntitiesRequestObject("artist_name")
+    inject_entities_request = InjectEntitiesRequestObject("artistNameFR")
 
-    artists = [Artist('pau fabregat'), Artist('blabla')]
+    artists = [Artist(None, 'pau fabregat'), Artist(None, 'blabla')]
 
     inject.publish_entities(inject_entities_request.entity_name, artists)
