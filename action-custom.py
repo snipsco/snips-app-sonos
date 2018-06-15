@@ -6,9 +6,9 @@ from snipssonos.services.spotify.spotify_music_custom_service import SpotifyCust
 from snipssonos.services.injection_service import InjectEntitiesService
 from snipssonos.use_cases.inject_entities import InjectEntitiesUseCase
 
-# HERMES_HOST = "localhost"
-HERMES_HOST = "192.168.170.114"
+HERMES_HOST = "localhost"
 SECONDS_IN_A_DAY = 86400.0
+ARTIST_ENTITY_NAME = "artistNameFR"
 
 if __name__ == "__main__":
     configuration = read_configuration_file("config.ini")
@@ -19,13 +19,15 @@ if __name__ == "__main__":
     music_custom_service = SpotifyCustomService(client_id, client_secret, access_token)
     injection_service = InjectEntitiesService(HERMES_HOST)
 
-    starttime = time.time()
+    # starttime = time.time()
 
     # Code taken from: https://stackoverflow.com/a/25251804
-    while True:
-        inject_entities_request = InjectEntitiesRequestObject("artist_name")
-        use_case = InjectEntitiesUseCase(music_custom_service, injection_service)
+    # TODO first call iterate with all top data and in the loop just keep getting short term top data
+    # TODO: enable loop when refresh_token issue is solved
+    # while True:
+    inject_entities_request = InjectEntitiesRequestObject(ARTIST_ENTITY_NAME)
+    use_case = InjectEntitiesUseCase(music_custom_service, injection_service)
 
-        response = use_case.process_request(inject_entities_request)
+    response = use_case.process_request(inject_entities_request)
 
-        time.sleep(SECONDS_IN_A_DAY - ((time.time() - starttime) % SECONDS_IN_A_DAY))
+    # time.sleep(SECONDS_IN_A_DAY - ((time.time() - starttime) % SECONDS_IN_A_DAY))
