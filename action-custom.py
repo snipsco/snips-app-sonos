@@ -1,3 +1,5 @@
+#!/usr/bin/env python2
+# -*-: coding utf-8 -*-
 import time
 
 from snipssonos.use_cases.request_objects import InjectEntitiesRequestObject
