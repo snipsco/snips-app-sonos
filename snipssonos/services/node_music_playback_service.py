@@ -2,7 +2,8 @@ import requests
 
 from snipssonos.services.music_playback_service import MusicPlaybackService
 
-class NodeMusicPlaybackService(MusicPlaybackService): # TODO : Refactor this in next iteration ...
+
+class NodeMusicPlaybackService(MusicPlaybackService):  # TODO : Refactor this in next iteration ...
 
     PORT = 5005
     HOST = "localhost"
@@ -16,12 +17,7 @@ class NodeMusicPlaybackService(MusicPlaybackService): # TODO : Refactor this in 
         if req.ok:
             return True
 
-
     def _generate_play_now_query(self, music_item):
         room_name = self.device.name
         uri = music_item.uri
         return "{}{}:{}/{}/spotify/now/{}".format(self.PROTOCOL, self.HOST, self.PORT, room_name, uri)
-
-
-
-

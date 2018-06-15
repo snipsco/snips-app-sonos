@@ -3,8 +3,8 @@ import requests
 from snipssonos.services.device_transport_control import DeviceTransportControlService
 from snipssonos.exceptions import NoReachableDeviceException
 
-class NodeDeviceTransportControlService(DeviceTransportControlService):
 
+class NodeDeviceTransportControlService(DeviceTransportControlService):
     PORT = 5005
     HOST = "localhost"
     PROTOCOL = "http://"
@@ -34,7 +34,6 @@ class NodeDeviceTransportControlService(DeviceTransportControlService):
     def _generate_mute_query(self, room_name):
         return "{}/{}/mute".format(self.BASE_URL, room_name)
 
-
     def _process_query(self, query_url):
         req = requests.get(query_url)
         if req.ok:
@@ -59,4 +58,3 @@ class NodeDeviceTransportControlService(DeviceTransportControlService):
         room_name = device.name
         query_url = self._generate_mute_query(room_name)
         return self._process_query(query_url)
-

@@ -1,5 +1,6 @@
 from snipssonos.entities.entities import Entity
 
+
 class Device(object):
     VOLUME_MAX = 100
     VOLUME_MIN = 0
@@ -22,11 +23,10 @@ class Device(object):
         else:
             self._volume = value
 
-
     @classmethod
     def from_dict(cls, a_dictionary):
         device = cls(
-            name= a_dictionary['name'],
+            name=a_dictionary['name'],
             identifier=a_dictionary['identifier'],
             volume=a_dictionary['volume']
         )

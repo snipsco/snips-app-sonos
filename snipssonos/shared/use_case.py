@@ -1,5 +1,6 @@
 from snipssonos.shared.response_object import ResponseFailure
 
+
 class UseCase(object):
 
     def execute(self, request_object):

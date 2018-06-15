@@ -1,7 +1,8 @@
 from snipssonos.shared.request_object import InvalidRequestObject, ValidRequestObject
 
+
 class VolumeUpRequestObject(ValidRequestObject):
-    def __init__(self,  volume_increase=None):
+    def __init__(self, volume_increase=None):
         self.volume_increase = volume_increase
 
     @classmethod
@@ -11,10 +12,12 @@ class VolumeUpRequestObject(ValidRequestObject):
         if 'volume_increase' in a_dictionary and not isinstance(a_dictionary['volume_increase'], int):
             invalid_request.add_error('volume_increase', 'must be an integer')
 
-        if 'volume_increase' in a_dictionary and isinstance(a_dictionary['volume_increase'], int) and a_dictionary['volume_increase'] < 0:
+        if 'volume_increase' in a_dictionary and isinstance(a_dictionary['volume_increase'], int) and a_dictionary[
+            'volume_increase'] < 0:
             invalid_request.add_error('volume_increase', 'must be positive')
 
-        if 'volume_increase' in a_dictionary and isinstance(a_dictionary['volume_increase'], int) and a_dictionary['volume_increase'] > 100:
+        if 'volume_increase' in a_dictionary and isinstance(a_dictionary['volume_increase'], int) and a_dictionary[
+            'volume_increase'] > 100:
             invalid_request.add_error('volume_increase', 'must be lower than 100')
 
         if invalid_request.has_errors():
@@ -26,7 +29,7 @@ class VolumeUpRequestObject(ValidRequestObject):
 
 
 class VolumeDownRequestObject(ValidRequestObject):
-    def __init__(self,  volume_decrease=None):
+    def __init__(self, volume_decrease=None):
         self.volume_decrease = volume_decrease
 
     @classmethod
@@ -36,10 +39,12 @@ class VolumeDownRequestObject(ValidRequestObject):
         if 'volume_decrease' in a_dictionary and not isinstance(a_dictionary['volume_decrease'], int):
             invalid_request.add_error('volume_decrease', 'must be an integer')
 
-        if 'volume_decrease' in a_dictionary and isinstance(a_dictionary['volume_decrease'], int) and a_dictionary['volume_decrease'] < 0:
+        if 'volume_decrease' in a_dictionary and isinstance(a_dictionary['volume_decrease'], int) and a_dictionary[
+            'volume_decrease'] < 0:
             invalid_request.add_error('volume_decrease', 'must be positive')
 
-        if 'volume_decrease' in a_dictionary and isinstance(a_dictionary['volume_decrease'], int) and a_dictionary['volume_decrease'] > 100:
+        if 'volume_decrease' in a_dictionary and isinstance(a_dictionary['volume_decrease'], int) and a_dictionary[
+            'volume_decrease'] > 100:
             invalid_request.add_error('volume_decrease', 'must be lower than 100')
 
         if invalid_request.has_errors():
@@ -51,23 +56,25 @@ class VolumeDownRequestObject(ValidRequestObject):
 
 
 class VolumeSetRequestObject(ValidRequestObject):
-    def __init__(self,  volume_level=None):
+    def __init__(self, volume_level=None):
         self.volume_level = volume_level
 
     @classmethod
     def from_dict(cls, a_dictionary):
         invalid_request = InvalidRequestObject()
 
-        if not('volume_level' in a_dictionary):
+        if not ('volume_level' in a_dictionary):
             invalid_request.add_error('volume_level', 'is missing')
 
         if 'volume_level' in a_dictionary and not isinstance(a_dictionary['volume_level'], int):
             invalid_request.add_error('volume_level', 'must be an integer')
 
-        if 'volume_level' in a_dictionary and isinstance(a_dictionary['volume_level'], int) and a_dictionary['volume_level'] < 0:
+        if 'volume_level' in a_dictionary and isinstance(a_dictionary['volume_level'], int) and a_dictionary[
+            'volume_level'] < 0:
             invalid_request.add_error('volume_level', 'must be positive')
 
-        if 'volume_level' in a_dictionary and isinstance(a_dictionary['volume_level'], int) and a_dictionary['volume_level'] > 100:
+        if 'volume_level' in a_dictionary and isinstance(a_dictionary['volume_level'], int) and a_dictionary[
+            'volume_level'] > 100:
             invalid_request.add_error('volume_level', 'must be lower than 100')
 
         if invalid_request.has_errors():
@@ -120,13 +127,12 @@ class PlayTrackRequestObject(ValidRequestObject):
         self.album_name = album_name
         self.playlist_name = playlist_name
 
-
     @classmethod
     def from_dict(cls, a_dictionary):
         invalid_request = InvalidRequestObject()
 
-        if not('track_name' in a_dictionary):
-            invalid_request.add_error('track_name','is missing')
+        if not ('track_name' in a_dictionary):
+            invalid_request.add_error('track_name', 'is missing')
 
         if invalid_request.has_errors():
             return invalid_request
@@ -148,8 +154,8 @@ class PlayArtistRequestObject(ValidRequestObject):
     def from_dict(cls, a_dictionary):
         invalid_request = InvalidRequestObject()
 
-        if not('artist_name' in a_dictionary):
-            invalid_request.add_error('artist_name','is missing')
+        if not ('artist_name' in a_dictionary):
+            invalid_request.add_error('artist_name', 'is missing')
 
         if invalid_request.has_errors():
             return invalid_request
@@ -168,8 +174,8 @@ class PlayPlaylistRequestObject(ValidRequestObject):
     def from_dict(cls, a_dictionary):
         invalid_request = InvalidRequestObject()
 
-        if not('playlist_name' in a_dictionary):
-            invalid_request.add_error('playlist_name','is missing')
+        if not ('playlist_name' in a_dictionary):
+            invalid_request.add_error('playlist_name', 'is missing')
 
         if invalid_request.has_errors():
             return invalid_request
@@ -189,8 +195,8 @@ class PlayAlbumRequestObject(ValidRequestObject):
     def from_dict(cls, a_dictionary):
         invalid_request = InvalidRequestObject()
 
-        if not('album_name' in a_dictionary):
-            invalid_request.add_error('album_name','is missing')
+        if not ('album_name' in a_dictionary):
+            invalid_request.add_error('album_name', 'is missing')
 
         if invalid_request.has_errors():
             return invalid_request
@@ -208,7 +214,6 @@ class PlayMusicRequestObject(ValidRequestObject):
         self.artist_name = artist_name
         self.album_name = album_name
         self.playlist_name = playlist_name
-
 
     @classmethod
     def from_dict(cls, a_dictionary):

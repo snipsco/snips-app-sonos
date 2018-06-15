@@ -1,5 +1,6 @@
 from snipssonos.entities.entities import Entity
 
+
 class Playlist(object):
     def __init__(self, uri, name):
         self.uri = uri

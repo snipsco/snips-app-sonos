@@ -1,4 +1,4 @@
-class DeviceTransportControlService(object): # TODO : Make this class abstract
+class DeviceTransportControlService(object):  # TODO : Make this class abstract
     def pause(self, device):
         raise NotImplementedError("pause() is not implemented")
 

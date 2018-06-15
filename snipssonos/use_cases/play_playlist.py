@@ -2,6 +2,7 @@ from snipssonos.shared.use_case import UseCase
 from snipssonos.shared.response_object import ResponseSuccess, ResponseFailure
 from snipssonos.shared.feedback import FR_TTS_GENERIC_ERROR, FR_TTS_PLAYING_PLAYLIST_TEMPLATE
 
+
 class PlayPlaylistUseCase(UseCase):
 
     def __init__(self, device_discovery_service, music_search_service, music_playback_service):

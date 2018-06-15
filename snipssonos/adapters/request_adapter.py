@@ -2,6 +2,7 @@ from snipssonos.use_cases.request_objects import VolumeUpRequestObject, PlayTrac
     VolumeSetRequestObject, VolumeDownRequestObject, ResumeMusicRequestObject, SpeakerInterruptRequestObject, \
     MuteRequestObject, PlayPlaylistRequestObject, PlayAlbumRequestObject, PlayMusicRequestObject
 
+
 class VolumeUpRequestAdapter(object):
 
     @classmethod
@@ -53,7 +54,6 @@ class MuteRequestAdapter(object):
         return dict()
 
 
-
 class ResumeMusicRequestAdapter(object):
     @classmethod
     def from_intent_message(cls, intentMessage):
@@ -64,6 +64,7 @@ class ResumeMusicRequestAdapter(object):
     def extract_slots_dictionary(intentMessage):
         return dict()
 
+
 class SpeakerInterruptRequestAdapter(object):
     @classmethod
     def from_intent_message(cls, intentMessage):
@@ -73,6 +74,7 @@ class SpeakerInterruptRequestAdapter(object):
     @staticmethod
     def extract_slots_dictionary(intentMessage):
         return dict()
+
 
 class PlayTrackRequestAdapter(object):
 
@@ -86,18 +88,19 @@ class PlayTrackRequestAdapter(object):
         slots_dict = dict()
 
         if len(intentMessage.slots.song_name):
-            slots_dict.update({'track_name': intentMessage.slots.song_name.first().value })
+            slots_dict.update({'track_name': intentMessage.slots.song_name.first().value})
 
         if len(intentMessage.slots.artist_name):
-            slots_dict.update({'artist_name': intentMessage.slots.artist_name.first().value })
+            slots_dict.update({'artist_name': intentMessage.slots.artist_name.first().value})
 
         if len(intentMessage.slots.album_name):
-            slots_dict.update({'album_name': intentMessage.slots.album_name.first().value })
+            slots_dict.update({'album_name': intentMessage.slots.album_name.first().value})
 
         if len(intentMessage.slots.playlist_name):
-            slots_dict.update({'playlist_name': intentMessage.slots.playlist_name.first().value })
+            slots_dict.update({'playlist_name': intentMessage.slots.playlist_name.first().value})
 
         return slots_dict
+
 
 class PlayArtistRequestAdapter(object):
 
@@ -111,12 +114,13 @@ class PlayArtistRequestAdapter(object):
         slots_dict = dict()
 
         if len(intentMessage.slots.playlist_name):
-            slots_dict.update({'playlist_name': intentMessage.slots.playlist_name.first().value })
+            slots_dict.update({'playlist_name': intentMessage.slots.playlist_name.first().value})
 
         if len(intentMessage.slots.artist_name):
-            slots_dict.update({'artist_name': intentMessage.slots.artist_name.first().value })
+            slots_dict.update({'artist_name': intentMessage.slots.artist_name.first().value})
 
         return slots_dict
+
 
 class PlayPlaylistRequestAdapter(object):
 
@@ -130,7 +134,7 @@ class PlayPlaylistRequestAdapter(object):
         slots_dict = dict()
 
         if len(intentMessage.slots.playlist_name):
-            slots_dict.update({'playlist_name': intentMessage.slots.playlist_name.first().value })
+            slots_dict.update({'playlist_name': intentMessage.slots.playlist_name.first().value})
 
         return slots_dict
 
@@ -156,6 +160,7 @@ class PlayAlbumRequestAdapter(object):
 
         return slots_dict
 
+
 class PlayMusicRequestAdapter(object):
     @classmethod
     def from_intent_message(cls, intentMessage):
@@ -176,6 +181,6 @@ class PlayMusicRequestAdapter(object):
             slots_dict.update({'playlist_name': intentMessage.slots.playlist_name.first().value})
 
         if len(intentMessage.slots.song_name):
-            slots_dict.update({'track_name': intentMessage.slots.song_name.first().value })
+            slots_dict.update({'track_name': intentMessage.slots.song_name.first().value})
 
         return slots_dict
