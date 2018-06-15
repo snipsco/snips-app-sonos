@@ -17,6 +17,7 @@ def generate_volume_slot(volume_increase):
 
     return volume_slot
 
+
 @pytest.fixture
 def correct_intent_message():
     VOLUME_INCREASE = 10
@@ -36,6 +37,7 @@ def correct_intent_message():
     )
 
     return intent_message
+
 
 @pytest.fixture
 def correct_intent_message_with_two_slots():
@@ -69,8 +71,8 @@ The request adapters turns an object into a request object usable for a use case
 
 """
 
-def test_volume_up_adapter_from_correct_intent_message_generates_valid_request(correct_intent_message):
 
+def test_volume_up_adapter_from_correct_intent_message_generates_valid_request(correct_intent_message):
     valid_request = VolumeUpRequestAdapter.from_intent_message(correct_intent_message)
 
     assert isinstance(valid_request, ValidRequestObject)
@@ -94,6 +96,7 @@ def test_volume_up_adapter_from_intent_message_with_no_slots_generates_valid_req
 
     assert isinstance(valid_request, ValidRequestObject)
     assert valid_request.volume_increase is None
+
 
 @pytest.mark.skip(reason="Waiting for next iteration to move parameters validation to constructor")
 def test_volume_up_adapter_from_intent_message_with_multiple_slots_generates_invalid_request():
@@ -125,12 +128,9 @@ def test_volume_up_adapter_from_intent_message_with_multiple_slots_generates_inv
     assert isinstance(invalid_request, InvalidRequestObject)
 
 
-
-def test_volume_up_adapter_from_intent_message_with_slot_with_array_of_values_generates_valid_request(correct_intent_message_with_two_slots):
-
+def test_volume_up_adapter_from_intent_message_with_slot_with_array_of_values_generates_valid_request(
+        correct_intent_message_with_two_slots):
     valid_request = VolumeUpRequestAdapter.from_intent_message(correct_intent_message_with_two_slots)
 
     assert isinstance(valid_request, ValidRequestObject)
     assert isinstance(valid_request, VolumeUpRequestObject)
-
-

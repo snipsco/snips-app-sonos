@@ -60,4 +60,3 @@ def test_use_case_with_empty_track_name():
 
 def test_use_case_with_track_name_and_empty_parameter():
     assert True is False
-

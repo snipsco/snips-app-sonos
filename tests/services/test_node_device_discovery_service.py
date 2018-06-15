@@ -12,7 +12,7 @@ def connected_device():
     return Device.from_dict({
         'identifier': 'RINCON_7828CA10127001400',
         'name': 'Antho Room',
-        'volume' : 18
+        'volume': 18
     })
 
 
@@ -23,9 +23,9 @@ def test_device_discovery_service_initialization():
     assert discovery_service.HOST == NodeDeviceDiscoveryService.HOST
     assert discovery_service.PROTOCOL == NodeDeviceDiscoveryService.PROTOCOL
 
+
 def test_generate_correct_url_query_for_get_method():
     discovery_service = NodeDeviceDiscoveryService()
-
 
     expected_query = "http://localhost:5005/zones/"
     actual_query = discovery_service.generate_get_query()
@@ -141,6 +141,7 @@ def test_parses_correct_device_from_input_json():
     assert devices[0].name == "Antho Room"
     assert devices[0].volume == 17
 
+
 def test_parsing_invalid_json_raises_exception():
     discovery_service = NodeDeviceDiscoveryService()
     json_response = """[
@@ -198,6 +199,7 @@ def test_parsing_invalid_json_raises_exception():
     with pytest.raises(DeviceParsingException):
         discovery_service.parse_devices(json_response)
 
+
 def test_parsing_json_with_empty_members():
     discovery_service = NodeDeviceDiscoveryService()
     json_response = """[
@@ -225,6 +227,7 @@ def test_get_method_performs_correct_api_query(mocked_requests):
     discovery_device.execute_query()
     actual_query = discovery_device.generate_get_query()
     mocked_requests.get.assert_called_with(actual_query)
+
 
 @mock.patch('snipssonos.services.node_device_discovery_service.requests')
 def test_unreachable_device_raises_exception(mocked_requests):

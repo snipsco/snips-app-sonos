@@ -1,6 +1,7 @@
 from snipssonos.entities.entities import Entity
 from snipssonos.entities import device as d
 
+
 def test_device_model_initialization():
     identifier = "RINCON_XXXXXX"
     name = "Antho's Sonos"
@@ -16,6 +17,7 @@ def test_device_model_initialization():
     assert device.VOLUME_MAX == VOLUME_MAX
     assert device.VOLUME_MIN == VOLUME_MIN
 
+
 def test_device_model_initialization_with_dict():
     identifier = "RINCON_XXXXXX"
     name = "Antho's Sonos"
@@ -23,8 +25,8 @@ def test_device_model_initialization_with_dict():
 
     device = d.Device.from_dict(
         {
-            'identifier' : identifier,
-            'name' : name,
+            'identifier': identifier,
+            'name': name,
             'volume': volume,
         }
     )
@@ -42,6 +44,7 @@ def test_device_is_entity():
     device = d.Device(identifier, name, volume)
     assert isinstance(device, Entity)
 
+
 def test_device_set_volume_within_range():
     identifier = "RINCON_XXXXXXX"
     name = "Sonos device"
@@ -52,6 +55,7 @@ def test_device_set_volume_within_range():
     device.volume = 20
 
     assert device.volume == 20
+
 
 def test_device_set_volume_higher_range():
     identifier = "RINCON_XXXXXXX"
@@ -64,6 +68,7 @@ def test_device_set_volume_higher_range():
 
     assert device.volume == d.Device.VOLUME_MAX
 
+
 def test_device_set_volume_lower_range():
     identifier = "RINCON_XXXXXXX"
     name = "Sonos device"
@@ -74,6 +79,7 @@ def test_device_set_volume_lower_range():
     device.volume = -123456789
 
     assert device.volume == d.Device.VOLUME_MIN
+
 
 def test_device_increment_volume_within_range():
     identifier = "RINCON_XXXXXXX"
@@ -86,6 +92,7 @@ def test_device_increment_volume_within_range():
     device.increase_volume(increment)
 
     assert device.volume == 20
+
 
 def test_device_increment_volume_exceeds_high_range():
     identifier = "RINCON_XXXXXXX"
@@ -112,6 +119,7 @@ def test_device_decrement_volume_within_range():
     device.decrease_volume(decrement)
 
     assert device.volume == 25
+
 
 def test_device_decrement_volume_exceeds_high_range():
     identifier = "RINCON_XXXXXXX"

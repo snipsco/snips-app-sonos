@@ -20,6 +20,7 @@ def test_device_model_initialization_with_dict():
     )
     assert track.uri == uri
 
+
 def test_track_is_entity():
     track = Track("uri")
     assert isinstance(track, Entity)

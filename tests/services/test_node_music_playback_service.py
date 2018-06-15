@@ -11,7 +11,7 @@ def connected_device():
     return Device.from_dict({
         'identifier': 'RINCON_7828CA10127001400',
         'name': 'Antho Room',
-        'volume' : 18
+        'volume': 18
     })
 
 
@@ -21,6 +21,7 @@ def test_music_playback_service_initialization(connected_device):
     assert music_playback_service.PORT == NodeMusicPlaybackService.PORT
     assert music_playback_service.HOST == NodeMusicPlaybackService.HOST
     assert music_playback_service.PROTOCOL == NodeMusicPlaybackService.PROTOCOL
+
 
 def test_generate_correct_url_query_for_get_method(connected_device):
     music_playback_service = NodeMusicPlaybackService(connected_device)
