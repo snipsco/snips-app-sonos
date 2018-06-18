@@ -1,6 +1,6 @@
 import requests
 
-from snipssonos.services.device.device_transport_control import DeviceTransportControlService
+from snipssonos.services.device.transport_control import DeviceTransportControlService
 from snipssonos.exceptions import NoReachableDeviceException
 
 

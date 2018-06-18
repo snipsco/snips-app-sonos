@@ -5,7 +5,7 @@ from snipssonos.entities.track import Track
 from snipssonos.entities.album import Album
 from snipssonos.entities.artist import Artist
 from snipssonos.entities.playlist import Playlist
-from snipssonos.services.music.music_search_service import MusicSearchService
+from snipssonos.services.music.search_service import MusicSearchService
 from snipssonos.helpers.spotify_client import SpotifyClient, SpotifyAPISearchQueryBuilder
 
 

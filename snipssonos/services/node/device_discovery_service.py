@@ -2,7 +2,7 @@ import json
 import requests
 
 from snipssonos.entities.device import Device
-from snipssonos.services.device.device_discovery_service import DeviceDiscoveryService
+from snipssonos.services.device.discovery_service import DeviceDiscoveryService
 from snipssonos.exceptions import DeviceParsingException, NoReachableDeviceException
 
 
