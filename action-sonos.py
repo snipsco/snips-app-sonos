@@ -1,24 +1,20 @@
 #!/usr/bin/env python2
 # -*-: coding utf-8 -*-
 
-import ConfigParser
 import logging
-import io
-import traceback
 
 from hermes_python.hermes import Hermes
-from hermes_python.ontology import *
 
 from snipssonos.helpers.snips_config_parser import read_configuration_file
-from snipssonos.use_cases.volume_up import VolumeUpUseCase
-from snipssonos.use_cases.volume_down import VolumeDownUseCase
-from snipssonos.use_cases.volume_set import VolumeSetUseCase
+from snipssonos.use_cases.volume.up import VolumeUpUseCase
+from snipssonos.use_cases.volume.down import VolumeDownUseCase
+from snipssonos.use_cases.volume.set import VolumeSetUseCase
 from snipssonos.use_cases.mute import MuteUseCase
-from snipssonos.use_cases.play_track import PlayTrackUseCase
-from snipssonos.use_cases.play_artist import PlayArtistUseCase
-from snipssonos.use_cases.play_music import PlayMusicUseCase
-from snipssonos.use_cases.play_playlist import PlayPlaylistUseCase
-from snipssonos.use_cases.play_album import PlayAlbumUseCase
+from snipssonos.use_cases.play.track import PlayTrackUseCase
+from snipssonos.use_cases.play.artist import PlayArtistUseCase
+from snipssonos.use_cases.play.music import PlayMusicUseCase
+from snipssonos.use_cases.play.playlist import PlayPlaylistUseCase
+from snipssonos.use_cases.play.album import PlayAlbumUseCase
 from snipssonos.use_cases.resume_music import ResumeMusicUseCase
 from snipssonos.use_cases.speaker_interrupt import SpeakerInterruptUseCase
 from snipssonos.use_cases.next_track import NextTrackUseCase

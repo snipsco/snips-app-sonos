@@ -4,7 +4,7 @@ import requests
 
 from snipssonos.services.node.device_transport_control import NodeDeviceTransportControlService
 from snipssonos.exceptions import NoReachableDeviceException
-from snipssonos.use_cases.volume_up import VolumeUpUseCase
+from snipssonos.use_cases.volume.up import VolumeUpUseCase
 from snipssonos.entities.device import Device
 
 
