@@ -36,10 +36,10 @@ class VolumeSetRequestAdapter(object):
 
     @staticmethod
     def extract_slots_dictionary(intentMessage):
-        if len(intentMessage.slots.volume_set_percentage_fr):
-            return {'volume_level': int(intentMessage.slots.volume_set_percentage_fr.first().value)}
-        elif len(intentMessage.slots.volume_set_absolute_fr):
-            return {'volume_level': int(intentMessage.slots.volume_set_absolute_fr.first().value)}
+        if len(intentMessage.slots.volume_set_percentage):
+            return {'volume_level': int(intentMessage.slots.volume_set_percentage.first().value)}
+        elif len(intentMessage.slots.volume_set_absolute):
+            return {'volume_level': int(intentMessage.slots.volume_set_absolute.first().value)}
         else:
             return dict()
 
