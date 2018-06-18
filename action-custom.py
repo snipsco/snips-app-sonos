@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
     starttime = time.time()
     first_time=True
-    # Code taken from: https://stackoverflow.com/a/25251804
+    # Code for scheduling taken from: https://stackoverflow.com/a/25251804
     # TODO first call iterate with all top data and in the loop just keep getting short term top data
     while True:
         if first_time:
