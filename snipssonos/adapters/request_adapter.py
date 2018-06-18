@@ -1,6 +1,7 @@
-from snipssonos.use_cases.request_objects import VolumeUpRequestObject, PlayTrackRequestObject, PlayArtistRequestObject, \
-    VolumeSetRequestObject, VolumeDownRequestObject, ResumeMusicRequestObject, SpeakerInterruptRequestObject, \
-    MuteRequestObject, PlayPlaylistRequestObject, PlayAlbumRequestObject, PlayMusicRequestObject
+from snipssonos.use_cases.request_objects import VolumeUpRequestFactory, PlayTrackRequestFactory, \
+    PlayArtistRequestFactory, \
+    VolumeSetRequestFactory, VolumeDownRequestFactory, ResumeMusicRequestFactory, SpeakerInterruptRequestFactory, \
+    MuteRequestFactory, PlayPlaylistRequestFactory, PlayAlbumRequestFactory, PlayMusicRequestFactory
 
 
 class VolumeUpRequestAdapter(object):
@@ -8,7 +9,7 @@ class VolumeUpRequestAdapter(object):
     @classmethod
     def from_intent_message(cls, intentMessage):
         slots_dict = cls.extract_slots_dictionary(intentMessage)
-        return VolumeUpRequestObject.from_dict(slots_dict)
+        return VolumeUpRequestFactory.from_dict(slots_dict)
 
     @staticmethod
     def extract_slots_dictionary(intentMessage):
@@ -19,7 +20,7 @@ class VolumeDownRequestAdapter(object):
     @classmethod
     def from_intent_message(cls, intentMessage):
         slots_dict = cls.extract_slots_dictionary(intentMessage)
-        return VolumeDownRequestObject.from_dict(slots_dict)
+        return VolumeDownRequestFactory.from_dict(slots_dict)
 
     @staticmethod
     def extract_slots_dictionary(intentMessage):
@@ -31,7 +32,7 @@ class VolumeSetRequestAdapter(object):
     @classmethod
     def from_intent_message(cls, intentMessage):
         slots_dict = cls.extract_slots_dictionary(intentMessage)
-        return VolumeSetRequestObject.from_dict(slots_dict)
+        return VolumeSetRequestFactory.from_dict(slots_dict)
 
     @staticmethod
     def extract_slots_dictionary(intentMessage):
@@ -47,7 +48,7 @@ class MuteRequestAdapter(object):
     @classmethod
     def from_intent_message(cls, intentMessage):
         slots_dict = cls.extract_slots_dictionary(intentMessage)
-        return MuteRequestObject.from_dict(slots_dict)
+        return MuteRequestFactory.from_dict(slots_dict)
 
     @staticmethod
     def extract_slots_dictionary(intentMessage):
@@ -58,7 +59,7 @@ class ResumeMusicRequestAdapter(object):
     @classmethod
     def from_intent_message(cls, intentMessage):
         slots_dict = cls.extract_slots_dictionary(intentMessage)
-        return ResumeMusicRequestObject.from_dict(slots_dict)
+        return ResumeMusicRequestFactory.from_dict(slots_dict)
 
     @staticmethod
     def extract_slots_dictionary(intentMessage):
@@ -69,7 +70,7 @@ class SpeakerInterruptRequestAdapter(object):
     @classmethod
     def from_intent_message(cls, intentMessage):
         slots_dict = cls.extract_slots_dictionary(intentMessage)
-        return SpeakerInterruptRequestObject.from_dict(slots_dict)
+        return SpeakerInterruptRequestFactory.from_dict(slots_dict)
 
     @staticmethod
     def extract_slots_dictionary(intentMessage):
@@ -81,7 +82,7 @@ class PlayTrackRequestAdapter(object):
     @classmethod
     def from_intent_message(cls, intentMessage):
         slots_dict = cls.extract_slots_dictionary(intentMessage)
-        return PlayTrackRequestObject.from_dict(slots_dict)
+        return PlayTrackRequestFactory.from_dict(slots_dict)
 
     @staticmethod
     def extract_slots_dictionary(intentMessage):
@@ -107,7 +108,7 @@ class PlayArtistRequestAdapter(object):
     @classmethod
     def from_intent_message(cls, intentMessage):
         slots_dict = cls.extract_slots_dictionary(intentMessage)
-        return PlayArtistRequestObject.from_dict(slots_dict)
+        return PlayArtistRequestFactory.from_dict(slots_dict)
 
     @staticmethod
     def extract_slots_dictionary(intentMessage):
@@ -127,7 +128,7 @@ class PlayPlaylistRequestAdapter(object):
     @classmethod
     def from_intent_message(cls, intentMessage):
         slots_dict = cls.extract_slots_dictionary(intentMessage)
-        return PlayPlaylistRequestObject.from_dict(slots_dict)
+        return PlayPlaylistRequestFactory.from_dict(slots_dict)
 
     @staticmethod
     def extract_slots_dictionary(intentMessage):
@@ -143,7 +144,7 @@ class PlayAlbumRequestAdapter(object):
     @classmethod
     def from_intent_message(cls, intentMessage):
         slots_dict = cls.extract_slots_dictionary(intentMessage)
-        return PlayAlbumRequestObject.from_dict(slots_dict)
+        return PlayAlbumRequestFactory.from_dict(slots_dict)
 
     @staticmethod
     def extract_slots_dictionary(intentMessage):
@@ -165,7 +166,7 @@ class PlayMusicRequestAdapter(object):
     @classmethod
     def from_intent_message(cls, intentMessage):
         slots_dict = cls.extract_slots_dictionary(intentMessage)
-        return PlayMusicRequestObject.from_dict(slots_dict)
+        return PlayMusicRequestFactory.from_dict(slots_dict)
 
     @staticmethod
     def extract_slots_dictionary(intentMessage):

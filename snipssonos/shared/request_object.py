@@ -1,3 +1,5 @@
+from snipssonos.exceptions import RequestObjectInitializationException
+
 class InvalidRequestObject(object):
     def __init__(self):
         self.errors = list()
@@ -23,3 +25,14 @@ class ValidRequestObject(object):
     @classmethod
     def from_dict(cls, adict):
         raise NotImplementedError
+
+
+class RequestObjectFactory(object):
+    request_object_class = ValidRequestObject
+
+    @classmethod
+    def from_dict(cls, a_dict):
+        try:
+            return cls.request_object_class.from_dict(a_dict)
+        except RequestObjectInitializationException as exception:
+            return exception.invalid_request_object

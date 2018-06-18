@@ -3,7 +3,7 @@ from mock import mock
 
 from snipssonos.entities.device import Device
 from snipssonos.use_cases.volume_set import VolumeSetUseCase
-from snipssonos.use_cases.request_objects import VolumeSetRequestObject
+from snipssonos.use_cases.request_objects import VolumeSetRequestObject, VolumeSetRequestFactory
 
 from snipssonos.exceptions import NoReachableDeviceException
 
@@ -26,7 +26,7 @@ def test_use_case_empty_parameters(connected_device):
     device_transport_control_service = mock.Mock()
 
     volume_set_uc = VolumeSetUseCase(device_discovery_service, device_transport_control_service)
-    volume_set_request = VolumeSetRequestObject.from_dict({})
+    volume_set_request = VolumeSetRequestFactory.from_dict({})
     result_object = volume_set_uc.execute(volume_set_request)
 
     device_discovery_service.get.assert_not_called()
@@ -45,7 +45,7 @@ def test_use_case_no_reachable_device():
 
     volume_set_uc = VolumeSetUseCase(device_discovery_service, device_transport_control_service)
 
-    volume_set_request = VolumeSetRequestObject.from_dict({'volume_level': 10})
+    volume_set_request = VolumeSetRequestFactory.from_dict({'volume_level': 10})
     result_obj = volume_set_uc.execute(volume_set_request)
 
     assert bool(result_obj) is False
@@ -61,7 +61,7 @@ def test_use_case_with_wrong_parameter():
     device_transport_control_service = mock.Mock()
     volume_set_uc = VolumeSetUseCase(device_discovery_service, device_transport_control_service)
 
-    volume_set_request = VolumeSetRequestObject.from_dict({'volume_level': volume_level_is_a_string})
+    volume_set_request = VolumeSetRequestFactory.from_dict({'volume_level': volume_level_is_a_string})
     response_object = volume_set_uc.execute(volume_set_request)
 
     assert bool(response_object) is False
@@ -76,7 +76,7 @@ def test_use_case_with_parameter_out_of_range(connected_device):
     device_transport_control_service = mock.Mock()
     volume_set_uc = VolumeSetUseCase(device_discovery_service, device_transport_control_service)
 
-    volume_set_request = VolumeSetRequestObject.from_dict({'volume_level': volume_increase_in_percentage})
+    volume_set_request = VolumeSetRequestFactory.from_dict({'volume_level': volume_increase_in_percentage})
     response_object = volume_set_uc.execute(volume_set_request)
 
     assert bool(response_object) is False
@@ -93,7 +93,7 @@ def test_use_case_with_positive_percentage(connected_device):
     device_transport_control_service = mock.Mock()
     volume_set_uc = VolumeSetUseCase(device_discovery_service, device_transport_control_service)
 
-    volume_set_request = VolumeSetRequestObject.from_dict({'volume_level': new_volume_level})
+    volume_set_request = VolumeSetRequestFactory.from_dict({'volume_level': new_volume_level})
     response_object = volume_set_uc.execute(volume_set_request)
 
     assert bool(volume_set_request) is True
@@ -111,7 +111,7 @@ def test_use_case_with_negative_percentage(connected_device):
     device_transport_control_service = mock.Mock()
     volume_set_uc = VolumeSetUseCase(device_discovery_service, device_transport_control_service)
 
-    volume_set_request = VolumeSetRequestObject.from_dict({'volume_level': volume_negative_level})
+    volume_set_request = VolumeSetRequestFactory.from_dict({'volume_level': volume_negative_level})
     response_object = volume_set_uc.execute(volume_set_request)
 
     assert bool(response_object) is False
@@ -128,7 +128,7 @@ def test_use_case_with_positive_integer(connected_device):
 
     volume_set_uc = VolumeSetUseCase(device_discovery_service, device_transport_control_service)
 
-    volume_set_request = VolumeSetRequestObject.from_dict({'volume_level': volume_level})
+    volume_set_request = VolumeSetRequestFactory.from_dict({'volume_level': volume_level})
     response_object = volume_set_uc.execute(volume_set_request)
 
     assert bool(volume_set_request) is True
@@ -146,7 +146,7 @@ def test_use_case_with_negative_integer(connected_device):
     device_transport_control_service = mock.Mock()
     volume_set_uc = VolumeSetUseCase(device_discovery_service, device_transport_control_service)
 
-    volume_set_request = VolumeSetRequestObject.from_dict({'volume_level': volume_level_negative})
+    volume_set_request = VolumeSetRequestFactory.from_dict({'volume_level': volume_level_negative})
     response_object = volume_set_uc.execute(volume_set_request)
 
     assert bool(response_object) is False
@@ -162,7 +162,7 @@ def test_use_case_with_maximum_volume(connected_device):
     device_transport_control_service = mock.Mock()
     volume_set_uc = VolumeSetUseCase(device_discovery_service, device_transport_control_service)
 
-    volume_set_request = VolumeSetRequestObject.from_dict({'volume_level': volume_level})
+    volume_set_request = VolumeSetRequestFactory.from_dict({'volume_level': volume_level})
     response_object = volume_set_uc.execute(volume_set_request)
 
     assert bool(response_object) is True
