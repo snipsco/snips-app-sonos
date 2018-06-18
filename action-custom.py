@@ -22,7 +22,7 @@ if __name__ == "__main__":
     injection_service = InjectEntitiesService(HERMES_HOST)
 
     starttime = time.time()
-    first_time=True
+    first_time = True
     # Code for scheduling taken from: https://stackoverflow.com/a/25251804
     # TODO first call iterate with all top data and in the loop just keep getting short term top data
     while True:
