@@ -27,10 +27,10 @@ from snipssonos.adapters.request_adapter import VolumeUpRequestAdapter, PlayTrac
     PlayArtistRequestAdapter, VolumeSetRequestAdapter, VolumeDownRequestAdapter, ResumeMusicRequestAdapter, \
     SpeakerInterruptRequestAdapter, MuteRequestAdapter, PlayPlaylistRequestAdapter, PlayAlbumRequestAdapter, \
     PlayMusicRequestAdapter, NextTrackRequestAdapter
-from snipssonos.services.node.node_device_discovery_service import NodeDeviceDiscoveryService
-from snipssonos.services.node.node_device_transport_control import NodeDeviceTransportControlService
-from snipssonos.services.node.node_music_playback_service import NodeMusicPlaybackService
-from snipssonos.services.spotify.spotify_music_search_service import SpotifyMusicSearchService
+from snipssonos.services.node.device_discovery_service import NodeDeviceDiscoveryService
+from snipssonos.services.node.device_transport_control import NodeDeviceTransportControlService
+from snipssonos.services.node.music_playback_service import NodeMusicPlaybackService
+from snipssonos.services.spotify.music_search_service import SpotifyMusicSearchService
 
 from snipssonos.shared.feedback import FR_TTS_SHORT_ERROR
 

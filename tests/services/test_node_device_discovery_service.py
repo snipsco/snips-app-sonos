@@ -3,7 +3,7 @@ import pytest
 import requests
 
 from snipssonos.entities.device import Device
-from snipssonos.services.node.node_device_discovery_service import NodeDeviceDiscoveryService
+from snipssonos.services.node.device_discovery_service import NodeDeviceDiscoveryService
 from snipssonos.exceptions import DeviceParsingException, NoReachableDeviceException
 
 
