@@ -1,6 +1,9 @@
 from snipssonos.shared.use_case import UseCase
 from snipssonos.shared.response_object import ResponseSuccess, ResponseFailure
 
+from snipssonos.shared.feedback import FR_TTS_GENERIC_ERROR  # TODO : This might violate the dependency rule of clean Architecture ...
+
+import logging
 
 class PlayArtistUseCase(UseCase):
 
@@ -21,10 +24,18 @@ class PlayArtistUseCase(UseCase):
 
         if request_object.artist_name:
             results_track = self.music_search_service.search_artist(request_object.artist_name)
-        if len(results_track):
-            first_result = results_track[0]
-            self.music_playback_service.play(device, first_result)
-        else:
-            return ResponseFailure.build_resource_error("An error happened")
+
+            if len(results_track) > 1:
+                first_result = results_track[0]
+                other_results = results_track[1:]
+
+                self.music_playback_service.play(device, first_result)
+                self.music_playback_service.queue(device, other_results)
+
+            elif len(results_track) == 1:
+                first_result = results_track[0]
+                self.music_playback_service.play(device, first_result)
+            else:
+                return ResponseFailure.build_resource_error(FR_TTS_GENERIC_ERROR)
 
         return ResponseSuccess()
