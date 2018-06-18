@@ -33,3 +33,24 @@ def test_generate_correct_url_query_for_get_method(connected_device):
     actual_query = music_playback_service._generate_play_now_query(track)
 
     assert expected_query == actual_query
+
+def test_generate_correct_url_query_for_queue(connected_device):
+    music_playback_service = NodeMusicPlaybackService(connected_device)
+
+    track = Track.from_dict({'uri': 'uri'})
+
+    expected_query = "http://localhost:5005/Antho Room/spotify/queue/uri"
+
+    actual_query = music_playback_service._generate_queue_query(track)
+
+    assert expected_query == actual_query
+    music_playback_service._generate_queue_query(track)
+
+@mock.patch('snipssonos.services.node_music_playback_service.requests')
+def test_calls_queue(mocked_request, connected_device):
+    music_playback_service = NodeMusicPlaybackService(connected_device)
+
+    tracks = [Track.from_dict({'uri':'uri{}'.format(str(i))})for i in range(10)]
+    music_playback_service.queue(connected_device, tracks)
+
+    assert mocked_request.get.call_count == len(tracks)
