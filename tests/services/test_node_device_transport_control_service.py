@@ -66,6 +66,19 @@ def test_generate_url_query_for_mute(connected_device):
     assert transport_service._generate_mute_query(room_name) == "http://localhost:5005/Antho/mute"
 
 
+def test_generate_url_query_for_next_track(connected_device):
+    PROTOCOL = NodeDeviceTransportControlService.PROTOCOL
+    HOST = NodeDeviceTransportControlService.HOST
+    PORT = NodeDeviceTransportControlService.PORT
+
+    room_name = connected_device.name
+    volume_level = 10
+
+    transport_service = NodeDeviceTransportControlService()
+
+    assert transport_service._generate_next_track_query(room_name) == "http://localhost:5005/Antho/next"
+
+
 @mock.patch('snipssonos.services.node_device_transport_control.requests')
 def test_volume_up_method_performs_correct_api_query(mocked_requests, connected_device):
     transport_service = NodeDeviceTransportControlService()
