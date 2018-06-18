@@ -3,7 +3,7 @@ from mock import mock
 
 from snipssonos.entities.device import Device
 from snipssonos.use_cases.mute import MuteUseCase
-from snipssonos.use_cases.request_objects import MuteRequestObject
+from snipssonos.use_cases.request_objects import MuteRequestFactory
 
 from snipssonos.exceptions import NoReachableDeviceException
 
@@ -26,7 +26,7 @@ def test_use_case_empty_parameters(connected_device):
     device_transport_control_service = mock.Mock()
 
     mute_uc = MuteUseCase(device_discovery_service, device_transport_control_service)
-    mute_request_object = MuteRequestObject.from_dict({})
+    mute_request_object = MuteRequestFactory.from_dict({})
     result_object = mute_uc.execute(mute_request_object)
 
     device_discovery_service.get.assert_called()
@@ -47,7 +47,7 @@ def test_use_case_no_reachable_device():
 
     mute_uc = MuteUseCase(device_discovery_service, device_transport_control_service)
 
-    mute_request = MuteRequestObject()
+    mute_request = MuteRequestFactory.from_dict({})
     result_obj = mute_uc.execute(mute_request)
 
     assert bool(result_obj) is False

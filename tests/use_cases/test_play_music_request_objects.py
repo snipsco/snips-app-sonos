@@ -3,75 +3,48 @@ import pytest
 from snipssonos.use_cases import request_objects as reqo
 
 
-def test_build_play_track_request_object_from_empty_dict():
-    play_track_request = reqo.PlayMusicRequestObject.from_dict(dict())
-
-    assert bool(play_track_request) is False
-
-
-def test_build_play_track_request_object_from_artist():
-    adict = {
-        'music_items': [
-            {
-                'name': 'Nekfeu',
-                'type': 'artist'
-            }
-        ]
-    }
-
-    play_track_request = reqo.PlayMusicRequestObject.from_dict(adict)
+def test_build_play_music_request_object_from_empty_dict():
+    play_track_request = reqo.PlayMusicRequestFactory.from_dict(dict())
 
     assert bool(play_track_request) is True
-    assert isinstance(play_track_request.music_items[0], reqo.PlayMusicRequestObject.ArtistItem)
+
+
+def test_build_play_music_request_object_from_artist():
+    adict = {
+        'artist_name': 'Nekfeu'
+    }
+
+    play_music_request = reqo.PlayMusicRequestFactory.from_dict(adict)
+
+    assert bool(play_music_request) is True
 
 
 def test_build_play_track_request_object_from_track():
     adict = {
-        'music_items': [
-            {
-                'name': 'Mauvaise Graine',
-                'type': 'track'
-            }
-        ]
+        'track_name': 'Mauvaise Graine'
     }
 
-    play_track_request = reqo.PlayMusicRequestObject.from_dict(adict)
+    play_music_request = reqo.PlayMusicRequestFactory.from_dict(adict)
 
-    assert bool(play_track_request) is True
-    assert isinstance(play_track_request.music_items[0], reqo.PlayMusicRequestObject.TrackItem)
+    assert bool(play_music_request) is True
 
 
 def test_build_play_track_request_object_from_album():
     adict = {
-        'music_items': [
-            {
-                'name': 'Feu',
-                'type': 'album'
-            }
-        ]
+        'album_name': 'Feu'
     }
 
-    play_track_request = reqo.PlayMusicRequestObject.from_dict(adict)
+    play_music_request = reqo.PlayMusicRequestFactory.from_dict(adict)
 
-    assert bool(play_track_request) is True
-    assert isinstance(play_track_request.music_items[0], reqo.PlayMusicRequestObject.AlbumItem)
+    assert bool(play_music_request) is True
 
 
 def test_build_play_track_request_object_from_artist_and_track():
     adict = {
-        'music_items': [
-            {
-                'name': 'Nekfeu',
-                'type': 'artist'
-            },
-            {
-                'name': 'Feu',
-                'type': 'album'
-            }
-        ]
+        'artist_name': 'Nekfeu',
+        'album_name': 'Feu',
     }
 
-    play_track_request = reqo.PlayMusicRequestObject.from_dict(adict)
+    play_music_request = reqo.PlayMusicRequestFactory.from_dict(adict)
 
-    assert bool(play_track_request) is True
-    assert len(play_track_request.music_items) == 2
+    assert bool(play_music_request) is True

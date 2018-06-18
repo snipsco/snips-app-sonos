@@ -3,7 +3,7 @@ from mock import mock
 
 from snipssonos.entities.device import Device
 from snipssonos.use_cases.volume_down import VolumeDownUseCase
-from snipssonos.use_cases.request_objects import VolumeDownRequestObject
+from snipssonos.use_cases.request_objects import VolumeDownRequestObject, VolumeDownRequestFactory
 
 from snipssonos.exceptions import NoReachableDeviceException
 
@@ -24,7 +24,7 @@ def test_use_case_empty_parameters(connected_device):
     device_transport_control_service = mock.Mock()
 
     volume_down_uc = VolumeDownUseCase(device_discovery_service, device_transport_control_service)
-    volume_down_request = VolumeDownRequestObject.from_dict({})
+    volume_down_request = VolumeDownRequestFactory.from_dict({})
     result_object = volume_down_uc.execute(volume_down_request)
 
     device_discovery_service.get.assert_called()
@@ -75,11 +75,11 @@ def test_use_case_with_parameter_out_of_range(connected_device):
     device_transport_control_service = mock.Mock()
     volume_down_uc = VolumeDownUseCase(device_discovery_service, device_transport_control_service)
 
-    volume_down_request = VolumeDownRequestObject.from_dict({'volume_decrease': volume_increase_in_percentage})
+    volume_down_request = VolumeDownRequestFactory.from_dict({'volume_decrease': volume_increase_in_percentage})
     response_object = volume_down_uc.execute(volume_down_request)
 
-    assert bool(response_object) is False
-    assert connected_device.volume == 10
+    assert bool(response_object) is True
+    assert connected_device.volume == 0
 
 
 def test_use_case_with_positive_percentage(connected_device):
@@ -92,7 +92,7 @@ def test_use_case_with_positive_percentage(connected_device):
     device_transport_control_service = mock.Mock()
     volume_down_uc = VolumeDownUseCase(device_discovery_service, device_transport_control_service)
 
-    volume_down_request = VolumeDownRequestObject.from_dict({'volume_decrease': volume_decrease_in_percentage})
+    volume_down_request = VolumeDownRequestFactory.from_dict({'volume_decrease': volume_decrease_in_percentage})
     response_object = volume_down_uc.execute(volume_down_request)
 
     assert bool(response_object) is True
@@ -109,11 +109,11 @@ def test_use_case_with_negative_percentage(connected_device):
     device_transport_control_service = mock.Mock()
     volume_down_uc = VolumeDownUseCase(device_discovery_service, device_transport_control_service)
 
-    volume_down_request = VolumeDownRequestObject.from_dict({'volume_decrease': volume_decrease_in_percentage})
+    volume_down_request = VolumeDownRequestFactory.from_dict({'volume_decrease': volume_decrease_in_percentage})
     response_object = volume_down_uc.execute(volume_down_request)
 
-    assert bool(response_object) is False
-    assert connected_device.volume == 10
+    assert bool(response_object) is True
+    assert connected_device.volume == 0
 
 
 def test_use_case_with_positive_integer(connected_device):
@@ -126,12 +126,12 @@ def test_use_case_with_positive_integer(connected_device):
     device_transport_control_service = mock.Mock()
     volume_down_uc = VolumeDownUseCase(device_discovery_service, device_transport_control_service)
 
-    volume_down_request = VolumeDownRequestObject.from_dict({'volume_decrease' : volume_decrease_integer})
+    volume_down_request = VolumeDownRequestFactory.from_dict({'volume_decrease' : volume_decrease_integer})
     response_object = volume_down_uc.execute(volume_down_request)
 
     assert bool(response_object) is True
     device_transport_control_service.volume_down.assert_called_with(connected_device)
-    assert connected_device.volume == initial_volume - volume_decrease_integer
+    assert connected_device.volume == 0
 
 
 def test_use_case_with_negative_integer(connected_device):
@@ -143,11 +143,11 @@ def test_use_case_with_negative_integer(connected_device):
     device_transport_control_service = mock.Mock()
     volume_down_uc = VolumeDownUseCase(device_discovery_service, device_transport_control_service)
 
-    volume_down_request = VolumeDownRequestObject.from_dict({'volume_decrease': volume_decrease_integer})
+    volume_down_request = VolumeDownRequestFactory.from_dict({'volume_decrease': volume_decrease_integer})
     response_object = volume_down_uc.execute(volume_down_request)
 
-    assert bool(response_object) is False
-    assert connected_device.volume == 10
+    assert bool(response_object) is True
+    assert connected_device.volume == 0
 
 
 def test_use_case_with_maximum_volume(connected_device):
@@ -159,7 +159,7 @@ def test_use_case_with_maximum_volume(connected_device):
     device_transport_control_service = mock.Mock()
     volume_down_uc = VolumeDownUseCase(device_discovery_service, device_transport_control_service)
 
-    volume_down_request = VolumeDownRequestObject.from_dict({'volume_decrease': volume_decrease_integer})
+    volume_down_request = VolumeDownRequestFactory.from_dict({'volume_decrease': volume_decrease_integer})
     response_object = volume_down_uc.execute(volume_down_request)
 
     assert bool(response_object) is True

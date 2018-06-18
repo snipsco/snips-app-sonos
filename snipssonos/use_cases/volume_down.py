@@ -12,11 +12,8 @@ class VolumeDownUseCase(UseCase):
 
     def process_request(self, request_object):
         device = self.device_discovery_service.get()
-        volume_decrease = request_object.volume_decrease
-        if volume_decrease:
-            device.decrease_volume(volume_decrease)
-            self.device_transport_control_service.volume_down(device)
-        else:
-            device.decrease_volume(self.DEFAULT_VOLUME_DECREMENT)
-            self.device_transport_control_service.volume_down(device)
+
+        device.decrease_volume(self.DEFAULT_VOLUME_DECREMENT)
+
+        self.device_transport_control_service.volume_down(device)
         return ResponseSuccess()
