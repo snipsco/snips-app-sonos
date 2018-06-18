@@ -16,3 +16,6 @@ class DeviceTransportControlService(object):  # TODO : Make this class abstract
 
     def mute(self, device):
         raise NotImplementedError("mute() is not implemented")
+
+    def next_track(self, device):
+        raise NotImplementedError("next_track() is not implemented")

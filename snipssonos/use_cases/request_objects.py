@@ -22,6 +22,16 @@ class VolumeDownRequestFactory(RequestObjectFactory):
     request_object_class = VolumeDownRequestObject
 
 
+class NextTrackRequestObject(ValidRequestObject):
+    @classmethod
+    def from_dict(cls, adict):
+        return cls()
+
+
+class NextTrackRequestFactory(RequestObjectFactory):
+    request_object_class = NextTrackRequestObject
+
+
 class VolumeSetRequestObject(ValidRequestObject):
     def __init__(self, volume_level):
         self.volume_level = volume_level
@@ -123,8 +133,10 @@ class PlayTrackRequestObject(ValidRequestObject):
             playlist_name=a_dictionary.get('playlist_name', None),
         )
 
+
 class PlayTrackRequestFactory(RequestObjectFactory):
     request_object_class = PlayTrackRequestObject
+
 
 class PlayArtistRequestObject(ValidRequestObject):
     def __init__(self, artist_name, playlist_name=None):
@@ -165,7 +177,6 @@ class PlayPlaylistRequestObject(ValidRequestObject):
     def __init__(self, playlist_name):
         self.playlist_name = playlist_name
 
-
     @property
     def playlist_name(self):
         return self._playlist_name
@@ -182,13 +193,13 @@ class PlayPlaylistRequestObject(ValidRequestObject):
         if invalid_request.has_errors():
             raise RequestObjectInitializationException(invalid_request)
 
-
     @classmethod
     def from_dict(cls, a_dictionary):
 
         return cls(
             playlist_name=a_dictionary.get('playlist_name', None)
         )
+
 
 class PlayPlaylistRequestFactory(RequestObjectFactory):
     request_object_class = PlayPlaylistRequestObject
@@ -224,6 +235,7 @@ class PlayAlbumRequestObject(ValidRequestObject):
             artist_name=a_dictionary.get('artist_name', None),
             playlist_name=a_dictionary.get('playlist_name', None)
         )
+
 
 class PlayAlbumRequestFactory(RequestObjectFactory):
     request_object_class = PlayAlbumRequestObject

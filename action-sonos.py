@@ -20,10 +20,12 @@ from snipssonos.use_cases.play_playlist import PlayPlaylistUseCase
 from snipssonos.use_cases.play_album import PlayAlbumUseCase
 from snipssonos.use_cases.resume_music import ResumeMusicUseCase
 from snipssonos.use_cases.speaker_interrupt import SpeakerInterruptUseCase
+from snipssonos.use_cases.next_track import NextTrackUseCase
+
 from snipssonos.adapters.request_adapter import VolumeUpRequestAdapter, PlayTrackRequestAdapter, \
     PlayArtistRequestAdapter, VolumeSetRequestAdapter, VolumeDownRequestAdapter, ResumeMusicRequestAdapter, \
     SpeakerInterruptRequestAdapter, MuteRequestAdapter, PlayPlaylistRequestAdapter, PlayAlbumRequestAdapter, \
-    PlayMusicRequestAdapter
+    PlayMusicRequestAdapter, NextTrackRequestAdapter
 from snipssonos.services.node_device_discovery_service import NodeDeviceDiscoveryService
 from snipssonos.services.node_device_transport_control import NodeDeviceTransportControlService
 from snipssonos.services.node_music_playback_service import NodeMusicPlaybackService
@@ -35,7 +37,7 @@ from snipssonos.shared.feedback import FR_TTS_SHORT_ERROR
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
 
-HOSTNAME = "localhost"
+HOSTNAME = "sonos-antho.local"
 
 HERMES_HOST = "{}:1883".format(HOSTNAME)
 MOPIDY_HOST = HOSTNAME
@@ -114,7 +116,18 @@ def previousSong_callback(hermes, intentMessage):
 
 
 def nextSong_callback(hermes, intentMessage):
-    raise NotImplementedError("nextSong_callback() not implemented")
+    usecase = NextTrackUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
+
+    next_track_request = NextTrackRequestAdapter.from_intent_message(intentMessage)
+
+    response = usecase.execute(next_track_request)
+    if not response:
+        logging.info(response.value)
+        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
+    else:
+        logging.info(response)
+        hermes.publish_end_session(intentMessage.session_id, "")
+
 
 
 def resumeMusic_callback(hermes, intentMessage):  # Playback functions
@@ -261,4 +274,5 @@ if __name__ == "__main__":
             .subscribe_intent("muteSound4", mute_callback) \
             .subscribe_intent("resumeMusic4", resumeMusic_callback) \
             .subscribe_intent("speakerInterrupt4", speakerInterrupt_callback) \
+            .subscribe_intent("nextSong4", nextSong_callback) \
             .loop_forever()
