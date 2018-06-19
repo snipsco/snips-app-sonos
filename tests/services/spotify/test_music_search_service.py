@@ -1,14 +1,11 @@
-#coding: utf-8
-import mock
-import pytest
-import requests
-
 from snipssonos.services.spotify.music_search_service import SpotifyMusicSearchService
 from tests.services.spotify.raw_responses import *
+
 
 # Testing Music Search Service
 def test_music_service_empty_song_name():
     pass
+
 
 # Testing Spotify Music Service
 def test_correct_parsing_of_tracks_for_correct_response():
