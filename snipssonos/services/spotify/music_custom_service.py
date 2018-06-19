@@ -15,10 +15,10 @@ class SpotifyCustomService:
         self.client.set_user_endpoint()
 
     def fetch_top_artist(self):
-        self.client.set_top_artist()
+        self.client.set_top_artist_endpoint()
         artists_results = []
         for time_range in self.TIME_RANGES:
-            top_artist_by_time_range_query = SpotifyAPISearchQueryBuilder(is_user_data=True)
+            top_artist_by_time_range_query = SpotifyAPISearchQueryBuilder(is_request_user_data_query=True)
             top_artist_by_time_range_query = top_artist_by_time_range_query\
                 .add_time_range(time_range)\
                 .add_limit(50)

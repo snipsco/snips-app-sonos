@@ -1,7 +1,8 @@
 import base64
 import requests
 
-from snipssonos.exceptions import MusicSearchProviderConnectionError, MusicSearchCredentialsError
+from snipssonos.exceptions import MusicSearchProviderConnectionError, MusicSearchCredentialsError,\
+    SpotifyClientWrongEndpoint, SpotifyQueryBuilderNonExistentTimeRange, SpotifyQueryBuilderUserDataQueryNotSet
 
 
 class SpotifyClient(object):
@@ -92,23 +93,32 @@ class SpotifyClient(object):
         self.endpoint = self.USER_ENDPOINT
         return self
 
-    def set_top_tracks(self):
+    def set_top_tracks_endpoint(self):
+        self.is_user_endpoint_set()
         self.endpoint = "{}/top/{}".format(self.endpoint, "tracks")
 
-    def set_top_artist(self):
+    def set_top_artist_endpoint(self):
+        self.is_user_endpoint_set()
         self.endpoint = "{}/top/{}".format(self.endpoint, "artists")
 
-    def set_playlist(self):
+    def set_playlist_endpoint(self):
+        self.is_user_endpoint_set()
         self.endpoint = "{}/{}".format(self.endpoint, "playlists")
+
+    def is_user_endpoint_set(self):
+        if self.endpoint != self.USER_ENDPOINT:
+            raise SpotifyClientWrongEndpoint
 
 
 class SpotifyAPISearchQueryBuilder(object):
-    def __init__(self, is_user_data=False):
+    TIME_RANGES = ["long_term", "medium_term", "short_term"]
+
+    def __init__(self, is_request_user_data_query=False):
         self.keyword = ""
         self.field_filters = []
         self.user_filters = {}
         self.result_type = None
-        self.is_user_data = is_user_data
+        self.is_request_user_data_query = is_request_user_data_query
 
     def add_generic_search_term(self, term):
         if len(term):
@@ -141,10 +151,13 @@ class SpotifyAPISearchQueryBuilder(object):
         :param time_range: long_term (last 4 years), medium_term (last 6 months) or short_term (last 4 weeks)
         :return:
         """
+        self.is_user_data_is_set()
+        self.is_valid_time_range(time_range)
         self.user_filters.update({'time_range': time_range})
         return self
 
     def add_limit(self, limit):
+        self.is_user_data_is_set()
         self.user_filters.update({'limit': limit})
         return self
 
@@ -170,7 +183,7 @@ class SpotifyAPISearchQueryBuilder(object):
 
     def to_dict(self):
         params_dictionary = {}
-        if self.is_user_data:
+        if self.is_request_user_data_query:
             params_dictionary = self.user_filters
         else:
             if len(self.field_filters):
@@ -184,3 +197,11 @@ class SpotifyAPISearchQueryBuilder(object):
                 params_dictionary.update({'type': self.result_type})
 
         return params_dictionary
+
+    def is_valid_time_range(self, time_range):
+        if time_range not in self.TIME_RANGES:
+            raise SpotifyQueryBuilderNonExistentTimeRange
+
+    def is_user_data_is_set(self):
+        if not self.is_request_user_data_query:
+            raise SpotifyQueryBuilderUserDataQueryNotSet

@@ -47,3 +47,27 @@ class APIRequestError(Exception):
 
 class APIRequestWrongParams(APIRequestError):
     """The API was called with wrong parameters. """
+
+
+# Spotify client
+class SpotifyClientException(Exception):
+    """An error occurred within the Spotify Client """
+
+
+class SpotifyClientWrongEndpoint(SpotifyClientException):
+    """The requested Spotify endpoint does not exist."""
+
+
+# Spotify query builder
+class SpotifyQueryBuilderException(Exception):
+    """An error occurred within the Spotify Query Builder"""
+
+
+class SpotifyQueryBuilderNonExistentTimeRange(SpotifyQueryBuilderException):
+    """The time range used does not exist, please use valid time ranges:
+    'long_term', 'medium_term', 'short_term'"""
+
+
+class SpotifyQueryBuilderUserDataQueryNotSet(SpotifyQueryBuilderException):
+    """Trying to set fields to request a user data query but the class has not been
+    initialized to build this kind of query"""
