@@ -1,4 +1,8 @@
+import pytest
+
 from snipssonos.helpers.spotify_client import SpotifyAPISearchQueryBuilder
+from snipssonos.exceptions import SpotifyQueryBuilderNonExistentTimeRange,\
+    SpotifyQueryBuilderUserDataQueryNotSet
 
 # Testing Spotify API Search Query Builder
 def test_spotify_api_query_builder_add_search_term():
@@ -103,3 +107,29 @@ def test_spotify_api_query_builder_add_track_filter():
 
     expected_query_dict = {'q': 'track:pernety'}
     assert actual_query_dict['q'] == expected_query_dict['q']
+
+
+def test_spotify_api_query_builder_add_time_range():
+    qb = SpotifyAPISearchQueryBuilder(True).add_time_range('long_term')
+    actual_query_dict = qb.to_dict()
+    expected_query_dict = {'time_range': 'long_term'}
+    assert actual_query_dict['time_range'] == expected_query_dict['time_range']
+
+
+def test_spotify_api_query_builder_add_limit():
+    qb = SpotifyAPISearchQueryBuilder(True).add_limit(20)
+    actual_query_dict = qb.to_dict()
+    expected_query_dict = {'limit': 20}
+    assert actual_query_dict['limit'] == expected_query_dict['limit']
+
+
+def test_spotify_api_query_builder_add_time_range_raises_exception():
+    with pytest.raises(SpotifyQueryBuilderNonExistentTimeRange):
+        SpotifyAPISearchQueryBuilder(True).add_time_range('I_do_not_exist')
+
+
+def test_spotify_api_query_builder_add_time_range_when_request_user_data_not_set_raises_exception():
+    with pytest.raises(SpotifyQueryBuilderUserDataQueryNotSet):
+        SpotifyAPISearchQueryBuilder().add_time_range('long_term')
+
+
