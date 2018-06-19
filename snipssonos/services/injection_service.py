@@ -10,22 +10,18 @@ class InjectEntitiesService:
         self.mqtt_client = MqttClient(hermes_host)
         self.mqtt_client.run()
 
-        self.data = None
-        self.entity_name = None
-
     def publish_entities(self, entity_name, data):
-        self.data = data
-        self.entity_name = entity_name
-        payload = self.build_payload()
+        payload = self.build_payload(entity_name, data)
 
+        # TODO replace with log
         print(payload)
 
         injection_topic = self.MQTT_TOPIC_INJECT
         self.mqtt_client.publish(injection_topic, payload)
 
-    def build_payload(self):
+    def build_payload(self, entity_name, data):
         entities_payload = dict()
-        entities_payload[self.entity_name] = self.parse_data()
+        entities_payload[entity_name] = self.parse_data(entity_name, data)
 
         payload = dict()
         payload["operations"] = [
@@ -37,12 +33,12 @@ class InjectEntitiesService:
 
         return json.dumps(payload)
 
-    def parse_data(self):
+    def parse_data(self, entity_name, data):
         return {
-            'snips/artist': [artist.name for artist in self.data],
+            'snips/artist': [artist.name for artist in data],
             'song_name': {},
             'playlist_name': {}
-        }[self.entity_name]
+        }[entity_name]
 
 
 # TODO erase, just for test
