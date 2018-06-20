@@ -21,7 +21,7 @@ class SpotifyClient(object):
 
     def _check_credentials_validity(self):
         if not (len(self.client_id) * len(self.client_secret)):
-            raise MusicSearchCredentialsError
+            raise MusicSearchCredentialsError("Could not find client_id or client_secret")
 
     def _get_base_64_encoded_credentials(self):
         credentials_string = "{}:{}".format(self.client_id, self.client_secret)
@@ -38,7 +38,7 @@ class SpotifyClient(object):
 
     def _get_authorization_headers_from_access_token(self):
         if not len(self.access_token):
-            raise MusicSearchCredentialsError
+            raise MusicSearchCredentialsError("No access token found")
         else:
             auth_headers = {'Authorization': 'Bearer {}'.format(self.access_token)}
             return auth_headers
@@ -54,7 +54,7 @@ class SpotifyClient(object):
                 data={'grant_type': 'client_credentials'}
             )
 
-            # TODO figure what is going with this call
+            # TODO figure what is going on with this call
             # data = {
             #     'grant_type': 'refresh_token',
             #     'refresh_token': self.refresh_token
