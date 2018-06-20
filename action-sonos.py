@@ -17,7 +17,6 @@ from snipssonos.use_cases.play.playlist import PlayPlaylistUseCase
 from snipssonos.use_cases.play.album import PlayAlbumUseCase
 from snipssonos.use_cases.resume_music import ResumeMusicUseCase
 from snipssonos.use_cases.speaker_interrupt import SpeakerInterruptUseCase
-from snipssonos.use_cases.next_track import NextTrackUseCase
 
 from snipssonos.adapters.request_adapter import VolumeUpRequestAdapter, PlayTrackRequestAdapter, \
     PlayArtistRequestAdapter, VolumeSetRequestAdapter, VolumeDownRequestAdapter, ResumeMusicRequestAdapter, \
@@ -41,8 +40,9 @@ MOPIDY_HOST = HOSTNAME
 # Logging config
 logging.basicConfig(level=logging.INFO)
 
-# Music management functions
 
+
+# Music management functions
 def addSong_callback(hermes, intentMessage):
     raise NotImplementedError("addSong_callback() not implemented")
 
@@ -91,26 +91,11 @@ def previousSong_callback(hermes, intentMessage):
     raise NotImplementedError("previousSong_callback() not implemented")
 
 
-def nextSong_callback(hermes, intentMessage):
-    usecase = NextTrackUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
-
-    next_track_request = NextTrackRequestAdapter.from_intent_message(intentMessage)
-
-    response = usecase.execute(next_track_request)
-    if not response:
-        logging.info(response.value)
-        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
-    else:
-        logging.info(response)
-        hermes.publish_end_session(intentMessage.session_id, "")
-
-
-
 def resumeMusic_callback(hermes, intentMessage):  # Playback functions
-    usecase = ResumeMusicUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
+    use_case = ResumeMusicUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
     resume_music_request = ResumeMusicRequestAdapter.from_intent_message(intentMessage)
 
-    response = usecase.execute(resume_music_request)
+    response = use_case.execute(resume_music_request)
     if not response:
         logging.info(response.value)
         hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
@@ -120,10 +105,10 @@ def resumeMusic_callback(hermes, intentMessage):  # Playback functions
 
 
 def speakerInterrupt_callback(hermes, intentMessage):
-    usecase = SpeakerInterruptUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
+    use_case = SpeakerInterruptUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
     speaker_interrupt_request = SpeakerInterruptRequestAdapter.from_intent_message(intentMessage)
 
-    response = usecase.execute(speaker_interrupt_request)
+    response = use_case.execute(speaker_interrupt_request)
     if not response:
         logging.info(response.value)
         hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
@@ -133,10 +118,10 @@ def speakerInterrupt_callback(hermes, intentMessage):
 
 
 def volumeDown_callback(hermes, intentMessage):
-    usecase = VolumeDownUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
+    use_case = VolumeDownUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
     volume_down_request = VolumeDownRequestAdapter.from_intent_message(intentMessage)
 
-    response = usecase.execute(volume_down_request)
+    response = use_case.execute(volume_down_request)
     if not response:
         logging.info(response.value)
         hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
@@ -146,10 +131,10 @@ def volumeDown_callback(hermes, intentMessage):
 
 
 def volumeUp_callback(hermes, intentMessage):
-    usecase = VolumeUpUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
+    use_case = VolumeUpUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
     volume_up_request = VolumeUpRequestAdapter.from_intent_message(intentMessage)
 
-    response = usecase.execute(volume_up_request)
+    response = use_case.execute(volume_up_request)
     if not response:
         logging.info(response.value)
         hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
@@ -159,10 +144,10 @@ def volumeUp_callback(hermes, intentMessage):
 
 
 def volumeSet_callback(hermes, intentMessage):
-    usecase = VolumeSetUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
+    use_case = VolumeSetUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
     volume_set_request = VolumeSetRequestAdapter.from_intent_message(intentMessage)
 
-    response = usecase.execute(volume_set_request)
+    response = use_case.execute(volume_set_request)
     if not response:
         logging.info(response.value)
         hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
@@ -172,10 +157,10 @@ def volumeSet_callback(hermes, intentMessage):
 
 
 def mute_callback(hermes, intentMessage):
-    usecase = MuteUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
+    use_case = MuteUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
     mute_request = MuteRequestAdapter.from_intent_message(intentMessage)
 
-    response = usecase.execute(mute_request)
+    response = use_case.execute(mute_request)
     if not response:
         logging.info(response.value)
         hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
@@ -204,7 +189,6 @@ def playArtist_callback(hermes, intentMessage):
                                  hermes.music_playback_service)
     play_artist_request = PlayArtistRequestAdapter.from_intent_message(intentMessage)
 
-
     logging.info(play_artist_request)
     response = use_case.execute(play_artist_request)
 
@@ -221,7 +205,6 @@ def playMusic_callback(hermes, intentMessage):
                                 hermes.music_playback_service)
     play_music_request = PlayMusicRequestAdapter.from_intent_message(intentMessage)
 
-
     logging.info(play_music_request)
     response = use_case.execute(play_music_request)
 
@@ -229,6 +212,7 @@ def playMusic_callback(hermes, intentMessage):
         hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
     else:
         hermes.publish_end_session(intentMessage.session_id, response.feedback)
+
 
 if __name__ == "__main__":
     configuration = read_configuration_file("config.ini")
@@ -249,5 +233,4 @@ if __name__ == "__main__":
             .subscribe_intent("muteSound4", mute_callback) \
             .subscribe_intent("resumeMusic4", resumeMusic_callback) \
             .subscribe_intent("speakerInterrupt4", speakerInterrupt_callback) \
-            .subscribe_intent("nextSong4", nextSong_callback) \
             .loop_forever()
