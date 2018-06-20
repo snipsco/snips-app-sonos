@@ -6,7 +6,7 @@ import time
 
 from snipssonos.use_cases.request_objects import InjectEntitiesRequestFactory
 from snipssonos.helpers.snips_config_parser import read_configuration_file
-from snipssonos.services.spotify.music_custom_service import SpotifyCustomService
+from snipssonos.services.spotify.music_customization_service import SpotifyCustomizationService
 from snipssonos.services.injection_service import InjectEntitiesService
 from snipssonos.use_cases.inject_entities import InjectEntitiesUseCase
 
@@ -20,7 +20,7 @@ if __name__ == "__main__":
     client_secret = configuration['secret']['client_secret']
     access_token = configuration['secret']['access_token']
 
-    music_custom_service = SpotifyCustomService(client_id, client_secret, access_token)
+    music_custom_service = SpotifyCustomizationService(client_id, client_secret, access_token)
     injection_service = InjectEntitiesService(HERMES_HOST)
 
     starttime = time.time()
