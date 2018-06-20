@@ -1,5 +1,7 @@
 #!/usr/bin/env python2
 # -*-: coding utf-8 -*-
+
+import logging
 import time
 
 from snipssonos.use_cases.request_objects import InjectEntitiesRequestFactory
@@ -28,9 +30,11 @@ if __name__ == "__main__":
     while True:
         if first_time:
             inject_entities_request = InjectEntitiesRequestFactory.from_dict({'entity_name': ARTIST_ENTITY_NAME})
+            logging.info("Inject entities request: {}".format(inject_entities_request))
             use_case = InjectEntitiesUseCase(music_custom_service, injection_service)
 
             response = use_case.process_request(inject_entities_request)
+            logging.info("Response: {}".format(response))
             first_time = False
 
         time.sleep(SECONDS_IN_A_DAY - ((time.time() - starttime) % SECONDS_IN_A_DAY))
