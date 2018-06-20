@@ -203,7 +203,7 @@ class SpotifyAPISearchQueryBuilder(object):
 
     def is_valid_time_range(self, time_range):
         if time_range not in self.TIME_RANGES:
-            raise SpotifyQueryBuilderNonExistentTimeRange
+            raise SpotifyQueryBuilderNonExistentTimeRange("The time range {} is not defined".format(time_range))
 
     def is_user_data_is_set(self):
         if not self.is_request_user_data_query:
