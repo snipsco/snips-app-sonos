@@ -63,7 +63,8 @@ class SpotifyClient(object):
             return access_token
 
         except requests.exceptions.ConnectionError as e:
-            raise MusicSearchProviderConnectionError
+            raise MusicSearchProviderConnectionError(
+                "There was a problem retrieving the access token: {}".format(e.message))
 
     def authenticate(self):
         if self.access_token is None:
@@ -82,9 +83,11 @@ class SpotifyClient(object):
             if response.ok:
                 return response.text
             else:
-                raise MusicSearchProviderConnectionError
+                raise MusicSearchProviderConnectionError(
+                    "There was a problem while making a request to Spotify: {}".format(response.reason))
         except requests.exceptions.ConnectionError as e:
-            raise MusicSearchProviderConnectionError
+            raise MusicSearchProviderConnectionError(
+                "There was a problem while querying to Spotify api: {}".format(e.message))
 
     def set_search_endpoint(self):
             self.endpoint = self.SEARCH_ENDPOINT
