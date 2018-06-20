@@ -1,8 +1,11 @@
+import pytest
+
 from snipssonos.services.spotify.music_search_service import SpotifyMusicSearchService
 from tests.services.spotify.raw_responses import *
 
 
 # Testing Music Search Service
+@pytest.mark.skip()
 def test_music_service_empty_song_name():
     pass
 
