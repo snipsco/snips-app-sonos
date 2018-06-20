@@ -266,15 +266,28 @@ class InjectEntitiesRequestObject(ValidRequestObject):
     def __init__(self, entity_name):
         self.entity_name = entity_name
 
+    @property
+    def entity_name(self):
+        return self._entity_name
+
+    @entity_name.setter
+    def entity_name(self, entity_name):
+        invalid_request = InvalidRequestObject()
+        # TODO once entity names are set in stone figure validation here
+        if isinstance(entity_name, str):
+            self._entity_name = entity_name
+        else:
+            invalid_request.add_error('entity_name', 'has to be a string')
+        if invalid_request.has_errors():
+            raise RequestObjectInitializationException(invalid_request)
+
     @classmethod
     def from_dict(cls, a_dictionary):
-        invalid_request = InvalidRequestObject()
 
-        if not('entity_name' in a_dictionary):
-            invalid_request.add_error('entity_name', 'is missing')
-
-        if invalid_request.has_errors():
-            return invalid_request
         return cls(
-            entity_name=a_dictionary.get('artist_name', None)
+            entity_name=a_dictionary.get('entity_name', None)
         )
+
+
+class InjectEntitiesRequestFactory(RequestObjectFactory):
+    request_object_class = InjectEntitiesRequestObject

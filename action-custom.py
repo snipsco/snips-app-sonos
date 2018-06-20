@@ -2,7 +2,7 @@
 # -*-: coding utf-8 -*-
 import time
 
-from snipssonos.use_cases.request_objects import InjectEntitiesRequestObject
+from snipssonos.use_cases.request_objects import InjectEntitiesRequestFactory
 from snipssonos.helpers.snips_config_parser import read_configuration_file
 from snipssonos.services.spotify.music_custom_service import SpotifyCustomService
 from snipssonos.services.injection_service import InjectEntitiesService
@@ -27,7 +27,7 @@ if __name__ == "__main__":
     # TODO first call iterate with all top data and in the loop just keep getting short term top data
     while True:
         if first_time:
-            inject_entities_request = InjectEntitiesRequestObject(ARTIST_ENTITY_NAME)
+            inject_entities_request = InjectEntitiesRequestFactory.from_dict({'entity_name': ARTIST_ENTITY_NAME})
             use_case = InjectEntitiesUseCase(music_custom_service, injection_service)
 
             response = use_case.process_request(inject_entities_request)
