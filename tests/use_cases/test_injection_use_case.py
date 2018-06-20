@@ -9,7 +9,7 @@ ARTIST_ENTITY_NAME = "snips/artist"
 
 
 @mock.patch('snipssonos.services.spotify.music_customization_service.SpotifyCustomizationService')
-@mock.patch('snipssonos.services.injection_service.InjectEntitiesService')
+@mock.patch('snipssonos.services.entities_injection_service.EntitiesInjectionService')
 def test_inject_entities_successful(custom_mock, injection_mock):
     custom_mock_instance = custom_mock.return_value
     injection_mock_instance = injection_mock.return_value
@@ -26,7 +26,7 @@ def test_inject_entities_successful(custom_mock, injection_mock):
 
 
 @mock.patch('snipssonos.services.spotify.music_customization_service.SpotifyCustomizationService')
-@mock.patch('snipssonos.services.injection_service.InjectEntitiesService')
+@mock.patch('snipssonos.services.entities_injection_service.EntitiesInjectionService')
 def test_inject_entities_failure(custom_mock, injection_mock):
     custom_mock_instance = custom_mock.return_value
     injection_mock_instance = injection_mock.return_value

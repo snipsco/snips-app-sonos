@@ -3,7 +3,7 @@ import json
 from snipssonos.helpers.mqtt_client import MqttClient
 
 
-class InjectEntitiesService:
+class EntitiesInjectionService:
     MQTT_TOPIC_INJECT = 'hermes/asr/inject'
 
     def __init__(self, hermes_host):
