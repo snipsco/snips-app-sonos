@@ -8,7 +8,7 @@ from snipssonos.use_cases.request_objects import InjectEntitiesRequestFactory
 ARTIST_ENTITY_NAME = "snips/artist"
 
 
-@mock.patch('snipssonos.services.spotify.music_custom_service.SpotifyCustomService')
+@mock.patch('snipssonos.services.spotify.music_customization_service.SpotifyCustomizationService')
 @mock.patch('snipssonos.services.injection_service.InjectEntitiesService')
 def test_inject_entities_successful(custom_mock, injection_mock):
     custom_mock_instance = custom_mock.return_value
@@ -25,7 +25,7 @@ def test_inject_entities_successful(custom_mock, injection_mock):
     assert isinstance(response, ResponseSuccess)
 
 
-@mock.patch('snipssonos.services.spotify.music_custom_service.SpotifyCustomService')
+@mock.patch('snipssonos.services.spotify.music_customization_service.SpotifyCustomizationService')
 @mock.patch('snipssonos.services.injection_service.InjectEntitiesService')
 def test_inject_entities_failure(custom_mock, injection_mock):
     custom_mock_instance = custom_mock.return_value

@@ -4,7 +4,7 @@ from snipssonos.entities.artist import Artist
 from snipssonos.helpers.spotify_client import SpotifyClient, SpotifyAPISearchQueryBuilder
 
 
-class SpotifyCustomService:
+class SpotifyCustomizationService:
     TIME_RANGES = ["long_term", "medium_term", "short_term"]
 
     def __init__(self, client_id, client_secret, access_token=None, refresh_token=None):
