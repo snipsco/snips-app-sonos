@@ -30,24 +30,9 @@ class SpotifyCustomService:
     def reset_user_endpoint(self):
         self.client.set_user_endpoint()
 
-    # def fetch_top_tracks(self, time_range=None):
-    # def fetch_playlist(self):
-
     @staticmethod
     def parse_artist_results(raw_response):
         response = json.loads(raw_response)
         artists = [Artist(item['uri'], item['name']) for item in response['items']]
 
         return artists
-
-
-# TODO erase, just testing purposes
-if __name__ == "__main__":
-    client_id = ""
-    client_secret = ""
-    access_token = ""
-
-    custom = SpotifyCustomService(client_id, client_secret, access_token)
-
-    results_artist = custom.fetch_top_artist()
-    print(results_artist)

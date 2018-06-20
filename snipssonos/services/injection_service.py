@@ -13,9 +13,6 @@ class InjectEntitiesService:
     def publish_entities(self, entity_name, data):
         payload = self.build_payload(entity_name, data)
 
-        # TODO replace with log
-        print(payload)
-
         injection_topic = self.MQTT_TOPIC_INJECT
         self.mqtt_client.publish(injection_topic, payload)
 
@@ -39,18 +36,3 @@ class InjectEntitiesService:
             'song_name': {},
             'playlist_name': {}
         }[entity_name]
-
-
-# TODO erase, just for test
-if __name__ == "__main__":
-    from snipssonos.use_cases.request_objects import InjectEntitiesRequestObject
-    from snipssonos.entities.artist import Artist
-
-    HOSTNAME = "localhost"
-
-    inject = InjectEntitiesService(HOSTNAME)
-    inject_entities_request = InjectEntitiesRequestObject("snips/artist")
-
-    artists = [Artist(None, 'pau fabregat'), Artist(None, 'blabla')]
-
-    inject.publish_entities(inject_entities_request.entity_name, artists)
