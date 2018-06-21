@@ -3069,6 +3069,177 @@ TOP_ARTISTS = """{
   "next": "https://api.spotify.com/v1/me/top/artists?limit=20&offset=20"
 }"""
 
+TOP_TRACKS = """{
+  "items": [
+    {
+      "album": {
+        "album_type": "ALBUM",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1Xyo4u8uXC1ZmMpatF05PJ"
+            },
+            "href": "https://api.spotify.com/v1/artists/1Xyo4u8uXC1ZmMpatF05PJ",
+            "id": "1Xyo4u8uXC1ZmMpatF05PJ",
+            "name": "The Weeknd",
+            "type": "artist",
+            "uri": "spotify:artist:1Xyo4u8uXC1ZmMpatF05PJ"
+          }
+        ],
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/09fggMHib4YkOtwQNXEBII"
+        },
+        "href": "https://api.spotify.com/v1/albums/09fggMHib4YkOtwQNXEBII",
+        "id": "09fggMHib4YkOtwQNXEBII",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/2c7ef91e8327dec51919d1f3be37a411b4028306",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/4816c45ce6ef1e45df6a84784d2123595f787182",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/a2c3947510abbeb764603aa53b96b33d97bd3ff0",
+            "width": 64
+          }
+        ],
+        "name": "Starboy",
+        "release_date": "2016-11-25",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:09fggMHib4YkOtwQNXEBII"
+      },
+      "artists": [
+        {
+          "external_urls": {
+            "spotify": "https://open.spotify.com/artist/1Xyo4u8uXC1ZmMpatF05PJ"
+          },
+          "href": "https://api.spotify.com/v1/artists/1Xyo4u8uXC1ZmMpatF05PJ",
+          "id": "1Xyo4u8uXC1ZmMpatF05PJ",
+          "name": "The Weeknd",
+          "type": "artist",
+          "uri": "spotify:artist:1Xyo4u8uXC1ZmMpatF05PJ"
+        },
+        {
+          "external_urls": {
+            "spotify": "https://open.spotify.com/artist/4tZwfgrHOc3mvqYlEYSvVi"
+          },
+          "href": "https://api.spotify.com/v1/artists/4tZwfgrHOc3mvqYlEYSvVi",
+          "id": "4tZwfgrHOc3mvqYlEYSvVi",
+          "name": "Daft Punk",
+          "type": "artist",
+          "uri": "spotify:artist:4tZwfgrHOc3mvqYlEYSvVi"
+        }
+      ],
+      "disc_number": 1,
+      "duration_ms": 269186,
+      "explicit": false,
+      "external_ids": {
+        "isrc": "USUG11601012"
+      },
+      "external_urls": {
+        "spotify": "https://open.spotify.com/track/4RepvCWqsP6zBuzvwYibAS"
+      },
+      "href": "https://api.spotify.com/v1/tracks/4RepvCWqsP6zBuzvwYibAS",
+      "id": "4RepvCWqsP6zBuzvwYibAS",
+      "is_local": false,
+      "is_playable": true,
+      "name": "I Feel It Coming",
+      "popularity": 78,
+      "preview_url": null,
+      "track_number": 18,
+      "type": "track",
+      "uri": "spotify:track:4RepvCWqsP6zBuzvwYibAS"
+    },
+    {
+      "album": {
+        "album_type": "ALBUM",
+        "artists": [
+          {
+            "external_urls": {
+              "spotify": "https://open.spotify.com/artist/1Xyo4u8uXC1ZmMpatF05PJ"
+            },
+            "href": "https://api.spotify.com/v1/artists/1Xyo4u8uXC1ZmMpatF05PJ",
+            "id": "1Xyo4u8uXC1ZmMpatF05PJ",
+            "name": "The Weeknd",
+            "type": "artist",
+            "uri": "spotify:artist:1Xyo4u8uXC1ZmMpatF05PJ"
+          }
+        ],
+        "external_urls": {
+          "spotify": "https://open.spotify.com/album/09fggMHib4YkOtwQNXEBII"
+        },
+        "href": "https://api.spotify.com/v1/albums/09fggMHib4YkOtwQNXEBII",
+        "id": "09fggMHib4YkOtwQNXEBII",
+        "images": [
+          {
+            "height": 640,
+            "url": "https://i.scdn.co/image/2c7ef91e8327dec51919d1f3be37a411b4028306",
+            "width": 640
+          },
+          {
+            "height": 300,
+            "url": "https://i.scdn.co/image/4816c45ce6ef1e45df6a84784d2123595f787182",
+            "width": 300
+          },
+          {
+            "height": 64,
+            "url": "https://i.scdn.co/image/a2c3947510abbeb764603aa53b96b33d97bd3ff0",
+            "width": 64
+          }
+        ],
+        "name": "Starboy",
+        "release_date": "2016-11-25",
+        "release_date_precision": "day",
+        "type": "album",
+        "uri": "spotify:album:09fggMHib4YkOtwQNXEBII"
+      },
+      "artists": [
+        {
+          "external_urls": {
+            "spotify": "https://open.spotify.com/artist/1Xyo4u8uXC1ZmMpatF05PJ"
+          },
+          "href": "https://api.spotify.com/v1/artists/1Xyo4u8uXC1ZmMpatF05PJ",
+          "id": "1Xyo4u8uXC1ZmMpatF05PJ",
+          "name": "The Weeknd",
+          "type": "artist",
+          "uri": "spotify:artist:1Xyo4u8uXC1ZmMpatF05PJ"
+        }
+      ],
+      "disc_number": 1,
+      "duration_ms": 218880,
+      "explicit": true,
+      "external_ids": {
+        "isrc": "USUG11600998"
+      },
+      "external_urls": {
+        "spotify": "https://open.spotify.com/track/3IU6xbfNZosvTdRrGs8b2u"
+      },
+      "href": "https://api.spotify.com/v1/tracks/3IU6xbfNZosvTdRrGs8b2u",
+      "id": "3IU6xbfNZosvTdRrGs8b2u",
+      "is_local": false,
+      "is_playable": true,
+      "name": "Reminder",
+      "popularity": 69,
+      "preview_url": null,
+      "track_number": 4,
+      "type": "track",
+      "uri": "spotify:track:3IU6xbfNZosvTdRrGs8b2u"
+    }
+  ],
+  "total": 50,
+  "limit": 2,
+  "offset": 0,
+  "href": "https://api.spotify.com/v1/me/top/tracks?limit=2&offset=0",
+  "previous": null,
+  "next": "https://api.spotify.com/v1/me/top/tracks?limit=2&offset=2"
+}"""
+
 EMPTY_ITEMS = """{
   "items": [],
   "total": 50,

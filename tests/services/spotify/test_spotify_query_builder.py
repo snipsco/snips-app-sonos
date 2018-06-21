@@ -23,21 +23,27 @@ def test_spotify_api_query_builder_user_endpoint_set():
 def test_spotify_api_query_builder_top_artists_endpoint_set():
     qb = SpotifyAPISearchQueryBuilder().set_user_query()  \
         .with_top_artists()
+    assert qb.endpoint == "{}/top/artists".format(SPOTIFY_USER_ENDPOINT)
 
+    qb = SpotifyAPISearchQueryBuilder().set_user_query("artists")
     assert qb.endpoint == "{}/top/artists".format(SPOTIFY_USER_ENDPOINT)
 
 
 def test_spotify_api_query_builder_top_tracks_endpoint_set():
     qb = SpotifyAPISearchQueryBuilder().set_user_query()  \
         .with_top_tracks()
+    assert qb.endpoint == "{}/top/tracks".format(SPOTIFY_USER_ENDPOINT)
 
+    qb = SpotifyAPISearchQueryBuilder().set_user_query("tracks")
     assert qb.endpoint == "{}/top/tracks".format(SPOTIFY_USER_ENDPOINT)
 
 
 def test_spotify_api_query_builder_playlist_endpoint_set():
     qb = SpotifyAPISearchQueryBuilder().set_user_query()  \
         .with_playlists()
+    assert qb.endpoint == "{}/playlists".format(SPOTIFY_USER_ENDPOINT)
 
+    qb = SpotifyAPISearchQueryBuilder().set_user_query("playlists")
     assert qb.endpoint == "{}/playlists".format(SPOTIFY_USER_ENDPOINT)
 
 
