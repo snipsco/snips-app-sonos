@@ -38,57 +38,5 @@ def test_spotify_client_encodes_base_64_raises_exception_with_empty_credentials(
         SpotifyClient(client_id, client_secret)
 
 
-def test_spotify_client_sets_search_endpoint():
-    client_id = "client_id"
-    client_secret = "client_secret"
-    client = SpotifyClient(client_id, client_secret)
-    client.set_search_endpoint()
 
-    assert client.endpoint == "https://api.spotify.com/v1/search"
-
-
-def test_spotify_client_sets_user_endpoint():
-    client_id = "client_id"
-    client_secret = "client_secret"
-    client = SpotifyClient(client_id, client_secret)
-    client.set_user_endpoint()
-
-    assert client.endpoint == "https://api.spotify.com/v1/me"
-
-
-def test_spotify_client_sets_top_artist_endpoint():
-    client_id = "client_id"
-    client_secret = "client_secret"
-    client = SpotifyClient(client_id, client_secret)
-    client.set_user_endpoint().set_top_artist_endpoint()
-
-    assert client.endpoint == "https://api.spotify.com/v1/me/top/artists"
-
-
-def test_spotify_client_sets_top_tracks_endpoint():
-    client_id = "client_id"
-    client_secret = "client_secret"
-    client = SpotifyClient(client_id, client_secret)
-    client.set_user_endpoint().set_top_tracks_endpoint()
-
-    assert client.endpoint == "https://api.spotify.com/v1/me/top/tracks"
-
-
-def test_spotify_client_sets_user_playlists_endpoint():
-    client_id = "client_id"
-    client_secret = "client_secret"
-    client = SpotifyClient(client_id, client_secret)
-    client.set_user_endpoint().set_playlist_endpoint()
-
-    assert client.endpoint == "https://api.spotify.com/v1/me/playlists"
-
-
-def test_spotify_client_sets_nonexistent_endpoint_raises_exception():
-    client_id = "client_id"
-    client_secret = "client_secret"
-    client = SpotifyClient(client_id, client_secret)
-
-    with pytest.raises(SpotifyClientWrongEndpoint):
-        client.set_search_endpoint()
-        client.set_top_artist_endpoint()
 

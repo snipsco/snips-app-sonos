@@ -16,10 +16,10 @@ class SpotifyMusicSearchService(MusicSearchService):
         self.client_secret = client_secret
 
         self.client = SpotifyClient(self.client_id, self.client_secret)
-        self.client.set_search_endpoint()
 
     def search_album(self, album_name):
         album_search_query = SpotifyAPISearchQueryBuilder() \
+            .set_search_query() \
             .add_album_result_type() \
             .add_generic_search_term(album_name)
 
@@ -29,6 +29,7 @@ class SpotifyMusicSearchService(MusicSearchService):
 
     def search_album_in_playlist(self, album_name, playlist_name):
         album_search_query = SpotifyAPISearchQueryBuilder() \
+            .set_search_query() \
             .add_album_result_type() \
             .add_album_filter(album_name) \
             .add_playlist_filter(playlist_name)
@@ -39,6 +40,7 @@ class SpotifyMusicSearchService(MusicSearchService):
 
     def search_album_for_artist(self, album_name, artist_name):
         album_search_query = SpotifyAPISearchQueryBuilder() \
+            .set_search_query() \
             .add_album_result_type() \
             .add_album_filter(album_name) \
             .add_artist_filter(artist_name)
@@ -49,6 +51,7 @@ class SpotifyMusicSearchService(MusicSearchService):
 
     def search_album_for_artist_and_for_playlist(self, album_name, artist_name, playlist_name):
         album_search_query = SpotifyAPISearchQueryBuilder() \
+            .set_search_query() \
             .add_album_result_type() \
             .add_album_filter(album_name) \
             .add_artist_filter(artist_name) \
@@ -60,6 +63,7 @@ class SpotifyMusicSearchService(MusicSearchService):
 
     def search_track(self, track_name):
         song_search_query = SpotifyAPISearchQueryBuilder() \
+            .set_search_query() \
             .add_track_result_type() \
             .add_generic_search_term(track_name)
 
@@ -69,6 +73,7 @@ class SpotifyMusicSearchService(MusicSearchService):
 
     def search_track_for_artist(self, track_name, artist_name):
         track_by_artist_search_query = SpotifyAPISearchQueryBuilder() \
+            .set_search_query() \
             .add_track_result_type() \
             .add_artist_filter(artist_name) \
             .add_track_filter(track_name)
@@ -79,6 +84,7 @@ class SpotifyMusicSearchService(MusicSearchService):
 
     def search_track_for_album(self, track_name, album_name):
         track_by_album_search_query = SpotifyAPISearchQueryBuilder() \
+            .set_search_query() \
             .add_track_filter(track_name) \
             .add_album_filter(album_name)
 
@@ -88,6 +94,7 @@ class SpotifyMusicSearchService(MusicSearchService):
 
     def search_track_for_playlist(self, track_name, playlist_name):
         track_by_playlist_search_query = SpotifyAPISearchQueryBuilder() \
+            .set_search_query() \
             .add_track_filter(track_name) \
             .add_playlist_filter(playlist_name)
 
@@ -97,6 +104,7 @@ class SpotifyMusicSearchService(MusicSearchService):
 
     def search_track_for_album_and_for_artist(self, track_name, album_name, artist_name):
         track_by_album_and_artist_search_query = SpotifyAPISearchQueryBuilder() \
+            .set_search_query() \
             .add_track_result_type() \
             .add_album_filter(album_name) \
             .add_artist_filter(artist_name) \
@@ -108,6 +116,7 @@ class SpotifyMusicSearchService(MusicSearchService):
 
     def search_track_for_album_and_for_playlist(self, track_name, album_name, playlist_name):
         track_by_album_and_playlist_search_query = SpotifyAPISearchQueryBuilder() \
+            .set_search_query() \
             .add_track_result_type() \
             .add_album_filter(album_name) \
             .add_playlist_filter(playlist_name) \
@@ -119,6 +128,7 @@ class SpotifyMusicSearchService(MusicSearchService):
 
     def search_track_for_artist_and_for_playlist(self, track_name, artist_name, playlist_name):
         track_by_artist_and_playlist_search_query = SpotifyAPISearchQueryBuilder() \
+            .set_search_query() \
             .add_track_result_type() \
             .add_artist_filter(artist_name) \
             .add_playlist_filter(playlist_name) \
@@ -131,6 +141,7 @@ class SpotifyMusicSearchService(MusicSearchService):
     def search_track_for_album_and_for_artist_and_for_playlist(self, track_name, album_name, artist_name,
                                                                playlist_name):
         track_by_album_and_artist_and_playlist_search_query = SpotifyAPISearchQueryBuilder() \
+            .set_search_query() \
             .add_track_result_type() \
             .add_album_filter(album_name) \
             .add_artist_filter(artist_name) \
@@ -143,6 +154,7 @@ class SpotifyMusicSearchService(MusicSearchService):
 
     def search_artist(self, artist_name):
         artist_search_query = SpotifyAPISearchQueryBuilder() \
+            .set_search_query() \
             .add_track_result_type() \
             .add_artist_filter(artist_name)
 
@@ -152,6 +164,7 @@ class SpotifyMusicSearchService(MusicSearchService):
 
     def search_artist_for_playlist(self, artist_name, playlist_name):
         track_by_artist_in_playlist_search_query = SpotifyAPISearchQueryBuilder() \
+            .set_search_query() \
             .add_artist_result_type() \
             .add_field_filter("artist", artist_name) \
             .add_field_filter("playlist", playlist_name)
@@ -163,6 +176,7 @@ class SpotifyMusicSearchService(MusicSearchService):
 
     def search_playlist(self, playlist_name):
         playlist_search_query = SpotifyAPISearchQueryBuilder() \
+            .set_search_query() \
             .add_playlist_result_type() \
             .add_generic_search_term(playlist_name)
 

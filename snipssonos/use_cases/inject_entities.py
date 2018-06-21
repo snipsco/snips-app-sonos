@@ -13,7 +13,6 @@ class InjectEntitiesUseCase(UseCase):
         if request_object.entity_name:
             logging.info("Fetching top artists")
             results_artist = self.music_customization_service.fetch_top_artist()
-            self.music_customization_service.reset_user_endpoint()
             if len(results_artist):
                 logging.info("Injecting artists: {}".format(results_artist))
                 self.entities_injection_service.publish_entities(request_object.entity_name, results_artist)
