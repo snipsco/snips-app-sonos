@@ -10,15 +10,15 @@ class EntitiesInjectionService:
         self.mqtt_client = MqttClient(hermes_host)
         self.mqtt_client.run()
 
-    def publish_entities(self, entity_name, data):
-        payload = self.build_payload(entity_name, data)
+    def publish_entities(self, entity_slot_name, data):
+        payload = self.build_payload(entity_slot_name, data)
 
         injection_topic = self.MQTT_TOPIC_INJECT
         self.mqtt_client.publish(injection_topic, payload)
 
-    def build_payload(self, entity_name, data):
+    def build_payload(self, entity_slot_name, data):
         entities_payload = dict()
-        entities_payload[entity_name] = self.parse_data(entity_name, data)
+        entities_payload[entity_slot_name] = self.parse_data(entity_slot_name, data)
 
         payload = dict()
         payload["operations"] = [
@@ -30,9 +30,10 @@ class EntitiesInjectionService:
 
         return json.dumps(payload)
 
-    def parse_data(self, entity_name, data):
+    @staticmethod
+    def parse_data(entity_slot_name, data):
         return {
             'snips/artist': [artist.name for artist in data],
-            'song_name': {},
-            'playlist_name': {}
-        }[entity_name]
+            'snips/song': [track.name for track in data],
+            'playlistNameFR': {}
+        }[entity_slot_name]
