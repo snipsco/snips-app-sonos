@@ -12,7 +12,11 @@ from snipssonos.use_cases.inject_entities import InjectEntitiesUseCase
 
 HERMES_HOST = "localhost"
 SECONDS_IN_A_DAY = 86400.0
-ARTIST_ENTITY_NAME = "snips/artist"
+
+ENTITIES = {
+    "artists": "snips/artist",
+    "track": "snips/songs"
+}
 
 if __name__ == "__main__":
     configuration = read_configuration_file("config.ini")
@@ -29,12 +33,19 @@ if __name__ == "__main__":
     # TODO first call iterate with all top data and in the loop just keep getting short term top data
     while True:
         if first_time:
-            inject_entities_request = InjectEntitiesRequestFactory.from_dict({'entity_name': ARTIST_ENTITY_NAME})
-            logging.info("Inject entities request: {}".format(inject_entities_request))
-            use_case = InjectEntitiesUseCase(music_customization_service, entities_injection_service)
+            for entity_name, entity_slot_name in ENTITIES.iteritems():
+                entity_dict = {
+                    'entity_name': entity_name,
+                    'entity_slot_name': entity_slot_name,
+                }
+                inject_entities_request = InjectEntitiesRequestFactory\
+                    .from_dict(entity_dict)
 
-            response = use_case.process_request(inject_entities_request)
-            logging.info("Response: {}".format(response))
-            first_time = False
+                logging.info("Inject entities request: {}".format(inject_entities_request))
+                use_case = InjectEntitiesUseCase(music_customization_service, entities_injection_service)
+
+                response = use_case.process_request(inject_entities_request)
+                logging.info("Response: {}".format(response))
+                first_time = False
 
         time.sleep(SECONDS_IN_A_DAY - ((time.time() - starttime) % SECONDS_IN_A_DAY))
