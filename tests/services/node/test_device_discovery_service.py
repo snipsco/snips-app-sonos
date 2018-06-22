@@ -3,7 +3,7 @@ import pytest
 import requests
 
 from snipssonos.entities.device import Device
-from snipssonos.services.node_device_discovery_service import NodeDeviceDiscoveryService
+from snipssonos.services.node.device_discovery_service import NodeDeviceDiscoveryService
 from snipssonos.exceptions import DeviceParsingException, NoReachableDeviceException
 
 
@@ -220,7 +220,7 @@ def test_get_method_returns_first_occurrence(mocked_get_devices, connected_devic
     assert discovery_service.get().volume == connected_device.volume
 
 
-@mock.patch('snipssonos.services.node_device_discovery_service.requests')
+@mock.patch('snipssonos.services.node.device_discovery_service.requests')
 def test_get_method_performs_correct_api_query(mocked_requests):
     discovery_device = NodeDeviceDiscoveryService()
 
@@ -229,7 +229,7 @@ def test_get_method_performs_correct_api_query(mocked_requests):
     mocked_requests.get.assert_called_with(actual_query)
 
 
-@mock.patch('snipssonos.services.node_device_discovery_service.requests')
+@mock.patch('snipssonos.services.node.device_discovery_service.requests')
 def test_unreachable_device_raises_exception(mocked_requests):
     discovery_device = NodeDeviceDiscoveryService()
 

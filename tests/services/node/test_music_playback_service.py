@@ -3,7 +3,7 @@ import pytest
 
 from snipssonos.entities.device import Device
 from snipssonos.entities.track import Track
-from snipssonos.services.node_music_playback_service import NodeMusicPlaybackService
+from snipssonos.services.node.music_playback_service import NodeMusicPlaybackService
 
 
 @pytest.fixture
@@ -34,6 +34,7 @@ def test_generate_correct_url_query_for_get_method(connected_device):
 
     assert expected_query == actual_query
 
+
 def test_generate_correct_url_query_for_queue(connected_device):
     music_playback_service = NodeMusicPlaybackService(connected_device)
 
@@ -46,7 +47,8 @@ def test_generate_correct_url_query_for_queue(connected_device):
     assert expected_query == actual_query
     music_playback_service._generate_queue_query(track)
 
-@mock.patch('snipssonos.services.node_music_playback_service.requests')
+
+@mock.patch('snipssonos.services.node.music_playback_service.requests')
 def test_calls_queue(mocked_request, connected_device):
     music_playback_service = NodeMusicPlaybackService(connected_device)
 

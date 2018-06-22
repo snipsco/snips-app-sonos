@@ -3,7 +3,7 @@ from mock import mock
 
 from snipssonos.entities.device import Device
 
-from snipssonos.use_cases.play_artist import PlayArtistUseCase
+from snipssonos.use_cases.play.artist import PlayArtistUseCase
 from snipssonos.use_cases.request_objects import PlayArtistRequestObject, PlayArtistRequestFactory
 
 from snipssonos.exceptions import NoReachableDeviceException

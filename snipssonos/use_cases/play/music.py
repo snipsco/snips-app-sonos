@@ -2,10 +2,10 @@ from snipssonos.shared.use_case import UseCase
 
 from snipssonos.shared.response_object import ResponseFailure
 
-from snipssonos.use_cases.play_track import PlayTrackUseCase
-from snipssonos.use_cases.play_artist import PlayArtistUseCase
-from snipssonos.use_cases.play_album import PlayAlbumUseCase
-from snipssonos.use_cases.play_playlist import PlayPlaylistUseCase
+from snipssonos.use_cases.play.track import PlayTrackUseCase
+from snipssonos.use_cases.play.artist import PlayArtistUseCase
+from snipssonos.use_cases.play.album import PlayAlbumUseCase
+from snipssonos.use_cases.play.playlist import PlayPlaylistUseCase
 
 import logging
 

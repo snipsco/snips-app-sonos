@@ -12,7 +12,8 @@ with open('README.rst') as readme_file:
 
 required = [
     "apiwrapper", 
-    "requests"
+    "requests",
+    "paho-mqtt"
 ]
 
 extras_require = {

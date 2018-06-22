@@ -2,7 +2,7 @@ import pytest
 from mock import mock
 
 from snipssonos.entities.device import Device
-from snipssonos.use_cases.volume_set import VolumeSetUseCase
+from snipssonos.use_cases.volume.set import VolumeSetUseCase
 from snipssonos.use_cases.request_objects import VolumeSetRequestObject, VolumeSetRequestFactory
 
 from snipssonos.exceptions import NoReachableDeviceException

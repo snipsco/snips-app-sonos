@@ -1,158 +1,17 @@
-# coding:utf-8
-import mock
-import pytest
-import requests
+#coding: utf-8
+EMPTY_TRACKS ="""{
+  "tracks" : {
+    "href" : "https://api.spotify.com/v1/search?query=Bashibookzeiezjfoizejfnzeiufhbieuhbfieruhg&type=track&offset=0&limit=20",
+    "items" : [ ],
+    "limit" : 20,
+    "next" : null,
+    "offset" : 0,
+    "previous" : null,
+    "total" : 0
+  }
+}"""
 
-from snipssonos.services.spotify_music_search_service import SpotifyClient, SpotifyMusicSearchService, \
-    SpotifyAPISearchQueryBuilder
-from snipssonos.exceptions import MusicSearchCredentialsError, MusicSearchProviderConnectionError
-
-
-# Testing Music Search Service
-def test_music_service_empty_song_name():
-    pass
-
-
-# Testing Spotify Client
-@pytest.mark.skip(reason="I didn't have time to do proper mocking. Let's wait for next iteration")
-@mock.patch('snipssonos.services.spotify_music_search_service.requests')
-def test_spotify_client_raises_exception_connection_error(mocked_requests):
-    mocked_requests.post.side_effect = requests.exceptions.ConnectionError
-
-    client_id = "client_id"
-    client_secret = "client_secret"
-
-    client = SpotifyClient(client_id, client_secret)
-    with pytest.raises(MusicSearchProviderConnectionError):
-        client.retrieve_access_token()
-
-
-def test_spotify_client_encodes_base_64_credentials():
-    client_id = "client_id"
-    client_secret = "client_secret"
-    expected_base64_encoded_credentials = "Y2xpZW50X2lkOmNsaWVudF9zZWNyZXQ="
-    client = SpotifyClient(client_id, client_secret)
-    actual_base64_encoded_credentials = client._get_base_64_encoded_credentials()
-
-    assert actual_base64_encoded_credentials == expected_base64_encoded_credentials
-
-
-def test_spotify_client_encodes_base_64_raises_exception_with_empty_credentials():
-    client_id = ""
-    client_secret = "client_secret"
-
-    with pytest.raises(MusicSearchCredentialsError):
-        client = SpotifyClient(client_id, client_secret)
-
-
-# Testing Spotify API Search Query Builder
-def test_spotify_api_query_builder_add_search_term():
-    qb = SpotifyAPISearchQueryBuilder()
-    qb.add_generic_search_term('roadhouse blues')
-
-    actual_dict = qb.to_dict()
-
-    expected_dict = {'q': 'roadhouse blues'}
-    assert actual_dict['q'] == expected_dict['q']
-
-
-def test_spotify_api_query_builder_add_field_filter():
-    qb = SpotifyAPISearchQueryBuilder()
-    qb.add_generic_search_term('roadhouse blues')
-    qb.add_field_filter('artist', 'antho')
-    qb.add_field_filter('album', 'this is an album')
-
-    actual_dict = qb.to_dict()
-
-    expected_dict = {'q': 'artist:antho album:this is an album'}
-    assert actual_dict['q'] == expected_dict['q']
-
-
-def test_spotify_api_query_builder_add_result_type():
-    qb = SpotifyAPISearchQueryBuilder()
-    qb.add_generic_search_term('roadhouse blues')
-    qb.add_result_type('track')
-
-    actual_dict = qb.to_dict()
-
-    expected_dict = {'q': 'roadhouse blues', 'type': 'track'}
-    assert actual_dict['q'] == expected_dict['q']
-    assert actual_dict['type'] == expected_dict['type']
-
-
-def test_spotify_api_query_builder_add_track_result_type():
-    qb = SpotifyAPISearchQueryBuilder()
-    qb.add_generic_search_term('roadhouse blues')
-    qb.add_track_result_type()
-
-    actual_dict = qb.to_dict()
-
-    expected_dict = {'q': 'roadhouse blues', 'type': 'track'}
-    assert actual_dict['q'] == expected_dict['q']
-    assert actual_dict['type'] == expected_dict['type']
-
-
-def test_spotify_api_query_builder_add_album_result_type():
-    qb = SpotifyAPISearchQueryBuilder()
-    qb.add_generic_search_term('roadhouse blues')
-    qb.add_album_result_type()
-
-    actual_dict = qb.to_dict()
-
-    expected_dict = {'q': 'roadhouse blues', 'type': 'album'}
-    assert actual_dict['q'] == expected_dict['q']
-    assert actual_dict['type'] == expected_dict['type']
-
-
-def test_spotify_api_query_builder_add_artist_result_type():
-    qb = SpotifyAPISearchQueryBuilder()
-    qb.add_generic_search_term('roadhouse blues')
-    qb.add_artist_result_type()
-
-    actual_dict = qb.to_dict()
-
-    expected_dict = {'q': 'roadhouse blues', 'type': 'artist'}
-    assert actual_dict['q'] == expected_dict['q']
-    assert actual_dict['type'] == expected_dict['type']
-
-
-def test_spotify_api_query_builder_add_playlist_result_type():
-    qb = SpotifyAPISearchQueryBuilder()
-    qb.add_generic_search_term('roadhouse blues')
-    qb.add_playlist_result_type()
-
-    actual_dict = qb.to_dict()
-
-    expected_dict = {'q': 'roadhouse blues', 'type': 'playlist'}
-    assert actual_dict['q'] == expected_dict['q']
-    assert actual_dict['type'] == expected_dict['type']
-
-
-def test_spotify_api_query_builder_add_artist_filter():
-    qb = SpotifyAPISearchQueryBuilder()
-    qb.add_generic_search_term('roadhouse blues')
-    qb.add_artist_filter("antho")
-
-    actual_query_dict = qb.to_dict()
-
-    expected_query_dict = {'q': 'artist:antho'}
-    assert actual_query_dict['q'] == expected_query_dict['q']
-
-
-def test_spotify_api_query_builder_add_track_filter():
-    qb = SpotifyAPISearchQueryBuilder()
-    qb.add_generic_search_term('roadhouse blues')
-    qb.add_track_filter("pernety")
-
-    actual_query_dict = qb.to_dict()
-
-    expected_query_dict = {'q': 'track:pernety'}
-    assert actual_query_dict['q'] == expected_query_dict['q']
-
-
-# Testing Spotify Music Service
-def test_correct_parsing_of_tracks_for_correct_response():
-    raw_response = """{
+TRACKS = """{
   "tracks" : {
     "href" : "https://api.spotify.com/v1/search?query=April+14th&type=track&offset=0&limit=20",
     "items" : [ {
@@ -1504,34 +1363,52 @@ def test_correct_parsing_of_tracks_for_correct_response():
   }
 }"""
 
-    client = SpotifyMusicSearchService("client_id", "client_secret")
-    tracks = client._parse_track_results(raw_response)
-
-    assert len(tracks) == 20
-    assert tracks[0].uri == "spotify:track:3f9HJzevC4sMYGDwj7yQwd"
-
-
-def test_correct_parsing_of_tracks_with_empty_response():
-    raw_empty_response = """{
-  "tracks" : {
-    "href" : "https://api.spotify.com/v1/search?query=Bashibookzeiezjfoizejfnzeiufhbieuhbfieruhg&type=track&offset=0&limit=20",
-    "items" : [ ],
+ARTISTS = """{
+  "artists" : {
+    "href" : "https://api.spotify.com/v1/search?query=tornado+wallace&type=artist&offset=0&limit=20",
+    "items" : [ {
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/artist/6GNWPphcJ5CtIwCJVV1lLT"
+      },
+      "followers" : {
+        "href" : null,
+        "total" : 6720
+      },
+      "genres" : [ "balearic", "deep house", "deep soul house", "float house" ],
+      "href" : "https://api.spotify.com/v1/artists/6GNWPphcJ5CtIwCJVV1lLT",
+      "id" : "6GNWPphcJ5CtIwCJVV1lLT",
+      "images" : [ {
+        "height" : 1000,
+        "url" : "https://i.scdn.co/image/5a78e67813195043c81c3c7c756281abbb4e839a",
+        "width" : 1000
+      }, {
+        "height" : 640,
+        "url" : "https://i.scdn.co/image/f5b0d16ec4d7ead4e89c0ef6ff7c5ae3aefd4946",
+        "width" : 640
+      }, {
+        "height" : 200,
+        "url" : "https://i.scdn.co/image/65ab6430fe0e2efa92e61385b73a573d50187658",
+        "width" : 200
+      }, {
+        "height" : 64,
+        "url" : "https://i.scdn.co/image/c85d6fb2d74a3eadba944c95b9436bc2481f3e38",
+        "width" : 64
+      } ],
+      "name" : "Tornado Wallace",
+      "popularity" : 35,
+      "type" : "artist",
+      "uri" : "spotify:artist:6GNWPphcJ5CtIwCJVV1lLT"
+    } ],
     "limit" : 20,
     "next" : null,
     "offset" : 0,
     "previous" : null,
-    "total" : 0
+    "total" : 1
   }
 }"""
 
-    client = SpotifyMusicSearchService("client_id", "client_secret")
-    tracks = client._parse_track_results(raw_empty_response)
 
-    assert len(tracks) == 0
-
-
-def test_correct_parsing_of_playlists_for_correct_response():
-    raw_response = """{
+PLAYLISTS = """{
   "playlists" : {
     "href" : "https://api.spotify.com/v1/search?query=piano&type=playlist&offset=0&limit=20",
     "items" : [ {
@@ -2199,69 +2076,7 @@ def test_correct_parsing_of_playlists_for_correct_response():
   }
 }"""
 
-    client = SpotifyMusicSearchService("client_id", "client_secret")
-    playlists = client._parse_playlist_results(raw_response)
-
-    assert len(playlists) == 20
-    assert playlists[0].name == "Peaceful Piano"
-    assert playlists[0].uri == "spotify:user:spotify:playlist:37i9dQZF1DX4sWSpwq3LiO"
-
-
-def test_correct_parsing_of_artists_for_correct_response():
-    raw_response = """{
-  "artists" : {
-    "href" : "https://api.spotify.com/v1/search?query=tornado+wallace&type=artist&offset=0&limit=20",
-    "items" : [ {
-      "external_urls" : {
-        "spotify" : "https://open.spotify.com/artist/6GNWPphcJ5CtIwCJVV1lLT"
-      },
-      "followers" : {
-        "href" : null,
-        "total" : 6720
-      },
-      "genres" : [ "balearic", "deep house", "deep soul house", "float house" ],
-      "href" : "https://api.spotify.com/v1/artists/6GNWPphcJ5CtIwCJVV1lLT",
-      "id" : "6GNWPphcJ5CtIwCJVV1lLT",
-      "images" : [ {
-        "height" : 1000,
-        "url" : "https://i.scdn.co/image/5a78e67813195043c81c3c7c756281abbb4e839a",
-        "width" : 1000
-      }, {
-        "height" : 640,
-        "url" : "https://i.scdn.co/image/f5b0d16ec4d7ead4e89c0ef6ff7c5ae3aefd4946",
-        "width" : 640
-      }, {
-        "height" : 200,
-        "url" : "https://i.scdn.co/image/65ab6430fe0e2efa92e61385b73a573d50187658",
-        "width" : 200
-      }, {
-        "height" : 64,
-        "url" : "https://i.scdn.co/image/c85d6fb2d74a3eadba944c95b9436bc2481f3e38",
-        "width" : 64
-      } ],
-      "name" : "Tornado Wallace",
-      "popularity" : 35,
-      "type" : "artist",
-      "uri" : "spotify:artist:6GNWPphcJ5CtIwCJVV1lLT"
-    } ],
-    "limit" : 20,
-    "next" : null,
-    "offset" : 0,
-    "previous" : null,
-    "total" : 1
-  }
-}"""
-
-    client = SpotifyMusicSearchService("client_id", "client_secret")
-    artists = client._parse_artists_results(raw_response)
-
-    assert len(artists) == 1
-    assert artists[0].name == "Tornado Wallace"
-    assert artists[0].uri == "spotify:artist:6GNWPphcJ5CtIwCJVV1lLT"
-
-
-def test_correct_parsing_of_albums_for_correct_response():
-    raw_response = """{
+ALBUMS = """{
     "albums": {
         "href": "https://api.spotify.com/v1/search?query=kids+see+ghosts&type=album&offset=0&limit=20",
         "items": [
@@ -2512,9 +2327,754 @@ def test_correct_parsing_of_albums_for_correct_response():
     }
 }"""
 
-    client = SpotifyMusicSearchService("client_id", "client_secret")
-    artists = client._parse_album_results(raw_response)
+TOP_ARTISTS = """{
+  "items": [
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/1Xyo4u8uXC1ZmMpatF05PJ"
+      },
+      "followers": {
+        "href": null,
+        "total": 10953071
+      },
+      "genres": [
+        "canadian pop",
+        "pop",
+        "rap"
+      ],
+      "href": "https://api.spotify.com/v1/artists/1Xyo4u8uXC1ZmMpatF05PJ",
+      "id": "1Xyo4u8uXC1ZmMpatF05PJ",
+      "images": [
+        {
+          "height": 640,
+          "url": "https://i.scdn.co/image/a5fa0d35a5070867261d100b879cac028fe96775",
+          "width": 640
+        },
+        {
+          "height": 320,
+          "url": "https://i.scdn.co/image/df9086189e64ad3f3dec425f53b0c5f595a787b5",
+          "width": 320
+        },
+        {
+          "height": 160,
+          "url": "https://i.scdn.co/image/6f594793615650a9a6964bd523ef6977ccaaae85",
+          "width": 160
+        }
+      ],
+      "name": "The Weeknd",
+      "popularity": 93,
+      "type": "artist",
+      "uri": "spotify:artist:1Xyo4u8uXC1ZmMpatF05PJ"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/2YZyLoL8N0Wb9xBt1NhZWg"
+      },
+      "followers": {
+        "href": null,
+        "total": 9482582
+      },
+      "genres": [
+        "hip hop",
+        "pop rap",
+        "rap",
+        "west coast rap"
+      ],
+      "href": "https://api.spotify.com/v1/artists/2YZyLoL8N0Wb9xBt1NhZWg",
+      "id": "2YZyLoL8N0Wb9xBt1NhZWg",
+      "images": [
+        {
+          "height": 640,
+          "url": "https://i.scdn.co/image/3a836196bfb341f736c7fe2704fb75de53f8dfbb",
+          "width": 640
+        },
+        {
+          "height": 320,
+          "url": "https://i.scdn.co/image/5259c0496329b3f608a1ae0edb799cd2f8451acc",
+          "width": 320
+        },
+        {
+          "height": 160,
+          "url": "https://i.scdn.co/image/b772a78d4cb192268d6f601a78f21044c17d6dda",
+          "width": 160
+        }
+      ],
+      "name": "Kendrick Lamar",
+      "popularity": 92,
+      "type": "artist",
+      "uri": "spotify:artist:2YZyLoL8N0Wb9xBt1NhZWg"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/7vZ7qmfXiu114lY0qm7rOe"
+      },
+      "followers": {
+        "href": null,
+        "total": 62177
+      },
+      "genres": [
+        "indie jazz",
+        "indie r&b",
+        "neo soul"
+      ],
+      "href": "https://api.spotify.com/v1/artists/7vZ7qmfXiu114lY0qm7rOe",
+      "id": "7vZ7qmfXiu114lY0qm7rOe",
+      "images": [
+        {
+          "height": 500,
+          "url": "https://i.scdn.co/image/d5006aece8d997a185181ff1016a857413101038",
+          "width": 500
+        },
+        {
+          "height": 200,
+          "url": "https://i.scdn.co/image/efe62e9bccab29b39fd200b1f9fc83eb6ec4569c",
+          "width": 200
+        },
+        {
+          "height": 64,
+          "url": "https://i.scdn.co/image/88514a1e70dd7232b38ceea8206e50d82c9646ca",
+          "width": 64
+        }
+      ],
+      "name": "Robert Glasper Experiment",
+      "popularity": 54,
+      "type": "artist",
+      "uri": "spotify:artist:7vZ7qmfXiu114lY0qm7rOe"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/76ses8Vy3hRpmyHgWl8lQm"
+      },
+      "followers": {
+        "href": null,
+        "total": 8500
+      },
+      "genres": [
+        "arab alternative"
+      ],
+      "href": "https://api.spotify.com/v1/artists/76ses8Vy3hRpmyHgWl8lQm",
+      "id": "76ses8Vy3hRpmyHgWl8lQm",
+      "images": [
+        {
+          "height": 640,
+          "url": "https://i.scdn.co/image/28cd5a8feb55137ad4587f355c216979d3743759",
+          "width": 640
+        },
+        {
+          "height": 300,
+          "url": "https://i.scdn.co/image/96e578562918a983cb385201ce9f593264668714",
+          "width": 300
+        },
+        {
+          "height": 64,
+          "url": "https://i.scdn.co/image/c79c645828e68d63ad34fca653759c4d0ae28116",
+          "width": 64
+        }
+      ],
+      "name": "Bachar Mar-Khalifé",
+      "popularity": 36,
+      "type": "artist",
+      "uri": "spotify:artist:76ses8Vy3hRpmyHgWl8lQm"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/1CoZyIx7UvdxT5c8UkMzHd"
+      },
+      "followers": {
+        "href": null,
+        "total": 395836
+      },
+      "genres": [
+        "indie r&b",
+        "pop",
+        "r&b"
+      ],
+      "href": "https://api.spotify.com/v1/artists/1CoZyIx7UvdxT5c8UkMzHd",
+      "id": "1CoZyIx7UvdxT5c8UkMzHd",
+      "images": [
+        {
+          "height": 640,
+          "url": "https://i.scdn.co/image/41bb9fd15af9b74e9aaf3b91743e17841328d40a",
+          "width": 640
+        },
+        {
+          "height": 320,
+          "url": "https://i.scdn.co/image/96b67dc391749e76da3acd21b89eaff8f174d2cf",
+          "width": 320
+        },
+        {
+          "height": 160,
+          "url": "https://i.scdn.co/image/ef79241dedb9bf9d73ed09ecef92f5603a8c8150",
+          "width": 160
+        }
+      ],
+      "name": "Jorja Smith",
+      "popularity": 80,
+      "type": "artist",
+      "uri": "spotify:artist:1CoZyIx7UvdxT5c8UkMzHd"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/3TVXtAsR1Inumwj472S9r4"
+      },
+      "followers": {
+        "href": null,
+        "total": 21627666
+      },
+      "genres": [
+        "canadian hip hop",
+        "canadian pop",
+        "hip hop",
+        "pop rap",
+        "rap"
+      ],
+      "href": "https://api.spotify.com/v1/artists/3TVXtAsR1Inumwj472S9r4",
+      "id": "3TVXtAsR1Inumwj472S9r4",
+      "images": [
+        {
+          "height": 640,
+          "url": "https://i.scdn.co/image/cb080366dc8af1fe4dc90c4b9959794794884c66",
+          "width": 640
+        },
+        {
+          "height": 320,
+          "url": "https://i.scdn.co/image/6bd672a0f33705eda4b543c304c21a152f393291",
+          "width": 320
+        },
+        {
+          "height": 160,
+          "url": "https://i.scdn.co/image/085ae2e76f402468fe9982851b51cf876e4f20fe",
+          "width": 160
+        }
+      ],
+      "name": "Drake",
+      "popularity": 99,
+      "type": "artist",
+      "uri": "spotify:artist:3TVXtAsR1Inumwj472S9r4"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/5Q8NEHGX70m1kkojbtm8wa"
+      },
+      "followers": {
+        "href": null,
+        "total": 187638
+      },
+      "genres": [
+        "etherpop",
+        "indie r&b"
+      ],
+      "href": "https://api.spotify.com/v1/artists/5Q8NEHGX70m1kkojbtm8wa",
+      "id": "5Q8NEHGX70m1kkojbtm8wa",
+      "images": [
+        {
+          "height": 640,
+          "url": "https://i.scdn.co/image/2ede8894dc37695f2007a4b116e8e42b5ec95414",
+          "width": 640
+        },
+        {
+          "height": 320,
+          "url": "https://i.scdn.co/image/6601ca77042d44694adfa2bf606a0541fa3840ec",
+          "width": 320
+        },
+        {
+          "height": 160,
+          "url": "https://i.scdn.co/image/c8442413e2b6c6f50ebdd5044612c86c40773907",
+          "width": 160
+        }
+      ],
+      "name": "Ibeyi",
+      "popularity": 58,
+      "type": "artist",
+      "uri": "spotify:artist:5Q8NEHGX70m1kkojbtm8wa"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/2i1CPudyCUjL50Wqjv8AMI"
+      },
+      "followers": {
+        "href": null,
+        "total": 33415
+      },
+      "genres": [
+        "indie jazz"
+      ],
+      "href": "https://api.spotify.com/v1/artists/2i1CPudyCUjL50Wqjv8AMI",
+      "id": "2i1CPudyCUjL50Wqjv8AMI",
+      "images": [
+        {
+          "height": 640,
+          "url": "https://i.scdn.co/image/14c3c54c52c721a5bda715395f39f4db7a68c681",
+          "width": 640
+        },
+        {
+          "height": 300,
+          "url": "https://i.scdn.co/image/c9b5aa1778d745599964d2ed4ef68d4bf2e7ae5f",
+          "width": 300
+        },
+        {
+          "height": 64,
+          "url": "https://i.scdn.co/image/e66d6c0c4f367d0ba54e2547b0db6f47875e08c3",
+          "width": 64
+        }
+      ],
+      "name": "Alfa Mist",
+      "popularity": 48,
+      "type": "artist",
+      "uri": "spotify:artist:2i1CPudyCUjL50Wqjv8AMI"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/7fVp0A6oCMfiQJihMnY0SZ"
+      },
+      "followers": {
+        "href": null,
+        "total": 25416
+      },
+      "genres": [],
+      "href": "https://api.spotify.com/v1/artists/7fVp0A6oCMfiQJihMnY0SZ",
+      "id": "7fVp0A6oCMfiQJihMnY0SZ",
+      "images": [
+        {
+          "height": 640,
+          "url": "https://i.scdn.co/image/3f6c16b79bec88bebff91b831375aa3cc6ace432",
+          "width": 640
+        },
+        {
+          "height": 320,
+          "url": "https://i.scdn.co/image/26d6221a6b253a38d783899d6a393bc4063e14de",
+          "width": 320
+        },
+        {
+          "height": 160,
+          "url": "https://i.scdn.co/image/739c2f00c38cc9b4ff773fa4e48366763a57d2e5",
+          "width": 160
+        }
+      ],
+      "name": "KNOWER",
+      "popularity": 43,
+      "type": "artist",
+      "uri": "spotify:artist:7fVp0A6oCMfiQJihMnY0SZ"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/2swvbEAfN70ZFcQB4Y7MaS"
+      },
+      "followers": {
+        "href": null,
+        "total": 73066
+      },
+      "genres": [
+        "portuguese pop"
+      ],
+      "href": "https://api.spotify.com/v1/artists/2swvbEAfN70ZFcQB4Y7MaS",
+      "id": "2swvbEAfN70ZFcQB4Y7MaS",
+      "images": [
+        {
+          "height": 640,
+          "url": "https://i.scdn.co/image/74db77a3618417ad330e756d4ea75000cb5863d9",
+          "width": 640
+        },
+        {
+          "height": 320,
+          "url": "https://i.scdn.co/image/16cb6bd853195a3cfa67fb1101026de03bcdf74e",
+          "width": 320
+        },
+        {
+          "height": 160,
+          "url": "https://i.scdn.co/image/59d3f62ebd84853bc368de406f504f75275dbf84",
+          "width": 160
+        }
+      ],
+      "name": "Richie Campbell",
+      "popularity": 54,
+      "type": "artist",
+      "uri": "spotify:artist:2swvbEAfN70ZFcQB4Y7MaS"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/18oYqNtcLUHrqO7LfX7qni"
+      },
+      "followers": {
+        "href": null,
+        "total": 3859
+      },
+      "genres": [
+        "soundtrack"
+      ],
+      "href": "https://api.spotify.com/v1/artists/18oYqNtcLUHrqO7LfX7qni",
+      "id": "18oYqNtcLUHrqO7LfX7qni",
+      "images": [
+        {
+          "height": 640,
+          "url": "https://i.scdn.co/image/a6e47b2cb141ad2fb7ae6cee72c7a1fe0ac7962c",
+          "width": 640
+        },
+        {
+          "height": 320,
+          "url": "https://i.scdn.co/image/3758995274cb6ccd55fa850cfcb84aa571883cba",
+          "width": 320
+        },
+        {
+          "height": 160,
+          "url": "https://i.scdn.co/image/584cb1da854c07359d43f43344db383734fbeed5",
+          "width": 160
+        }
+      ],
+      "name": "Nicholas Britell",
+      "popularity": 47,
+      "type": "artist",
+      "uri": "spotify:artist:18oYqNtcLUHrqO7LfX7qni"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/0kbYTNQb4Pb1rPbbaF0pT4"
+      },
+      "followers": {
+        "href": null,
+        "total": 1293788
+      },
+      "genres": [
+        "bebop",
+        "contemporary post-bop",
+        "cool jazz",
+        "hard bop",
+        "jazz",
+        "jazz fusion",
+        "jazz trumpet",
+        "vocal jazz"
+      ],
+      "href": "https://api.spotify.com/v1/artists/0kbYTNQb4Pb1rPbbaF0pT4",
+      "id": "0kbYTNQb4Pb1rPbbaF0pT4",
+      "images": [
+        {
+          "height": 1496,
+          "url": "https://i.scdn.co/image/e6b1cc182b3e397d2aee084959a7e62a0c27f6bd",
+          "width": 1000
+        },
+        {
+          "height": 958,
+          "url": "https://i.scdn.co/image/54a57d5cd1f917a9e475ef67a54b0c03488821b4",
+          "width": 640
+        },
+        {
+          "height": 299,
+          "url": "https://i.scdn.co/image/a6187e7a9251616677bd7271483c4ccd33ece70e",
+          "width": 200
+        },
+        {
+          "height": 96,
+          "url": "https://i.scdn.co/image/ea5d00ec47307152c32178e3785503a1200b32e2",
+          "width": 64
+        }
+      ],
+      "name": "Miles Davis",
+      "popularity": 66,
+      "type": "artist",
+      "uri": "spotify:artist:0kbYTNQb4Pb1rPbbaF0pT4"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/6jeroC7T0j4Dvz9y3gtofR"
+      },
+      "followers": {
+        "href": null,
+        "total": 37715
+      },
+      "genres": [],
+      "href": "https://api.spotify.com/v1/artists/6jeroC7T0j4Dvz9y3gtofR",
+      "id": "6jeroC7T0j4Dvz9y3gtofR",
+      "images": [
+        {
+          "height": 640,
+          "url": "https://i.scdn.co/image/8219eab1388aa94e244fd5f7fc54959c68872a2f",
+          "width": 640
+        },
+        {
+          "height": 320,
+          "url": "https://i.scdn.co/image/a402a6c404d97d6d73144b0674135e22947e0d58",
+          "width": 320
+        },
+        {
+          "height": 160,
+          "url": "https://i.scdn.co/image/8049773e949d09a7ba85263ac3b330e8ba9282b0",
+          "width": 160
+        }
+      ],
+      "name": "Elise Trouw",
+      "popularity": 41,
+      "type": "artist",
+      "uri": "spotify:artist:6jeroC7T0j4Dvz9y3gtofR"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/3QTDHixorJelOLxoxcjqGx"
+      },
+      "followers": {
+        "href": null,
+        "total": 65097
+      },
+      "genres": [
+        "hip hop",
+        "indie r&b",
+        "rap",
+        "trap soul",
+        "underground hip hop"
+      ],
+      "href": "https://api.spotify.com/v1/artists/3QTDHixorJelOLxoxcjqGx",
+      "id": "3QTDHixorJelOLxoxcjqGx",
+      "images": [
+        {
+          "height": 640,
+          "url": "https://i.scdn.co/image/00f4a7c6b350a611e1bf15808adb87373fb2c1f7",
+          "width": 640
+        },
+        {
+          "height": 320,
+          "url": "https://i.scdn.co/image/e7d6146d215bade6ba53755ef5d125d5658b6618",
+          "width": 320
+        },
+        {
+          "height": 160,
+          "url": "https://i.scdn.co/image/8ddf8583ded12815419009bd3640bec5e3a8d7ef",
+          "width": 160
+        }
+      ],
+      "name": "SiR",
+      "popularity": 62,
+      "type": "artist",
+      "uri": "spotify:artist:3QTDHixorJelOLxoxcjqGx"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/2h93pZq0e7k5yf4dywlkpM"
+      },
+      "followers": {
+        "href": null,
+        "total": 3389825
+      },
+      "genres": [
+        "hip hop",
+        "indie r&b",
+        "neo soul",
+        "pop",
+        "rap"
+      ],
+      "href": "https://api.spotify.com/v1/artists/2h93pZq0e7k5yf4dywlkpM",
+      "id": "2h93pZq0e7k5yf4dywlkpM",
+      "images": [
+        {
+          "height": 640,
+          "url": "https://i.scdn.co/image/7db34c8aace6feb91f38601bb75e6b3301b4657a",
+          "width": 640
+        },
+        {
+          "height": 320,
+          "url": "https://i.scdn.co/image/0cc22250c0b18183e5c62f240a5756ec5226dee1",
+          "width": 320
+        },
+        {
+          "height": 160,
+          "url": "https://i.scdn.co/image/e42028e7fe5a7ba790b5b4e7b096b06bf3319443",
+          "width": 160
+        }
+      ],
+      "name": "Frank Ocean",
+      "popularity": 84,
+      "type": "artist",
+      "uri": "spotify:artist:2h93pZq0e7k5yf4dywlkpM"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/4aGSoPUP1v4qh7RfBlvgbR"
+      },
+      "followers": {
+        "href": null,
+        "total": 1137
+      },
+      "genres": [],
+      "href": "https://api.spotify.com/v1/artists/4aGSoPUP1v4qh7RfBlvgbR",
+      "id": "4aGSoPUP1v4qh7RfBlvgbR",
+      "images": [
+        {
+          "height": 640,
+          "url": "https://i.scdn.co/image/8ad47e6f2f326fbc01931590e10558b98e37fd45",
+          "width": 640
+        },
+        {
+          "height": 320,
+          "url": "https://i.scdn.co/image/d9e6473e497268041ff1671dc1a945e3ad46db66",
+          "width": 320
+        },
+        {
+          "height": 160,
+          "url": "https://i.scdn.co/image/e1fa772bd5b47e8edff7f71de1d2240275f15b13",
+          "width": 160
+        }
+      ],
+      "name": "SKYGGE",
+      "popularity": 47,
+      "type": "artist",
+      "uri": "spotify:artist:4aGSoPUP1v4qh7RfBlvgbR"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/51UcKPhDKdKDGIjec0781x"
+      },
+      "followers": {
+        "href": null,
+        "total": 2742
+      },
+      "genres": [],
+      "href": "https://api.spotify.com/v1/artists/51UcKPhDKdKDGIjec0781x",
+      "id": "51UcKPhDKdKDGIjec0781x",
+      "images": [
+        {
+          "height": 640,
+          "url": "https://i.scdn.co/image/751f12023526c54b5d08c6e11e6d41e318e16336",
+          "width": 640
+        },
+        {
+          "height": 320,
+          "url": "https://i.scdn.co/image/a1ef1d0ffbe77cdfece876ec776c7302c5e88e6f",
+          "width": 320
+        },
+        {
+          "height": 160,
+          "url": "https://i.scdn.co/image/5c3082b5c5f2cb0176503077a9cd8767c5ab2d35",
+          "width": 160
+        }
+      ],
+      "name": "Alex Somers",
+      "popularity": 41,
+      "type": "artist",
+      "uri": "spotify:artist:51UcKPhDKdKDGIjec0781x"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/7dmbpbRfi5fEBqu9A9kwrc"
+      },
+      "followers": {
+        "href": null,
+        "total": 38699
+      },
+      "genres": [],
+      "href": "https://api.spotify.com/v1/artists/7dmbpbRfi5fEBqu9A9kwrc",
+      "id": "7dmbpbRfi5fEBqu9A9kwrc",
+      "images": [
+        {
+          "height": 640,
+          "url": "https://i.scdn.co/image/8015564114916149fa7e0eea7ac8167289add99d",
+          "width": 640
+        },
+        {
+          "height": 320,
+          "url": "https://i.scdn.co/image/dc0ad3681428a6c7370617a79c5b0ed570461b95",
+          "width": 320
+        },
+        {
+          "height": 160,
+          "url": "https://i.scdn.co/image/ccd38222424a1360bbb1cca74ed70b21afe86937",
+          "width": 160
+        }
+      ],
+      "name": "Iseo & Dodosound",
+      "popularity": 50,
+      "type": "artist",
+      "uri": "spotify:artist:7dmbpbRfi5fEBqu9A9kwrc"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/0r0KdmVS1Er3kaFnl1KPog"
+      },
+      "followers": {
+        "href": null,
+        "total": 109950
+      },
+      "genres": [
+        "gauze pop",
+        "tropical house"
+      ],
+      "href": "https://api.spotify.com/v1/artists/0r0KdmVS1Er3kaFnl1KPog",
+      "id": "0r0KdmVS1Er3kaFnl1KPog",
+      "images": [
+        {
+          "height": 1000,
+          "url": "https://i.scdn.co/image/42a9677ab3e9d850e748d01deeb6117c4cd22d73",
+          "width": 1000
+        },
+        {
+          "height": 640,
+          "url": "https://i.scdn.co/image/168afa8e706651dfe96ed269b0ddb87e2712b53f",
+          "width": 640
+        },
+        {
+          "height": 200,
+          "url": "https://i.scdn.co/image/4e2ba402aea9c19f9ced4abb6afe6d1df6296599",
+          "width": 200
+        },
+        {
+          "height": 64,
+          "url": "https://i.scdn.co/image/95f6d6b223544d6b2f6f0100105839723f7b566c",
+          "width": 64
+        }
+      ],
+      "name": "Kwabs",
+      "popularity": 55,
+      "type": "artist",
+      "uri": "spotify:artist:0r0KdmVS1Er3kaFnl1KPog"
+    },
+    {
+      "external_urls": {
+        "spotify": "https://open.spotify.com/artist/1uiEZYehlNivdK3iQyAbye"
+      },
+      "followers": {
+        "href": null,
+        "total": 245104
+      },
+      "genres": [
+        "indie r&b",
+        "neo soul"
+      ],
+      "href": "https://api.spotify.com/v1/artists/1uiEZYehlNivdK3iQyAbye",
+      "id": "1uiEZYehlNivdK3iQyAbye",
+      "images": [
+        {
+          "height": 640,
+          "url": "https://i.scdn.co/image/0fc5e65174230710e53521f58a10c29113faf163",
+          "width": 640
+        },
+        {
+          "height": 320,
+          "url": "https://i.scdn.co/image/98cfd6425477c8bfde12aee32cdf75f39803d1f8",
+          "width": 320
+        },
+        {
+          "height": 160,
+          "url": "https://i.scdn.co/image/9e02a9c2b3ae6fea53ccef4e22f06acf55988c6b",
+          "width": 160
+        }
+      ],
+      "name": "Tom Misch",
+      "popularity": 72,
+      "type": "artist",
+      "uri": "spotify:artist:1uiEZYehlNivdK3iQyAbye"
+    }
+  ],
+  "total": 50,
+  "limit": 20,
+  "offset": 0,
+  "href": "https://api.spotify.com/v1/me/top/artists",
+  "previous": null,
+  "next": "https://api.spotify.com/v1/me/top/artists?limit=20&offset=20"
+}"""
 
-    assert len(artists) == 2
-    assert artists[0].name == "KIDS SEE GHOSTS"
-    assert artists[0].uri == "spotify:album:6pwuKxMUkNg673KETsXPUV"
+EMPTY_ITEMS = """{
+  "items": [],
+  "total": 50,
+  "limit": 1,
+  "offset": 0,
+  "href": "https://api.spotify.com/v1/me/top/artists?limit=1&offset=0",
+  "previous": null,
+  "next": "https://api.spotify.com/v1/me/top/artists?limit=1&offset=1"
+}"""
