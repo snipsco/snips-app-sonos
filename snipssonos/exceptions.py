@@ -5,6 +5,7 @@ class SonosActionException(Exception):
 class ServiceException(SonosActionException):
     """An exception occured within a service"""
 
+
 # Request Objects
 class RequestObjectException(SonosActionException):
     """An exception occured with a request object"""
@@ -12,8 +13,10 @@ class RequestObjectException(SonosActionException):
 
 class RequestObjectInitializationException(RequestObjectException):
     """An exception occured with a request object"""
+
     def __init__(self, invalid_request_object):
         self.invalid_request_object = invalid_request_object
+
 
 # Device Discovery Service
 class DeviceDiscoveryException(ServiceException):
@@ -26,6 +29,10 @@ class DeviceParsingException(DeviceDiscoveryException):
 
 class NoReachableDeviceException(DeviceDiscoveryException):
     """No connected devices were found by the DeviceDiscovery service"""
+
+
+class ExternalDeviceDiscoveryUnreachable(DeviceDiscoveryException):
+    """An error occured with the device discovery driver """
 
 
 # Music Search Service
@@ -71,3 +78,9 @@ class SpotifyQueryBuilderNonExistentTimeRange(SpotifyQueryBuilderException):
 class SpotifyQueryBuilderUserDataQueryNotSet(SpotifyQueryBuilderException):
     """Trying to set fields to request a user data query but the class has not been
     initialized to build this kind of query"""
+
+
+# Adapters exceptions
+
+class AdapterException(SonosActionException):
+    """Something wrong happened in the Interface Adapter layer"""
