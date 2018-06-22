@@ -3240,6 +3240,123 @@ TOP_TRACKS = """{
   "next": "https://api.spotify.com/v1/me/top/tracks?limit=2&offset=2"
 }"""
 
+MY_PLAYLISTS = """{
+  "href": "https://api.spotify.com/v1/users/veranosinsol/playlists?offset=0&limit=3",
+  "items": [
+    {
+      "collaborative": false,
+      "external_urls": {
+        "spotify": "https://open.spotify.com/user/spotify/playlist/37i9dQZF1E4HWlOfuFLdnb"
+      },
+      "href": "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1E4HWlOfuFLdnb",
+      "id": "37i9dQZF1E4HWlOfuFLdnb",
+      "images": [
+        {
+          "height": null,
+          "url": "https://lineup-images.scdn.co/time-capsule_DEFAULT-en.jpg",
+          "width": null
+        }
+      ],
+      "name": "Your Time Capsule",
+      "owner": {
+        "display_name": "Spotify",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/user/spotify"
+        },
+        "href": "https://api.spotify.com/v1/users/spotify",
+        "id": "spotify",
+        "type": "user",
+        "uri": "spotify:user:spotify"
+      },
+      "primary_color": null,
+      "public": false,
+      "snapshot_id": "ctKr6U5dAZ3iN6WXWsV2+eZEqVFn06rmUah+v/7Znk/Gb5ZLaA/fPnTLkkwXpGWBVorxR3R5yWw=",
+      "tracks": {
+        "href": "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1E4HWlOfuFLdnb/tracks",
+        "total": 55
+      },
+      "type": "playlist",
+      "uri": "spotify:user:spotify:playlist:37i9dQZF1E4HWlOfuFLdnb"
+    },
+    {
+      "collaborative": false,
+      "external_urls": {
+        "spotify": "https://open.spotify.com/user/1231289896/playlist/3GwW4Fvfs9BuJzzajPJQch"
+      },
+      "href": "https://api.spotify.com/v1/users/1231289896/playlists/3GwW4Fvfs9BuJzzajPJQch",
+      "id": "3GwW4Fvfs9BuJzzajPJQch",
+      "images": [
+        {
+          "height": null,
+          "url": "https://pl.scdn.co/images/pl/default/1210078b8b99124f02f6ebcbb62cd9e0a8b11f68",
+          "width": null
+        }
+      ],
+      "name": "lofi hip-hop beats",
+      "owner": {
+        "display_name": null,
+        "external_urls": {
+          "spotify": "https://open.spotify.com/user/1231289896"
+        },
+        "href": "https://api.spotify.com/v1/users/1231289896",
+        "id": "1231289896",
+        "type": "user",
+        "uri": "spotify:user:1231289896"
+      },
+      "primary_color": null,
+      "public": false,
+      "snapshot_id": "JfBUxEOoX3h5Oqmw/rK1pyUn3P5hOJJXHMTmSckLzMHyVQwk/GFrrlMfy60XFA6R",
+      "tracks": {
+        "href": "https://api.spotify.com/v1/users/1231289896/playlists/3GwW4Fvfs9BuJzzajPJQch/tracks",
+        "total": 278
+      },
+      "type": "playlist",
+      "uri": "spotify:user:1231289896:playlist:3GwW4Fvfs9BuJzzajPJQch"
+    },
+    {
+      "collaborative": false,
+      "external_urls": {
+        "spotify": "https://open.spotify.com/user/spotify/playlist/37i9dQZF1DWT6MhXz0jw61"
+      },
+      "href": "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DWT6MhXz0jw61",
+      "id": "37i9dQZF1DWT6MhXz0jw61",
+      "images": [
+        {
+          "height": 300,
+          "url": "https://i.scdn.co/image/00d8c539b27fd70fac3b8650d2ba24148343c4bc",
+          "width": 300
+        }
+      ],
+      "name": "Mellow Bars",
+      "owner": {
+        "display_name": "Spotify",
+        "external_urls": {
+          "spotify": "https://open.spotify.com/user/spotify"
+        },
+        "href": "https://api.spotify.com/v1/users/spotify",
+        "id": "spotify",
+        "type": "user",
+        "uri": "spotify:user:spotify"
+      },
+      "primary_color": null,
+      "public": false,
+      "snapshot_id": "vra3no9pxzEZzNdWN2iWhlnLyvRf1wILM4Z+vbPAXlvbw3ym60Z1nLqoOY6M/ZW0+1D6I9l/xaM=",
+      "tracks": {
+        "href": "https://api.spotify.com/v1/users/spotify/playlists/37i9dQZF1DWT6MhXz0jw61/tracks",
+        "total": 100
+      },
+      "type": "playlist",
+      "uri": "spotify:user:spotify:playlist:37i9dQZF1DWT6MhXz0jw61"
+    }
+  ],
+  "limit": 3,
+  "next": "https://api.spotify.com/v1/users/veranosinsol/playlists?offset=3&limit=3",
+  "offset": 0,
+  "previous": null,
+  "total": 524
+}"""
+
+
 EMPTY_ITEMS = """{
   "items": [],
   "total": 50,

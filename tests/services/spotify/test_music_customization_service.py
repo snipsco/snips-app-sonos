@@ -1,7 +1,7 @@
 import mock
 
 from snipssonos.services.spotify.music_customization_service import SpotifyCustomizationService
-from tests.services.spotify.raw_responses import TOP_ARTISTS, EMPTY_ITEMS, TOP_TRACKS
+from tests.services.spotify.raw_responses import TOP_ARTISTS, EMPTY_ITEMS, TOP_TRACKS, MY_PLAYLISTS
 
 ENTITY_TYPES = ["artists", "tracks", "playlists"]
 
@@ -55,4 +55,17 @@ def test_music_customization_fetch_top_tracks(mock_spotify_client):
     assert len(artists) == 6
     assert artists[0].name == "I Feel It Coming"
     assert artists[0].uri == "spotify:track:4RepvCWqsP6zBuzvwYibAS"
+
+
+@mock.patch('snipssonos.services.spotify.music_customization_service.SpotifyClient')
+def test_music_customization_fetch_top_tracks(mock_spotify_client):
+    mock_spotify_client_instance = mock_spotify_client.return_value
+    mock_spotify_client_instance.execute_query.return_value = MY_PLAYLISTS
+
+    customization_service = SpotifyCustomizationService("client_id", "client_secret")
+    artists = customization_service.fetch_entity("playlists")
+
+    assert len(artists) == 3
+    assert artists[0].name == "Your Time Capsule"
+    assert artists[0].uri == "spotify:user:spotify:playlist:37i9dQZF1E4HWlOfuFLdnb"
 
