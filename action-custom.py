@@ -15,8 +15,14 @@ SECONDS_IN_A_DAY = 86400.0
 
 ENTITIES = {
     "artists": "snips/artist",
-    "track": "snips/songs"
+    "tracks": "snips/song"
 }
+
+# Logging config
+if HERMES_HOST != "localhost":
+    logging.basicConfig(level=logging.DEBUG)
+else:
+    logging.basicConfig(level=logging.INFO)
 
 if __name__ == "__main__":
     configuration = read_configuration_file("config.ini")
@@ -41,11 +47,12 @@ if __name__ == "__main__":
                 inject_entities_request = InjectEntitiesRequestFactory\
                     .from_dict(entity_dict)
 
-                logging.info("Inject entities request: {}".format(inject_entities_request))
+                logging.info("Inject entities request made for '{}' with slot name '{}'"
+                             .format(inject_entities_request.entity_name, inject_entities_request.entity_slot_name))
                 use_case = InjectEntitiesUseCase(music_customization_service, entities_injection_service)
 
                 response = use_case.process_request(inject_entities_request)
-                logging.info("Response: {}".format(response))
+                logging.info("Response: {}".format(bool(response)))
                 first_time = False
 
         time.sleep(SECONDS_IN_A_DAY - ((time.time() - starttime) % SECONDS_IN_A_DAY))

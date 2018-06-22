@@ -1,3 +1,4 @@
+import logging
 import json
 
 from snipssonos.helpers.mqtt_client import MqttClient
@@ -18,8 +19,9 @@ class EntitiesInjectionService:
 
     def build_payload(self, entity_slot_name, data):
         entities_payload = dict()
-        entities_payload[entity_slot_name] = self.parse_data(entity_slot_name, data)
-
+        parsed_data = self.parse_data(entity_slot_name, data)
+        entities_payload[entity_slot_name] = parsed_data
+        logging.info("Injecting data: %s", parsed_data)
         payload = dict()
         payload["operations"] = [
                 [
@@ -27,7 +29,6 @@ class EntitiesInjectionService:
                 ]
             ]
         payload["crossLanguage"] = "en"
-
         return json.dumps(payload)
 
     @staticmethod

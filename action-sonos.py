@@ -38,8 +38,10 @@ HERMES_HOST = "{}:1883".format(HOSTNAME)
 MOPIDY_HOST = HOSTNAME
 
 # Logging config
-logging.basicConfig(level=logging.INFO)
-
+if HERMES_HOST != "localhost":
+    logging.basicConfig(level=logging.DEBUG)
+else:
+    logging.basicConfig(level=logging.INFO)
 
 
 # Music management functions
