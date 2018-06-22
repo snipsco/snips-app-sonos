@@ -5,6 +5,7 @@ class SonosActionException(Exception):
 class ServiceException(SonosActionException):
     """An exception occurred within a service"""
 
+
 # Request Objects
 class RequestObjectException(SonosActionException):
     """An exception occurred with a request object"""
@@ -14,6 +15,7 @@ class RequestObjectInitializationException(RequestObjectException):
     """An exception occurred with a request object"""
     def __init__(self, invalid_request_object):
         self.invalid_request_object = invalid_request_object
+
 
 # Device Discovery Service
 class DeviceDiscoveryException(ServiceException):
