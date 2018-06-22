@@ -4,7 +4,8 @@ import requests
 
 from snipssonos.helpers.spotify_client import SpotifyClient
 from snipssonos.exceptions import MusicSearchCredentialsError, \
-    MusicSearchProviderConnectionError, SpotifyClientWrongEndpoint
+    MusicSearchProviderConnectionError
+
 
 # Testing Spotify Client
 @pytest.mark.skip(reason="I didn't have time to do proper mocking. Let's wait for next iteration")
