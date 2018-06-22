@@ -15,7 +15,8 @@ SECONDS_IN_A_DAY = 86400.0
 
 ENTITIES = {
     "artists": "snips/artist",
-    "tracks": "snips/song"
+    "tracks": "snips/song",
+    "playlists": "playlistNameFR",
 }
 
 # Logging config

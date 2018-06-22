@@ -2,6 +2,7 @@ import logging
 import json
 
 from snipssonos.helpers.mqtt_client import MqttClient
+from snipssonos.exceptions import InvalidEntitySlotName
 
 
 class EntitiesInjectionService:
@@ -33,8 +34,12 @@ class EntitiesInjectionService:
 
     @staticmethod
     def parse_data(entity_slot_name, data):
-        return {
-            'snips/artist': [artist.name for artist in data],
-            'snips/song': [track.name for track in data],
-            'playlistNameFR': {}
-        }[entity_slot_name]
+        try:
+            return {
+                'snips/artist': [artist.name for artist in data],
+                'snips/song': [track.name for track in data],
+                'playlistNameFR': [playlist.name for playlist in data]
+            }[entity_slot_name]
+        except KeyError:
+            raise InvalidEntitySlotName("The entity slot name {} has not been defined"
+                                        .format(entity_slot_name))
