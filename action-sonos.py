@@ -2,33 +2,30 @@
 # -*-: coding utf-8 -*-
 
 import logging
-import io
 
 from hermes_python.hermes import Hermes
-from hermes_python.ontology import *
 
 from snipssonos.helpers.snips_config_parser import read_configuration_file
 from snipssonos.use_cases.volume.up import VolumeUpUseCase
 from snipssonos.use_cases.volume.down import VolumeDownUseCase
 from snipssonos.use_cases.volume.set import VolumeSetUseCase
 from snipssonos.use_cases.mute import MuteUseCase
-from snipssonos.use_cases.play_track import PlayTrackUseCase
-from snipssonos.use_cases.play_artist import PlayArtistUseCase
-from snipssonos.use_cases.play_music import PlayMusicUseCase
-from snipssonos.use_cases.play_playlist import PlayPlaylistUseCase
-from snipssonos.use_cases.play_album import PlayAlbumUseCase
+from snipssonos.use_cases.play.track import PlayTrackUseCase
+from snipssonos.use_cases.play.artist import PlayArtistUseCase
+from snipssonos.use_cases.play.music import PlayMusicUseCase
+from snipssonos.use_cases.play.playlist import PlayPlaylistUseCase
+from snipssonos.use_cases.play.album import PlayAlbumUseCase
 from snipssonos.use_cases.resume_music import ResumeMusicUseCase
 from snipssonos.use_cases.speaker_interrupt import SpeakerInterruptUseCase
-from snipssonos.use_cases.next_track import NextTrackUseCase
 
 from snipssonos.adapters.request_adapter import VolumeUpRequestAdapter, PlayTrackRequestAdapter, \
     PlayArtistRequestAdapter, VolumeSetRequestAdapter, VolumeDownRequestAdapter, ResumeMusicRequestAdapter, \
     SpeakerInterruptRequestAdapter, MuteRequestAdapter, PlayPlaylistRequestAdapter, PlayAlbumRequestAdapter, \
     PlayMusicRequestAdapter, NextTrackRequestAdapter
-from snipssonos.services.node_device_discovery_service import NodeDeviceDiscoveryService
-from snipssonos.services.node_device_transport_control import NodeDeviceTransportControlService
-from snipssonos.services.node_music_playback_service import NodeMusicPlaybackService
-from snipssonos.services.spotify_music_search_service import SpotifyMusicSearchService
+from snipssonos.services.node.device_discovery_service import NodeDeviceDiscoveryService
+from snipssonos.services.node.device_transport_control import NodeDeviceTransportControlService
+from snipssonos.services.node.music_playback_service import NodeMusicPlaybackService
+from snipssonos.services.spotify.music_search_service import SpotifyMusicSearchService
 
 from snipssonos.shared.feedback import FR_TTS_SHORT_ERROR
 
@@ -43,8 +40,6 @@ MOPIDY_HOST = HOSTNAME
 
 # Logging config
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-
-
 
 
 # Music management functions
@@ -95,21 +90,6 @@ def radioOn_callback(hermes, intentMessage):
 
 def previousSong_callback(hermes, intentMessage):
     raise NotImplementedError("previousSong_callback() not implemented")
-
-
-def nextSong_callback(hermes, intentMessage):
-    usecase = NextTrackUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
-
-    next_track_request = NextTrackRequestAdapter.from_intent_message(intentMessage)
-
-    response = usecase.execute(next_track_request)
-    if not response:
-        logging.info(response.value)
-        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
-    else:
-        logging.info(response)
-        hermes.publish_end_session(intentMessage.session_id, "")
-
 
 
 def resumeMusic_callback(hermes, intentMessage):  # Playback functions

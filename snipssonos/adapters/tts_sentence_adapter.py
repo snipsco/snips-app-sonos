@@ -1,5 +1,5 @@
 from snipssonos.shared import feedback
-from snipssonos.exceptions import ExternalDeviceDiscoveryUnreachable
+import snipssonos.exceptions
 
 
 class TTSSentenceGenerator(object):
@@ -25,7 +25,11 @@ class TTSSentenceGenerator(object):
         if response_object: # ResponseSuccess
             return response_object.message
         else: # ResponseFailure
-            if isinstance(response_object.exception, ExternalDeviceDiscoveryUnreachable):
+            # TODO : Map specific exceptions to the correct TTS sentences.
+            if isinstance(response_object.exception, snipssonos.exceptions.SonosActionException):
+                return feedback.FR_TTS_GENERIC_ERROR
+
+            if isinstance(response_object.exception, snipssonos.exceptions.DeviceDiscoveryException):
                 return feedback.FR_TTS_DEVICE_DISCOVERY_SERVICE_UNREACHABLE
             else:
-                return "" # TODO : this is not correct.
+                return feedback.FR_TTS_SHORT_ERROR
