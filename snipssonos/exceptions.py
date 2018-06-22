@@ -1,27 +1,27 @@
 class SonosActionException(Exception):
-    """An exception occured with the Sonos Action."""
+    """An exception occurred with the Sonos Action."""
 
 
 class ServiceException(SonosActionException):
-    """An exception occured within a service"""
+    """An exception occurred within a service"""
 
 # Request Objects
 class RequestObjectException(SonosActionException):
-    """An exception occured with a request object"""
+    """An exception occurred with a request object"""
 
 
 class RequestObjectInitializationException(RequestObjectException):
-    """An exception occured with a request object"""
+    """An exception occurred with a request object"""
     def __init__(self, invalid_request_object):
         self.invalid_request_object = invalid_request_object
 
 # Device Discovery Service
 class DeviceDiscoveryException(ServiceException):
-    """An exceptio occured with the device discovery service"""
+    """An exception occurred with the device discovery service"""
 
 
 class DeviceParsingException(DeviceDiscoveryException):
-    """An error occured while trying to parse a device"""
+    """An error occurred while trying to parse a device"""
 
 
 class NoReachableDeviceException(DeviceDiscoveryException):
@@ -30,19 +30,19 @@ class NoReachableDeviceException(DeviceDiscoveryException):
 
 # Music Search Service
 class MusicSearchService(ServiceException):
-    """An error occured within the Music Search Service"""
+    """An error occurred within the Music Search Service"""
 
 
 class MusicSearchCredentialsError(MusicSearchService):
-    """An error occured with the credentials given to the Music Search Service"""
+    """An error occurred with the credentials given to the Music Search Service"""
 
 
 class MusicSearchProviderConnectionError(MusicSearchService):
-    """A connection error occured with the provider of the Music Search Service"""
+    """A connection error occurred with the provider of the Music Search Service"""
 
 
 class APIRequestError(Exception):
-    """An exception occured when interacting with Sonos API."""
+    """An exception occurred when interacting with Sonos API."""
 
 
 class APIRequestWrongParams(APIRequestError):
