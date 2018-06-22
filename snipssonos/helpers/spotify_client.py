@@ -2,7 +2,7 @@ import base64
 import requests
 
 from snipssonos.exceptions import MusicSearchProviderConnectionError, MusicSearchCredentialsError,\
-    SpotifyClientWrongEndpoint, SpotifyQueryBuilderNonExistentTimeRange, SpotifyQueryBuilderUserDataQueryNotSet
+     SpotifyQueryBuilderNonExistentTimeRange
 
 
 class SpotifyClient(object):
