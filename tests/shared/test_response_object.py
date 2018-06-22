@@ -100,8 +100,9 @@ def test_response_failure_build_resource_error():
 
 
 def test_response_failure_build_system_error():
-    response = reso.ResponseFailure.build_system_error("test message")
+    response = reso.ResponseFailure.build_system_error("test message", Exception())
 
     assert bool(response) is False
     assert response.type == reso.ResponseFailure.SYSTEM_ERROR
     assert response.message == "test message"
+    assert isinstance(response.exception, Exception)

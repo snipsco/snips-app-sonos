@@ -12,9 +12,10 @@ class ResponseFailure(object):
     PARAMETERS_ERROR = 'ParametersError'
     SYSTEM_ERROR = 'SystemError'
 
-    def __init__(self, type_, message):
+    def __init__(self, type_, message, exception=None):
         self.type = type_
         self.message = self._format_message(message)
+        self.exception = exception
 
     def _format_message(self, str_or_exception):
         if isinstance(str_or_exception, Exception):
@@ -43,5 +44,5 @@ class ResponseFailure(object):
         return cls(cls.RESOURCE_ERROR, message)
 
     @classmethod
-    def build_system_error(cls, message):
-        return cls(cls.SYSTEM_ERROR, message)
+    def build_system_error(cls, message, exception):
+        return cls(cls.SYSTEM_ERROR, message, exception)
