@@ -8,6 +8,7 @@ from snipssonos.use_cases.play.album import PlayAlbumUseCase
 from snipssonos.use_cases.play.playlist import PlayPlaylistUseCase
 
 import logging
+logger = logging.getLogger(__name__)
 
 
 class PlayMusicUseCase(UseCase):
@@ -29,83 +30,84 @@ class PlayMusicUseCase(UseCase):
 
     def extract_sub_use_case_from_parameters(self, track_name, artist_name, album_name, playlist_name):
         if not (track_name) and not (album_name) and not (artist_name) and playlist_name:
-            logging.info('playlist')
+            logger.info('Use case selected : Playlist', extra={'playlist': playlist_name})
             return PlayPlaylistUseCase(self.device_discovery_service, self.music_search_service,
                                        self.music_playback_service)
 
         if not (track_name) and not (album_name) and artist_name and not (playlist_name):
-            logging.info('artist')
+            logger.info('Use case selected : Artist', extra={'artist': artist_name, 'playlist': playlist_name})
             return PlayArtistUseCase(self.device_discovery_service, self.music_search_service,
                                      self.music_playback_service)
 
         if not (track_name) and not (album_name) and artist_name and playlist_name:
-            logging.info('artist-playlist')
+            logger.info('Use case selected : Artist-Playlist', extra={'artist':artist_name, 'playlist': playlist_name})
             return PlayArtistUseCase(self.device_discovery_service, self.music_search_service,
                                      self.music_playback_service)
 
         if not (track_name) and album_name and not (artist_name) and not (playlist_name):
-            logging.info('album')
+            logger.info('Use case selected : Album', extra={'album':album_name})
             return PlayAlbumUseCase(self.device_discovery_service, self.music_search_service,
                                     self.music_playback_service)
 
         if not (track_name) and album_name and not (artist_name) and playlist_name:
-            logging.info('album-playlist')
+            logger.info('Use case selected : Album-Playlist', extra={'album':album_name, 'playlist':playlist_name})
             return PlayAlbumUseCase(self.device_discovery_service, self.music_search_service,
                                     self.music_playback_service)
 
         if not (track_name) and album_name and artist_name and not (playlist_name):
-            logging.info('album-artist')
+            logger.info('Use case selected : Album-Artist', extra={'album':album_name, 'artist':artist_name})
             return PlayAlbumUseCase(self.device_discovery_service, self.music_search_service,
                                     self.music_playback_service)
 
         if not (track_name) and album_name and artist_name and playlist_name:
-            logging.info('album-artist-playlist')
+            logger.info('Use case selected : Album-Artist-Playlist', extra={'album': album_name, 'artist':artist_name, 'playlist':playlist_name})
             return PlayAlbumUseCase(self.device_discovery_service, self.music_search_service,
                                     self.music_playback_service)
 
         if track_name and not (album_name) and not (artist_name) and not (playlist_name):
-            logging.info('song')
+            logger.info('Use case selected : Song', extra={'track':track_name})
             return PlayTrackUseCase(self.device_discovery_service, self.music_search_service,
                                     self.music_playback_service)
 
         if track_name and not (album_name) and not (artist_name) and playlist_name:
-            logging.info('song-playlist')
+            logger.info('Use case selected : Song-Playlist', extra={'track': track_name, 'playlist':playlist_name})
             return PlayTrackUseCase(self.device_discovery_service, self.music_search_service,
                                     self.music_playback_service)
 
         if track_name and not (album_name) and artist_name and not (playlist_name):
-            logging.info('song-artist')
+            logger.info('Use case selected : Song-Artist', extra={'track':track_name, 'artist':artist_name})
             return PlayTrackUseCase(self.device_discovery_service, self.music_search_service,
                                     self.music_playback_service)
 
         if track_name and not (album_name) and artist_name and playlist_name:
-            logging.info('sont-artist-playlist')
+            logger.info('song-artist-playlist', extra={'track': track_name, 'artist':artist_name, 'playlist': playlist_name})
             return PlayTrackUseCase(self.device_discovery_service, self.music_search_service,
                                     self.music_playback_service)
 
         if track_name and album_name and not (artist_name) and not (playlist_name):
-            logging.info('song-album')
+            logger.info('Use case selected : Song-Album', extra={'track':track_name, 'album': album_name})
             return PlayTrackUseCase(self.device_discovery_service, self.music_search_service,
                                     self.music_playback_service)
 
         if track_name and album_name and not (artist_name) and playlist_name:
-            logging.info('song-album-playlist')
+            logger.info('Use case selected : Song-Album-Playlist', extra={'track':track_name, 'album':album_name, 'playlist':playlist_name})
             return PlayTrackUseCase(self.device_discovery_service, self.music_search_service,
                                     self.music_playback_service)
 
         if track_name and album_name and artist_name and not (playlist_name):
-            logging.info('song-album-artist')
+            logger.info('Use case selected : Song-Album-Artist', extra={'track:':track_name, 'album':album_name, 'artist':artist_name})
             return PlayTrackUseCase(self.device_discovery_service, self.music_search_service,
                                     self.music_playback_service)
 
         if track_name and album_name and artist_name and playlist_name:
-            logging.info('song-album-artist-playlist')
+            logger.info('Use case selected : Song-Album-Artist-Playlist', extra={'track':track_name, 'album':album_name, 'artist':artist_name, 'playlist':playlist_name})
             return PlayTrackUseCase(self.device_discovery_service, self.music_search_service,
                                     self.music_playback_service)
-
+        
+        logger.info('Use case selected : InvalidUseCase')
         return PlayMusicInvalidUseCase()
 
 
 class PlayMusicInvalidUseCase(UseCase):
     def process_request(self, request_object):
-        return ResponseFailure.build_resource_error("An error occured")
+        return ResponseFailure.build_resource_error("")
