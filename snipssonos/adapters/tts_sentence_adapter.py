@@ -25,11 +25,12 @@ class TTSSentenceGenerator(object):
         if response_object: # ResponseSuccess
             return response_object.message
         else: # ResponseFailure
-            # TODO : Map specific exceptions to the correct TTS sentences.
+            # TODO : Complete this by mapping specific exceptions to the correct TTS sentences.
             if isinstance(response_object.exception, snipssonos.exceptions.SonosActionException):
                 return feedback.FR_TTS_GENERIC_ERROR
 
             if isinstance(response_object.exception, snipssonos.exceptions.DeviceDiscoveryException):
                 return feedback.FR_TTS_DEVICE_DISCOVERY_SERVICE_UNREACHABLE
+
             else:
                 return feedback.FR_TTS_SHORT_ERROR
