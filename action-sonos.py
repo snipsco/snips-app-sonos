@@ -30,6 +30,7 @@ from snipssonos.services.spotify.music_search_service import SpotifyMusicSearchS
 from snipssonos.shared.feedback import FR_TTS_SHORT_ERROR
 
 # Utils functions
+CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
 
 HOSTNAME = "localhost"
@@ -38,11 +39,11 @@ HERMES_HOST = "{}:1883".format(HOSTNAME)
 MOPIDY_HOST = HOSTNAME
 
 # Logging config
-logging.basicConfig(level=logging.INFO)
-
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 # Music management functions
+
 def addSong_callback(hermes, intentMessage):
     raise NotImplementedError("addSong_callback() not implemented")
 
@@ -233,4 +234,5 @@ if __name__ == "__main__":
             .subscribe_intent("muteSound4", mute_callback) \
             .subscribe_intent("resumeMusic4", resumeMusic_callback) \
             .subscribe_intent("speakerInterrupt4", speakerInterrupt_callback) \
+            .subscribe_intent("nextSong4", nextSong_callback) \
             .loop_forever()
