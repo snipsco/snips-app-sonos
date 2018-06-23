@@ -3,7 +3,7 @@ import requests
 
 from snipssonos.entities.device import Device
 from snipssonos.services.device.discovery_service import DeviceDiscoveryService
-from snipssonos.exceptions import DeviceParsingException, NoReachableDeviceException
+from snipssonos.exceptions import DeviceParsingException, NoReachableDeviceException, ExternalDeviceDiscoveryUnreachable
 
 
 class NodeDeviceDiscoveryService(DeviceDiscoveryService):
@@ -25,7 +25,10 @@ class NodeDeviceDiscoveryService(DeviceDiscoveryService):
     def execute_query(self):
         query_url = self.generate_get_query()
 
-        req = requests.get(query_url)
+        try:
+            req = requests.get(query_url)
+        except requests.RequestException as e:
+            raise ExternalDeviceDiscoveryUnreachable("External Node REST API is unreachable")
 
         if req.ok:
             return req.text
