@@ -3,7 +3,7 @@ from mock import mock
 
 from snipssonos.entities.device import Device
 from snipssonos.use_cases.next_track import NextTrackUseCase
-from snipssonos.use_cases.request_objects import NextTrackRequestObject, NextTrackRequestFactory
+from snipssonos.use_cases.request_objects import NextTrackRequestFactory
 
 from snipssonos.exceptions import NoReachableDeviceException
 
@@ -47,4 +47,3 @@ def test_use_case_no_reachable_device():
 
     assert bool(result_obj) is False
     assert result_obj.message == "NoReachableDeviceException: No reachable Sonos devices"
-
