@@ -62,17 +62,7 @@ def previousSong_callback(hermes, intentMessage):
 
 
 def nextSong_callback(hermes, intentMessage):
-    usecase = NextTrackUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
-
-    next_track_request = NextTrackRequestAdapter.from_intent_message(intentMessage)
-
-    response = usecase.execute(next_track_request)
-    if not response:
-        logging.debug(response.value)
-        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
-    else:
-        logging.debug(response)
-        hermes.publish_end_session(intentMessage.session_id, "")
+    pass
 
 
 def resumeMusic_callback(hermes, intentMessage):  # Playback functions
