@@ -53,6 +53,7 @@ def addSong_callback(hermes, intentMessage):
 def getInfos_callback(hermes, intentMessage):
     raise NotImplementedError("getInfos_callback() not implemented")
 
+
 def radioOn_callback(hermes, intentMessage):
     raise NotImplementedError("radioOn_callback() not implemented")
 
