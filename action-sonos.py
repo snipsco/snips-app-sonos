@@ -37,8 +37,12 @@ HOSTNAME = "localhost"
 HERMES_HOST = "{}:1883".format(HOSTNAME)
 MOPIDY_HOST = HOSTNAME
 
-# Logging config
-if HERMES_HOST != "localhost":
+# Config & Logging
+CONFIGURATION = read_configuration_file("config.ini")
+LOG_LEVEL = CONFIGURATION['global']['log_level']
+if LOG_LEVEL == "info":
+    logging.basicConfig(level=logging.INFO)
+elif LOG_LEVEL == "debug":
     logging.basicConfig(level=logging.DEBUG)
 else:
     logging.basicConfig(level=logging.INFO)
@@ -217,9 +221,8 @@ def playMusic_callback(hermes, intentMessage):
 
 
 if __name__ == "__main__":
-    configuration = read_configuration_file("config.ini")
-    client_id = configuration['secret']['client_id']
-    client_secret = configuration['secret']['client_secret']
+    client_id = CONFIGURATION['secret']['client_id']
+    client_secret = CONFIGURATION['secret']['client_secret']
 
     with Hermes(HERMES_HOST) as h:
         h.device_discovery_service = NodeDeviceDiscoveryService()

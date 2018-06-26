@@ -10,7 +10,7 @@ from snipssonos.services.spotify.music_customization_service import SpotifyCusto
 from snipssonos.services.entities_injection_service import EntitiesInjectionService
 from snipssonos.use_cases.inject_entities import InjectEntitiesUseCase
 
-HERMES_HOST = "localhost"
+HERMES_HOST = "192.168.170.114"
 SECONDS_IN_A_DAY = 86400.0
 
 ENTITIES = {
@@ -19,17 +19,20 @@ ENTITIES = {
     "playlists": "playlistNameFR",
 }
 
-# Logging config
-if HERMES_HOST != "localhost":
+# Config & Logging
+CONFIGURATION = read_configuration_file("config.ini")
+LOG_LEVEL = CONFIGURATION['global']['log_level']
+if LOG_LEVEL == "info":
+    logging.basicConfig(level=logging.INFO)
+elif LOG_LEVEL == "debug":
     logging.basicConfig(level=logging.DEBUG)
 else:
     logging.basicConfig(level=logging.INFO)
 
 if __name__ == "__main__":
-    configuration = read_configuration_file("config.ini")
-    client_id = configuration['secret']['client_id']
-    client_secret = configuration['secret']['client_secret']
-    access_token = configuration['secret']['access_token']
+    client_id = CONFIGURATION['secret']['client_id']
+    client_secret = CONFIGURATION['secret']['client_secret']
+    access_token = CONFIGURATION['secret']['access_token']
 
     music_customization_service = SpotifyCustomizationService(client_id, client_secret, access_token)
     entities_injection_service = EntitiesInjectionService(HERMES_HOST)
