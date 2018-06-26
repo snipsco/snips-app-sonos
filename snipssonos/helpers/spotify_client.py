@@ -2,7 +2,7 @@ import base64
 import requests
 
 from snipssonos.exceptions import MusicSearchProviderConnectionError, MusicSearchCredentialsError,\
-    SpotifyClientWrongEndpoint, SpotifyQueryBuilderNonExistentTimeRange, SpotifyQueryBuilderUserDataQueryNotSet
+     SpotifyQueryBuilderNonExistentTimeRange
 
 
 class SpotifyClient(object):
@@ -80,13 +80,15 @@ class SpotifyClient(object):
                 return response.text
             else:
                 raise MusicSearchProviderConnectionError(
-                    "There was a problem while making a request to Spotify: {}".format(response.reason))
+                    "There was a problem while making a request to Spotify: '{}', while hitting the endpoint {}"
+                    .format(response.reason, query.endpoint))
         except requests.exceptions.ConnectionError as e:
             raise MusicSearchProviderConnectionError(
                 "There was a problem while querying to Spotify api: {}".format(e.message))
 
 
 class SpotifyAPISearchQueryBuilder(object):
+    ENTITY_TYPES = ["artists", "tracks", "playlists"]
     TIME_RANGES = ["long_term", "medium_term", "short_term"]
 
     SPOTIFY_ENDPOINT = "https://api.spotify.com/v1"
@@ -104,8 +106,11 @@ class SpotifyAPISearchQueryBuilder(object):
         self.endpoint = "{}/{}".format(self.SPOTIFY_ENDPOINT, self.SEARCH_QUERY)
         return self
 
-    def set_user_query(self):
+    def set_user_query(self, entity_name=None):
         self.endpoint = "{}/{}".format(self.SPOTIFY_ENDPOINT, self.USER_QUERY)
+        if entity_name in self.ENTITY_TYPES:
+            return self.with_playlists() if entity_name == "playlists" else \
+                getattr(self, "with_top_{}".format(entity_name))()
         return self
 
     def with_top_artists(self):

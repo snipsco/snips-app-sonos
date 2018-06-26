@@ -1,30 +1,29 @@
 class SonosActionException(Exception):
-    """An exception occured with the Sonos Action."""
+    """An exception occurred with the Sonos Action."""
 
 
 class ServiceException(SonosActionException):
-    """An exception occured within a service"""
+    """An exception occurred within a service"""
 
 
 # Request Objects
 class RequestObjectException(SonosActionException):
-    """An exception occured with a request object"""
+    """An exception occurred with a request object"""
 
 
 class RequestObjectInitializationException(RequestObjectException):
-    """An exception occured with a request object"""
-
+    """An exception occurred with a request object"""
     def __init__(self, invalid_request_object):
         self.invalid_request_object = invalid_request_object
 
 
 # Device Discovery Service
 class DeviceDiscoveryException(ServiceException):
-    """An exceptio occured with the device discovery service"""
+    """An exception occurred with the device discovery service"""
 
 
 class DeviceParsingException(DeviceDiscoveryException):
-    """An error occured while trying to parse a device"""
+    """An error occurred while trying to parse a device"""
 
 
 class NoReachableDeviceException(DeviceDiscoveryException):
@@ -32,37 +31,43 @@ class NoReachableDeviceException(DeviceDiscoveryException):
 
 
 class ExternalDeviceDiscoveryUnreachable(DeviceDiscoveryException):
-    """An error occured with the device discovery driver """
+    """An error occurred with the device discovery driver """
 
 
 # Music Search Service
 class MusicSearchService(ServiceException):
-    """An error occured within the Music Search Service"""
+    """An error occurred within the Music Search Service"""
 
 
 class MusicSearchCredentialsError(MusicSearchService):
-    """An error occured with the credentials given to the Music Search Service"""
+    """An error occurred with the credentials given to the Music Search Service"""
 
 
 class MusicSearchProviderConnectionError(MusicSearchService):
-    """A connection error occured with the provider of the Music Search Service"""
+    """A connection error occurred with the provider of the Music Search Service"""
 
 
 class APIRequestError(Exception):
-    """An exception occured when interacting with Sonos API."""
+    """An exception occurred when interacting with Sonos API."""
 
 
 class APIRequestWrongParams(APIRequestError):
     """The API was called with wrong parameters. """
 
 
+# Entities injection service
+class EntityInjectionService(ServiceException):
+    """An error occurred within the Entity Injection Service"""
+
+
+# Entities injection service
+class InvalidEntitySlotName(EntityInjectionService):
+    """An unknown entity slot name has been used to build the payload"""
+
+
 # Spotify client
 class SpotifyClientException(Exception):
     """An error occurred within the Spotify Client """
-
-
-class SpotifyClientWrongEndpoint(SpotifyClientException):
-    """The requested Spotify endpoint does not exist."""
 
 
 # Spotify query builder
@@ -75,12 +80,6 @@ class SpotifyQueryBuilderNonExistentTimeRange(SpotifyQueryBuilderException):
     'long_term', 'medium_term', 'short_term'"""
 
 
-class SpotifyQueryBuilderUserDataQueryNotSet(SpotifyQueryBuilderException):
-    """Trying to set fields to request a user data query but the class has not been
-    initialized to build this kind of query"""
-
-
 # Adapters exceptions
-
 class AdapterException(SonosActionException):
     """Something wrong happened in the Interface Adapter layer"""

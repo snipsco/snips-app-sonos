@@ -13,15 +13,12 @@ from snipssonos.use_cases.mute import MuteUseCase
 from snipssonos.use_cases.play.track import PlayTrackUseCase
 from snipssonos.use_cases.play.artist import PlayArtistUseCase
 from snipssonos.use_cases.play.music import PlayMusicUseCase
-from snipssonos.use_cases.play.playlist import PlayPlaylistUseCase
-from snipssonos.use_cases.play.album import PlayAlbumUseCase
 from snipssonos.use_cases.resume_music import ResumeMusicUseCase
 from snipssonos.use_cases.speaker_interrupt import SpeakerInterruptUseCase
 
 from snipssonos.adapters.request_adapter import VolumeUpRequestAdapter, PlayTrackRequestAdapter, \
     PlayArtistRequestAdapter, VolumeSetRequestAdapter, VolumeDownRequestAdapter, ResumeMusicRequestAdapter, \
-    SpeakerInterruptRequestAdapter, MuteRequestAdapter, PlayPlaylistRequestAdapter, PlayAlbumRequestAdapter, \
-    PlayMusicRequestAdapter, NextTrackRequestAdapter
+    SpeakerInterruptRequestAdapter, MuteRequestAdapter, PlayMusicRequestAdapter
 from snipssonos.services.node.device_discovery_service import NodeDeviceDiscoveryService
 from snipssonos.services.node.device_transport_control import NodeDeviceTransportControlService
 from snipssonos.services.node.music_playback_service import NodeMusicPlaybackService
@@ -32,7 +29,6 @@ from snipssonos.adapters.tts_sentence_adapter import TTSSentenceGenerator
 from snipssonos.shared.feedback import FR_TTS_SHORT_ERROR
 
 # Utils functions
-CONFIGURATION_ENCODING_FORMAT = "utf-8"
 CONFIG_INI = "config.ini"
 
 HOSTNAME = "localhost"
@@ -40,12 +36,18 @@ HOSTNAME = "localhost"
 HERMES_HOST = "{}:1883".format(HOSTNAME)
 MOPIDY_HOST = HOSTNAME
 
-# Logging config
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+# Config & Logging
+CONFIGURATION = read_configuration_file("config.ini")
+LOG_LEVEL = CONFIGURATION['global']['log_level']
+if LOG_LEVEL == "info":
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+elif LOG_LEVEL == "debug":
+    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+else:
+    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 # Music management functions
-
 def addSong_callback(hermes, intentMessage):
     raise NotImplementedError("addSong_callback() not implemented")
 
@@ -195,9 +197,8 @@ def playMusic_callback(hermes, intentMessage):
 
 
 if __name__ == "__main__":
-    configuration = read_configuration_file("config.ini")
-    client_id = configuration['secret']['client_id']
-    client_secret = configuration['secret']['client_secret']
+    client_id = CONFIGURATION['secret']['client_id']
+    client_secret = CONFIGURATION['secret']['client_secret']
 
     with Hermes(HERMES_HOST) as h:
         h.device_discovery_service = NodeDeviceDiscoveryService()

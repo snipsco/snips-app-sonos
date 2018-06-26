@@ -1,6 +1,8 @@
 import json
 
 from snipssonos.entities.artist import Artist
+from snipssonos.entities.track import Track
+from snipssonos.entities.playlist import Playlist
 from snipssonos.helpers.spotify_client import SpotifyClient, SpotifyAPISearchQueryBuilder
 
 
@@ -12,22 +14,43 @@ class SpotifyCustomizationService:
         self.client_id = client_id
         self.client_secret = client_secret
 
-    def fetch_top_artist(self):
-        artists_results = []
-        for time_range in self.TIME_RANGES:
-            top_artist_by_time_range_query = SpotifyAPISearchQueryBuilder() \
-                .set_user_query() \
-                .with_top_artists() \
-                .add_time_range(time_range)\
+    def fetch_entity(self, entity_type):
+        entity_results = []
+
+        if entity_type == "playlists":
+            top_entity_type_query = SpotifyAPISearchQueryBuilder() \
+                .set_user_query(entity_type) \
                 .add_limit(50)
 
-            raw_response = self.client.execute_query(top_artist_by_time_range_query)
-            artists_results += self.parse_artist_results(raw_response)
-        return artists_results
+            entity_results += self.execute_and_parse_query(entity_type, top_entity_type_query)
+        else:
+            for time_range in self.TIME_RANGES:
+                top_entity_type_by_time_range_query = SpotifyAPISearchQueryBuilder() \
+                    .set_user_query(entity_type) \
+                    .add_time_range(time_range)\
+                    .add_limit(50)
+
+                entity_results += self.execute_and_parse_query(entity_type,
+                                                               top_entity_type_by_time_range_query)
+        return entity_results
+
+    def execute_and_parse_query(self, entity_type, query):
+        raw_response = self.client.execute_query(query)
+        return self.parse_results(entity_type, raw_response)
 
     @staticmethod
-    def parse_artist_results(raw_response):
-        response = json.loads(raw_response)
-        artists = [Artist(item['uri'], item['name']) for item in response['items']]
+    def parse_results(entity_type, raw_response):
+        if entity_type == "artists":
+            response = json.loads(raw_response)
+            artists = [Artist(item['uri'], item['name']) for item in response['items']]
+            return artists
 
-        return artists
+        elif entity_type == "tracks":
+            response = json.loads(raw_response)
+            tracks = [Track(item['uri'], item['name']) for item in response['items']]
+            return tracks
+
+        elif entity_type == "playlists":
+            response = json.loads(raw_response)
+            playlists = [Playlist(item['uri'], item['name']) for item in response['items']]
+            return playlists
