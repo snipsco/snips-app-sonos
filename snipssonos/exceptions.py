@@ -30,6 +30,10 @@ class NoReachableDeviceException(DeviceDiscoveryException):
     """No connected devices were found by the DeviceDiscovery service"""
 
 
+class ExternalDeviceDiscoveryUnreachable(DeviceDiscoveryException):
+    """An error occurred with the device discovery driver """
+
+
 # Music Search Service
 class MusicSearchService(ServiceException):
     """An error occurred within the Music Search Service"""
@@ -75,3 +79,7 @@ class SpotifyQueryBuilderNonExistentTimeRange(SpotifyQueryBuilderException):
     """The time range used does not exist, please use valid time ranges:
     'long_term', 'medium_term', 'short_term'"""
 
+
+# Adapters exceptions
+class AdapterException(SonosActionException):
+    """Something wrong happened in the Interface Adapter layer"""

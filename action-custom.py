@@ -10,7 +10,7 @@ from snipssonos.services.spotify.music_customization_service import SpotifyCusto
 from snipssonos.services.entities_injection_service import EntitiesInjectionService
 from snipssonos.use_cases.inject_entities import InjectEntitiesUseCase
 
-HERMES_HOST = "192.168.170.114"
+HERMES_HOST = "localhost"
 SECONDS_IN_A_DAY = 86400.0
 
 ENTITIES = {

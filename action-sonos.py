@@ -13,19 +13,18 @@ from snipssonos.use_cases.mute import MuteUseCase
 from snipssonos.use_cases.play.track import PlayTrackUseCase
 from snipssonos.use_cases.play.artist import PlayArtistUseCase
 from snipssonos.use_cases.play.music import PlayMusicUseCase
-from snipssonos.use_cases.play.playlist import PlayPlaylistUseCase
-from snipssonos.use_cases.play.album import PlayAlbumUseCase
 from snipssonos.use_cases.resume_music import ResumeMusicUseCase
 from snipssonos.use_cases.speaker_interrupt import SpeakerInterruptUseCase
 
 from snipssonos.adapters.request_adapter import VolumeUpRequestAdapter, PlayTrackRequestAdapter, \
     PlayArtistRequestAdapter, VolumeSetRequestAdapter, VolumeDownRequestAdapter, ResumeMusicRequestAdapter, \
-    SpeakerInterruptRequestAdapter, MuteRequestAdapter, PlayPlaylistRequestAdapter, PlayAlbumRequestAdapter, \
-    PlayMusicRequestAdapter, NextTrackRequestAdapter
+    SpeakerInterruptRequestAdapter, MuteRequestAdapter, PlayMusicRequestAdapter
 from snipssonos.services.node.device_discovery_service import NodeDeviceDiscoveryService
 from snipssonos.services.node.device_transport_control import NodeDeviceTransportControlService
 from snipssonos.services.node.music_playback_service import NodeMusicPlaybackService
 from snipssonos.services.spotify.music_search_service import SpotifyMusicSearchService
+
+from snipssonos.adapters.tts_sentence_adapter import TTSSentenceGenerator
 
 from snipssonos.shared.feedback import FR_TTS_SHORT_ERROR
 
@@ -41,11 +40,11 @@ MOPIDY_HOST = HOSTNAME
 CONFIGURATION = read_configuration_file("config.ini")
 LOG_LEVEL = CONFIGURATION['global']['log_level']
 if LOG_LEVEL == "info":
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 elif LOG_LEVEL == "debug":
-    logging.basicConfig(level=logging.DEBUG)
+    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 else:
-    logging.basicConfig(level=logging.INFO)
+    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 # Music management functions
@@ -57,44 +56,16 @@ def getInfos_callback(hermes, intentMessage):
     raise NotImplementedError("getInfos_callback() not implemented")
 
 
-def playAlbum_callback(hermes, intentMessage):
-    use_case = PlayAlbumUseCase(hermes.device_discovery_service, hermes.music_search_service,
-                                hermes.music_playback_service)
-    play_album_request = PlayAlbumRequestAdapter.from_intent_message(intentMessage)
-
-    logging.info(play_album_request)
-    response = use_case.execute(play_album_request)
-
-    if not response:
-        logging.info(response)
-        hermes.publish_end_session(intentMessage.session_id, response.message)
-    else:
-        logging.info(response)
-        hermes.publish_end_session(intentMessage.session_id, response.feedback)
-
-
-def playPlaylist_callback(hermes, intentMessage):
-    use_case = PlayPlaylistUseCase(hermes.device_discovery_service, hermes.music_search_service,
-                                   hermes.music_playback_service)
-    play_playlist_request = PlayPlaylistRequestAdapter.from_intent_message(intentMessage)
-
-    logging.info(play_playlist_request)
-    response = use_case.execute(play_playlist_request)
-
-    if not response:
-        logging.info(response)
-        hermes.publish_end_session(intentMessage.session_id, response.message)
-    else:
-        logging.info(response)
-        hermes.publish_end_session(intentMessage.session_id, response.feedback)
-
-
 def radioOn_callback(hermes, intentMessage):
     raise NotImplementedError("radioOn_callback() not implemented")
 
 
 def previousSong_callback(hermes, intentMessage):
     raise NotImplementedError("previousSong_callback() not implemented")
+
+
+def nextSong_callback(hermes, intentMessage):
+    pass
 
 
 def resumeMusic_callback(hermes, intentMessage):  # Playback functions
@@ -211,12 +182,17 @@ def playMusic_callback(hermes, intentMessage):
                                 hermes.music_playback_service)
     play_music_request = PlayMusicRequestAdapter.from_intent_message(intentMessage)
 
-    logging.info(play_music_request)
     response = use_case.execute(play_music_request)
 
     if not response:
-        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
+        logging.error('Error type : {}'.format(response.type))
+        logging.error('Error message : {}'.format(response.message))
+        logging.error('Error exception : {}'.format(response.exception))
+
+        feedback = TTSSentenceGenerator("FRENCH").from_response_object(response)
+        hermes.publish_end_session(intentMessage.session_id, feedback)
     else:
+        logging.debug("Response Success : {}".format(response))
         hermes.publish_end_session(intentMessage.session_id, response.feedback)
 
 
@@ -229,7 +205,6 @@ if __name__ == "__main__":
         h.device_transport_control_service = NodeDeviceTransportControlService()
         h.music_search_service = SpotifyMusicSearchService(client_id, client_secret)
         h.music_playback_service = NodeMusicPlaybackService()
-
         h \
             .subscribe_intent("playMusic4", playMusic_callback) \
             .subscribe_intent("volumeUp4", volumeUp_callback) \
@@ -238,4 +213,5 @@ if __name__ == "__main__":
             .subscribe_intent("muteSound4", mute_callback) \
             .subscribe_intent("resumeMusic4", resumeMusic_callback) \
             .subscribe_intent("speakerInterrupt4", speakerInterrupt_callback) \
+            .subscribe_intent("nextSong4", nextSong_callback) \
             .loop_forever()
