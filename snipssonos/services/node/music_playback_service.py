@@ -1,7 +1,8 @@
 import requests
-import logging
 
 from snipssonos.services.music.playback_service import MusicPlaybackService
+from requests_futures.sessions import FuturesSession
+
 
 class NodeMusicPlaybackService(MusicPlaybackService):  # TODO : Refactor this in next iteration ...
 
@@ -18,17 +19,12 @@ class NodeMusicPlaybackService(MusicPlaybackService):  # TODO : Refactor this in
             return True
 
     def queue(self, device, music_items):
+        session = FuturesSession()
         self.device = device if device else self.device
-
-        results = list()
 
         for music_item in music_items:
             query_url = self._generate_queue_query(music_item)
-            req = requests.get(query_url)
-            results.append(req.ok)
-
-        return all(results)
-
+            session.get(query_url)
 
     def _generate_play_now_query(self, music_item):
         room_name = self.device.name
