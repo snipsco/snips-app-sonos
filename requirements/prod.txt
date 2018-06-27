@@ -2,3 +2,4 @@ apiwrapper
 hermes_python
 requests
 paho-mqtt
+requests_futures
