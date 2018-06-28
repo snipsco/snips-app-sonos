@@ -1,6 +1,8 @@
 import mock
 import pytest
 import requests
+import json
+import time
 
 from snipssonos.helpers.spotify_client import SpotifyClient
 from snipssonos.exceptions import MusicSearchCredentialsError, \
@@ -39,5 +41,31 @@ def test_spotify_client_encodes_base_64_raises_exception_with_empty_credentials(
         SpotifyClient(client_id, client_secret)
 
 
+@mock.patch('snipssonos.helpers.spotify_client.requests')
+@mock.patch('snipssonos.helpers.spotify_client.requests.Response')
+def test_access_token_is_refreshed_after_expiration(mock_response, mock_request):
+    client_id = "client_id"
+    client_secret = "client_secret"
+
+    # expiration is set to 1 sec
+    mock_response.json.return_value = json.loads("""{  
+       "access_token":"BQBhSKCPz_gQuffivPwvvpfn5oX7q0e5MTBdliEES8aWrRkGcsCH4pVy9HKYYpBlIBLjBremintjLxMpbk0",
+       "token_type":"Bearer",
+       "expires_in":1,
+       "scope":""
+    }""")
+
+    mock_request.post.return_value = mock_response
+
+    client = SpotifyClient(client_id, client_secret)
+    client.authenticate()
+
+    # we make sure the access token has been set after calling the authenticate method
+    assert client.access_token is not None
+    time.sleep(2)
+
+    # we make sure the call to the authorization endpoint is made after expiration
+    client.authenticate()
+    assert mock_request.post.call_count == 2
 
 
