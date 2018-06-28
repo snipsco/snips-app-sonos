@@ -8,12 +8,11 @@ from snipssonos.exceptions import MusicSearchProviderConnectionError, MusicSearc
 class SpotifyClient(object):
     AUTH_SERVICE_ENDPOINT = "https://accounts.spotify.com/api/token"
 
-    def __init__(self, client_id, client_secret, access_token=None, refresh_token=None):
+    def __init__(self, client_id, client_secret, refresh_token):
         self.client_id = str(client_id)
         self.client_secret = str(client_secret)
         self.refresh_token = refresh_token
-        self.access_token = access_token
-        self.endpoint = None
+        self.access_token = None
 
         self._check_credentials_validity()
 
@@ -49,14 +48,12 @@ class SpotifyClient(object):
             response = requests.post(
                 self.AUTH_SERVICE_ENDPOINT,
                 headers=headers,
-                data={'grant_type': 'client_credentials'}
+                data={
+                    'grant_type': 'refresh_token',
+                    'refresh_token': self.refresh_token
+                }
             )
 
-            # TODO figure what is going on with this call
-            # data = {
-            #     'grant_type': 'refresh_token',
-            #     'refresh_token': self.refresh_token
-            # }
             access_token = self._extract_access_token(response)
             return access_token
 

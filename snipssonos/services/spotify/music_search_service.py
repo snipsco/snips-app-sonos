@@ -10,12 +10,10 @@ from snipssonos.helpers.spotify_client import SpotifyClient, SpotifyAPISearchQue
 
 
 class SpotifyMusicSearchService(MusicSearchService):
-    def __init__(self, client_id, client_secret):
-        self.client = SpotifyClient(client_id, client_secret)
+    def __init__(self, client_id, client_secret, refresh_token):
+        self.client = SpotifyClient(client_id, client_secret, refresh_token)
         self.client_id = client_id
         self.client_secret = client_secret
-
-        self.client = SpotifyClient(self.client_id, self.client_secret)
 
     def search_album(self, album_name):
         album_search_query = SpotifyAPISearchQueryBuilder() \

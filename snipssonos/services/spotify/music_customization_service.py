@@ -9,8 +9,8 @@ from snipssonos.helpers.spotify_client import SpotifyClient, SpotifyAPISearchQue
 class SpotifyCustomizationService:
     TIME_RANGES = ["long_term", "medium_term", "short_term"]
 
-    def __init__(self, client_id, client_secret, access_token=None, refresh_token=None):
-        self.client = SpotifyClient(client_id, client_secret, access_token, refresh_token)
+    def __init__(self, client_id, client_secret, refresh_token):
+        self.client = SpotifyClient(client_id, client_secret, refresh_token)
         self.client_id = client_id
         self.client_secret = client_secret
 
