@@ -41,19 +41,17 @@ if __name__ == "__main__":
     entities_injection_service = EntitiesInjectionService(HERMES_HOST)
 
     starttime = time.time()
-    first_time = True
     # Code for scheduling taken from: https://stackoverflow.com/a/25251804
     # TODO first call get all top user data for the different time ranges
     # then in the loop just keep getting short term top data
     while True:
-        if first_time:
-            inject_entities_request = InjectEntitiesRequestFactory\
-                .from_dict(entities)
+        inject_entities_request = InjectEntitiesRequestFactory\
+            .from_dict(entities)
 
-            use_case = InjectEntitiesUseCase(music_customization_service, entities_injection_service)
+        use_case = InjectEntitiesUseCase(music_customization_service, entities_injection_service)
 
-            response = use_case.process_request(inject_entities_request)
-            logging.info("Response: {}".format(bool(response)))
-            first_time = False
+        response = use_case.process_request(inject_entities_request)
+        logging.info("Response: {}".format(bool(response)))
+        first_time = False
 
         time.sleep(SECONDS_IN_A_DAY - ((time.time() - starttime) % SECONDS_IN_A_DAY))
