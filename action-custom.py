@@ -34,29 +34,26 @@ if __name__ == "__main__":
     client_secret = CONFIGURATION['secret']['client_secret']
     refresh_token = CONFIGURATION['secret']['refresh_token']
 
+    entities = {
+        'entities': ENTITIES
+    }
     music_customization_service = SpotifyCustomizationService(client_id, client_secret, refresh_token)
     entities_injection_service = EntitiesInjectionService(HERMES_HOST)
 
     starttime = time.time()
     first_time = True
     # Code for scheduling taken from: https://stackoverflow.com/a/25251804
-    # TODO first call iterate with all top data and in the loop just keep getting short term top data
+    # TODO first call get all top user data for the different time ranges
+    # then in the loop just keep getting short term top data
     while True:
         if first_time:
-            for entity_name, entity_slot_name in ENTITIES.iteritems():
-                entity_dict = {
-                    'entity_name': entity_name,
-                    'entity_slot_name': entity_slot_name,
-                }
-                inject_entities_request = InjectEntitiesRequestFactory\
-                    .from_dict(entity_dict)
+            inject_entities_request = InjectEntitiesRequestFactory\
+                .from_dict(entities)
 
-                logging.info("Inject entities request made for '{}' with slot name '{}'"
-                             .format(inject_entities_request.entity_name, inject_entities_request.entity_slot_name))
-                use_case = InjectEntitiesUseCase(music_customization_service, entities_injection_service)
+            use_case = InjectEntitiesUseCase(music_customization_service, entities_injection_service)
 
-                response = use_case.process_request(inject_entities_request)
-                logging.info("Response: {}".format(bool(response)))
-                first_time = False
+            response = use_case.process_request(inject_entities_request)
+            logging.info("Response: {}".format(bool(response)))
+            first_time = False
 
         time.sleep(SECONDS_IN_A_DAY - ((time.time() - starttime) % SECONDS_IN_A_DAY))
