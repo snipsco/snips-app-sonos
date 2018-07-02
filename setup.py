@@ -23,6 +23,7 @@ extras_require = {
         "mock",
         "pytest",
         "coverage",
+        "hermes-python",
         "pytest-cov"
     ],
 }
