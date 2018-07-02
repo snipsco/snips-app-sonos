@@ -265,51 +265,50 @@ class PlayMusicRequestFactory(RequestObjectFactory):
 class InjectEntitiesRequestObject(ValidRequestObject):
     VALID_ENTITY_NAMES = ["artists", "tracks", "playlists"]
 
-    def __init__(self, entity_name, entity_slot_name):
-        self.entity_name = entity_name
-        self.entity_slot_name = entity_slot_name
+    def __init__(self, entities):
+        self.entities = entities
 
     @property
-    def entity_name(self):
-        return self._entity_name
+    def entities(self):
+        return self._entities
 
-    @property
-    def entity_slot_name(self):
-        return self._entity_slot_name
-
-    @entity_name.setter
-    def entity_name(self, entity_name):
+    @entities.setter
+    def entities(self, entities):
         invalid_request = InvalidRequestObject()
-        if isinstance(entity_name, str):
-            if entity_name in self.VALID_ENTITY_NAMES:
-                self._entity_name = entity_name
-            else:
-                invalid_request\
-                    .add_error('entity_name', 'has to be a valid entity name {}'
-                               .format([entity_name for entity_name in self.VALID_ENTITY_NAMES]))
+        if isinstance(entities, dict):
+            for entity_name, entity_slot_name in entities.iteritems():
+                self.entity_name_validation(entity_name, invalid_request)
+                self.entity_slot_name_validation(entity_slot_name, invalid_request)
+            self._entities = entities
         else:
-            invalid_request.add_error('entity_name', 'has to be a string')
+            invalid_request.add_error('entities', 'has to be a dictionary')
 
         if invalid_request.has_errors():
             raise RequestObjectInitializationException(invalid_request)
 
-    @entity_slot_name.setter
-    def entity_slot_name(self, entity_slot_name):
-        invalid_request = InvalidRequestObject()
+    def entity_name_validation(self, entity_name, invalid_request):
+        if not isinstance(entity_name, str):
+            invalid_request.add_error('entity name {} in entities'.format(entity_name),
+                                      'has to be a dictionary')
+        if entity_name not in self.VALID_ENTITY_NAMES:
+            invalid_request \
+                .add_error('entity name {} in entities'.format(entity_name),
+                           'has to be a valid entity name {}'
+                           .format([entity_name for entity_name in self.VALID_ENTITY_NAMES]))
+            return invalid_request
+
+    def entity_slot_name_validation(self, entity_slot_name, invalid_request):
         # TODO once entity names are set in stone figure validation here
-        if isinstance(entity_slot_name, str):
-            self._entity_slot_name = entity_slot_name
-        else:
-            invalid_request.add_error('entity_slot_name', 'has to be a string')
-        if invalid_request.has_errors():
-            raise RequestObjectInitializationException(invalid_request)
+        if not isinstance(entity_slot_name, str):
+            invalid_request.add_error('entity slot name {} in entities'.format(entity_slot_name),
+                                      'has to be a string')
+        return invalid_request
 
     @classmethod
     def from_dict(cls, a_dictionary):
 
         return cls(
-            entity_name=a_dictionary.get('entity_name', None),
-            entity_slot_name=a_dictionary.get('entity_slot_name', None)
+            entities=a_dictionary.get('entities', None),
         )
 
 
