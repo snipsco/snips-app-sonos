@@ -11,7 +11,7 @@ class UseCase(object):
             return self.process_request(request_object)
         except Exception as exc:
             return ResponseFailure.build_system_error(
-                "{}: {}".format(exc.__class__.__name__, str(exc))
+                "{}: {}".format(exc.__class__.__name__, str(exc)), exc
             )
 
     def process_request(self, request_object):

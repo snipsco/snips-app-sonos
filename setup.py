@@ -13,7 +13,9 @@ with open('README.rst') as readme_file:
 required = [
     "apiwrapper", 
     "requests",
-    "paho-mqtt"
+    "paho-mqtt",
+    "requests-futures",
+    "hermes-python"
 ]
 
 extras_require = {
@@ -21,8 +23,8 @@ extras_require = {
         "mock",
         "pytest",
         "coverage",
-        "pytest-cov",
-    	"hermes-python",
+        "hermes-python",
+        "pytest-cov"
     ],
 }
 

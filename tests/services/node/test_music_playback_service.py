@@ -48,11 +48,11 @@ def test_generate_correct_url_query_for_queue(connected_device):
     music_playback_service._generate_queue_query(track)
 
 
-@mock.patch('snipssonos.services.node.music_playback_service.requests')
-def test_calls_queue(mocked_request, connected_device):
+@mock.patch('snipssonos.services.node.music_playback_service.FuturesSession.get')
+def test_calls_queue(mocked_future, connected_device):
     music_playback_service = NodeMusicPlaybackService(connected_device)
 
-    tracks = [Track.from_dict({'uri':'uri{}'.format(str(i))})for i in range(10)]
+    tracks = [Track.from_dict({'uri': 'uri{}'.format(str(i))})for i in range(10)]
     music_playback_service.queue(connected_device, tracks)
 
-    assert mocked_request.get.call_count == len(tracks)
+    assert mocked_future.call_count == len(tracks)
