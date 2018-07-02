@@ -27,7 +27,7 @@ def test_spotify_client_encodes_base_64_credentials():
     client_id = "client_id"
     client_secret = "client_secret"
     expected_base64_encoded_credentials = "Y2xpZW50X2lkOmNsaWVudF9zZWNyZXQ="
-    client = SpotifyClient(client_id, client_secret)
+    client = SpotifyClient(client_id, client_secret, "refresh_token")
     actual_base64_encoded_credentials = client._get_base_64_encoded_credentials()
 
     assert actual_base64_encoded_credentials == expected_base64_encoded_credentials
@@ -38,7 +38,7 @@ def test_spotify_client_encodes_base_64_raises_exception_with_empty_credentials(
     client_secret = "client_secret"
 
     with pytest.raises(MusicSearchCredentialsError):
-        SpotifyClient(client_id, client_secret)
+        SpotifyClient(client_id, client_secret, "refresh_token")
 
 
 @mock.patch('snipssonos.helpers.spotify_client.requests')

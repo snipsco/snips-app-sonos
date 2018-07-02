@@ -12,7 +12,7 @@ def test_music_service_empty_song_name():
 
 # Testing Spotify Music Service
 def test_correct_parsing_of_tracks_for_correct_response():
-    client = SpotifyMusicSearchService("client_id", "client_secret")
+    client = SpotifyMusicSearchService("client_id", "client_secret", "refresh_token")
     tracks = client._parse_track_results(TRACKS)
 
     assert len(tracks) == 20
@@ -20,14 +20,14 @@ def test_correct_parsing_of_tracks_for_correct_response():
 
 
 def test_correct_parsing_of_tracks_with_empty_response():
-    client = SpotifyMusicSearchService("client_id", "client_secret")
+    client = SpotifyMusicSearchService("client_id", "client_secret", "refresh_token")
     tracks = client._parse_track_results(EMPTY_TRACKS)
 
     assert len(tracks) == 0
 
 
 def test_correct_parsing_of_playlists_for_correct_response():
-    client = SpotifyMusicSearchService("client_id", "client_secret")
+    client = SpotifyMusicSearchService("client_id", "client_secret", "refresh_token")
     playlists = client._parse_playlist_results(PLAYLISTS)
 
     assert len(playlists) == 20
@@ -36,7 +36,7 @@ def test_correct_parsing_of_playlists_for_correct_response():
 
 
 def test_correct_parsing_of_artists_for_correct_response():
-    client = SpotifyMusicSearchService("client_id", "client_secret")
+    client = SpotifyMusicSearchService("client_id", "client_secret", "refresh_token")
     artists = client._parse_artists_results(ARTISTS)
 
     assert len(artists) == 1
@@ -45,7 +45,7 @@ def test_correct_parsing_of_artists_for_correct_response():
 
 
 def test_correct_parsing_of_albums_for_correct_response():
-    client = SpotifyMusicSearchService("client_id", "client_secret")
+    client = SpotifyMusicSearchService("client_id", "client_secret", "refresh_token")
     artists = client._parse_album_results(ALBUMS)
 
     assert len(artists) == 2

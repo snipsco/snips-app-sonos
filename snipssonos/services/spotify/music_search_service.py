@@ -10,8 +10,8 @@ from snipssonos.helpers.spotify_client import SpotifyClient, SpotifyAPISearchQue
 
 
 class SpotifyMusicSearchService(MusicSearchService):
-    def __init__(self, client_id, client_secret):
-        self.client = SpotifyClient(client_id, client_secret)
+    def __init__(self, client_id, client_secret, refresh_token):
+        self.client = SpotifyClient(client_id, client_secret, refresh_token)
         self.client_id = client_id
         self.client_secret = client_secret
 

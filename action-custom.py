@@ -32,9 +32,9 @@ else:
 if __name__ == "__main__":
     client_id = CONFIGURATION['secret']['client_id']
     client_secret = CONFIGURATION['secret']['client_secret']
-    access_token = CONFIGURATION['secret']['access_token']
+    refresh_token = CONFIGURATION['secret']['refresh_token']
 
-    music_customization_service = SpotifyCustomizationService(client_id, client_secret, access_token)
+    music_customization_service = SpotifyCustomizationService(client_id, client_secret, refresh_token)
     entities_injection_service = EntitiesInjectionService(HERMES_HOST)
 
     starttime = time.time()

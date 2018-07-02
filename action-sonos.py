@@ -199,11 +199,12 @@ def playMusic_callback(hermes, intentMessage):
 if __name__ == "__main__":
     client_id = CONFIGURATION['secret']['client_id']
     client_secret = CONFIGURATION['secret']['client_secret']
+    refresh_token = CONFIGURATION['secret']['refresh_token']
 
     with Hermes(HERMES_HOST) as h:
         h.device_discovery_service = NodeDeviceDiscoveryService()
         h.device_transport_control_service = NodeDeviceTransportControlService()
-        h.music_search_service = SpotifyMusicSearchService(client_id, client_secret)
+        h.music_search_service = SpotifyMusicSearchService(client_id, client_secret, refresh_token)
         h.music_playback_service = NodeMusicPlaybackService()
         h \
             .subscribe_intent("playMusic4", playMusic_callback) \
