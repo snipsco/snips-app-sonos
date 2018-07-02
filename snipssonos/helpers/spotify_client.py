@@ -1,5 +1,6 @@
 import base64
 import requests
+import time
 
 from snipssonos.exceptions import MusicSearchProviderConnectionError, MusicSearchCredentialsError,\
      SpotifyQueryBuilderNonExistentTimeRange
@@ -8,11 +9,13 @@ from snipssonos.exceptions import MusicSearchProviderConnectionError, MusicSearc
 class SpotifyClient(object):
     AUTH_SERVICE_ENDPOINT = "https://accounts.spotify.com/api/token"
 
-    def __init__(self, client_id, client_secret, refresh_token):
+    def __init__(self, client_id, client_secret, refresh_token=None):
         self.client_id = str(client_id)
         self.client_secret = str(client_secret)
         self.refresh_token = refresh_token
         self.access_token = None
+        self.access_token_expiration = None
+        self.endpoint = None
 
         self._check_credentials_validity()
 
@@ -27,6 +30,10 @@ class SpotifyClient(object):
 
     def _extract_access_token(self, response):
         return response.json()['access_token']
+
+    def _set_access_token_expiration_time(self, response):
+        expires_in = response.json()['expires_in']
+        self.access_token_expiration = time.time() + expires_in
 
     def _get_authorization_headers_from_client_credentials(self):
         base64_encoded_credentials = self._get_base_64_encoded_credentials()
@@ -55,6 +62,7 @@ class SpotifyClient(object):
             )
 
             access_token = self._extract_access_token(response)
+            self._set_access_token_expiration_time(response)
             return access_token
 
         except requests.exceptions.ConnectionError as e:
@@ -62,7 +70,7 @@ class SpotifyClient(object):
                 "There was a problem retrieving the access token: {}".format(e.message))
 
     def authenticate(self):
-        if self.access_token is None:
+        if self.access_token is None or time.time() > self.access_token_expiration:
             self.access_token = self.retrieve_access_token()
 
     def execute_query(self, query):
@@ -77,8 +85,9 @@ class SpotifyClient(object):
                 return response.text
             else:
                 raise MusicSearchProviderConnectionError(
-                    "There was a problem while making a request to Spotify: '{}', while hitting the endpoint {}"
-                    .format(response.reason, query.endpoint))
+                    "There was a problem while making a request to Spotify: '{} with status code {}',"
+                    " while hitting the endpoint {}"
+                    .format(response.reason, response.status_code, query.endpoint))
         except requests.exceptions.ConnectionError as e:
             raise MusicSearchProviderConnectionError(
                 "There was a problem while querying to Spotify api: {}".format(e.message))
