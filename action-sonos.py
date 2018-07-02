@@ -15,10 +15,11 @@ from snipssonos.use_cases.play.artist import PlayArtistUseCase
 from snipssonos.use_cases.play.music import PlayMusicUseCase
 from snipssonos.use_cases.resume_music import ResumeMusicUseCase
 from snipssonos.use_cases.speaker_interrupt import SpeakerInterruptUseCase
+from snipssonos.use_cases.next_track import NextTrackUseCase
 
 from snipssonos.adapters.request_adapter import VolumeUpRequestAdapter, PlayTrackRequestAdapter, \
     PlayArtistRequestAdapter, VolumeSetRequestAdapter, VolumeDownRequestAdapter, ResumeMusicRequestAdapter, \
-    SpeakerInterruptRequestAdapter, MuteRequestAdapter, PlayMusicRequestAdapter
+    SpeakerInterruptRequestAdapter, MuteRequestAdapter, PlayMusicRequestAdapter, NextTrackRequestAdapter
 from snipssonos.services.node.device_discovery_service import NodeDeviceDiscoveryService
 from snipssonos.services.node.device_transport_control import NodeDeviceTransportControlService
 from snipssonos.services.node.music_playback_service import NodeMusicPlaybackService
@@ -65,7 +66,16 @@ def previousSong_callback(hermes, intentMessage):
 
 
 def nextSong_callback(hermes, intentMessage):
-    pass
+    use_case = NextTrackUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
+    next_track_request = NextTrackRequestAdapter.from_intent_message(intentMessage)
+
+    response = use_case.execute(next_track_request)
+    if not response:
+        logging.info(response.value)
+        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
+    else:
+        logging.info(response)
+        hermes.publish_end_session(intentMessage.session_id, "")
 
 
 def resumeMusic_callback(hermes, intentMessage):  # Playback functions
