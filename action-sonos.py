@@ -47,7 +47,6 @@ else:
 # Connection
 HOSTNAME = CONFIGURATION['global']['hostname'] if CONFIGURATION['global']['hostname'] else "localhost"
 HERMES_HOST = "{}:1883".format(HOSTNAME)
-MOPIDY_HOST = HOSTNAME
 
 
 # Music management functions
