@@ -27,4 +27,3 @@ class PlayPlaylistUseCase(UseCase):
             return ResponseSuccess(feedback=tts_feedback)
 
         return ResponseFailure.build_resource_error(self.feedback_service.get_generic_error_message())
-
