@@ -17,9 +17,6 @@ class DeezerMusicSearchService(MusicSearchService):
     def set_node_query_builder(self, device_name):
         self.query_builder = NodeQueryBuilder(device_name, self.SERVICE_NAME)
 
-    def get_music_service_name(self):
-        return self.SERVICE_NAME
-
     def search_album(self, album_name):
         search_query = self.query_builder\
             .add_album_result_type()\
@@ -115,10 +112,7 @@ class DeezerMusicSearchService(MusicSearchService):
     def execute_query(self, query):
         try:
             response = requests.get(query)
-
-            if response.ok:
-                return response.text
-            else:
+            if not response.ok():
                 raise MusicSearchProviderConnectionError(
                     "There was a problem while making a request to the Node server: '{} with status code {}',"
                     " while hitting the endpoint {}"
