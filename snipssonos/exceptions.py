@@ -95,6 +95,24 @@ class AdapterException(SonosActionException):
     """Something wrong happened in the Interface Adapter layer"""
 
 
+# Node query builder
+class NodeQueryBuilderException(Exception):
+    """An error occurred within the Node Query Builder"""
+
+
+class NodeQueryBuilderUnavailableMusicService(NodeQueryBuilderException):
+    """The music service is not implemented"""
+
+
+class NodeQueryBuilderMissingQueryData(NodeQueryBuilderException):
+    """Result type and/or field filters have not been provided"""
+
+
+# Deezer search and play
+class DeezerSearchServiceException(Exception):
+    """An error occurred within the Deezer Search service"""
+
+
 # Device Discovery Service
 class DeviceDiscoveryServiceException(Exception):
     """An error occurred within the Device Discovery Service"""

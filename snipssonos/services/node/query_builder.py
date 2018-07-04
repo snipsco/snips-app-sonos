@@ -1,3 +1,4 @@
+from snipssonos.exceptions import NodeQueryBuilderMissingQueryData, NodeQueryBuilderUnavailableMusicService
 
 
 class NodeQueryBuilder(object):
@@ -17,7 +18,10 @@ class NodeQueryBuilder(object):
     def set_music_service(self, music_service):
         if self.is_available_music_service(music_service):
             self.music_service = music_service
-        # TODO throw error
+        else:
+            raise NodeQueryBuilderUnavailableMusicService(
+                "The {} is not available {} use instead"
+                .format(music_service, ','.join(self.AVAILABLE_MUSIC_SERVICES)))
 
     def add_result_type(self, result_type):
         self.result_type = result_type
@@ -62,7 +66,7 @@ class NodeQueryBuilder(object):
             return "{}/{}/musicsearch/{}/{}/{}".format(base_endpoint, device_name, self.music_service,
                                                        self.result_type, fields_query)
         else:
-            print("Create error case")  # TODO
+            raise NodeQueryBuilderMissingQueryData("Result type and/or field filters have not been set")
 
     def is_available_music_service(self, music_service):
         return music_service in self.AVAILABLE_MUSIC_SERVICES
