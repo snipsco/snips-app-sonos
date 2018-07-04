@@ -1,7 +1,7 @@
 from snipssonos.services.music.playback_service import MusicPlaybackService
 
 
-class NodeMusicPlaybackService(MusicPlaybackService):  # Dumb playback service to comply with current api
+class DeezerNodeMusicPlaybackService(MusicPlaybackService):  # Dumb playback service to comply with current api
 
     def play(self, device, music_item):
         return True
