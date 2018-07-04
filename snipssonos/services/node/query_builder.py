@@ -1,6 +1,6 @@
 
 
-class NodeSearchQueryBuilder(object):
+class NodeQueryBuilder(object):
 
     AVAILABLE_MUSIC_SERVICES = ["spotify", "deezer"]
 
@@ -8,8 +8,8 @@ class NodeSearchQueryBuilder(object):
     HOST = "localhost"
     PROTOCOL = "http://"
 
-    def __init__(self, device, music_service):
-        self.device = device
+    def __init__(self, device_name, music_service):
+        self.device_name = device_name
         self.music_service = music_service
         self.result_type = None
         self.field_filters = []
@@ -52,16 +52,15 @@ class NodeSearchQueryBuilder(object):
         return "{}{}:{}".format(self.PROTOCOL, self.HOST, self.PORT)
 
     def _generate_query_terms(self):
-        return ''.join(["{} ".format(field_filter for field_filter in self.field_filters)])\
-            .strip()
+        return ' '.join(self.field_filters).strip()
 
     def generate_search_query(self):
-        room_name = self.device.name
+        device_name = self.device_name
         base_endpoint = self._generate_base_endpoint()
         fields_query = self._generate_query_terms()
         if self.result_type and fields_query:
-            return "{}/{}/{}/{}/{}".format(base_endpoint, room_name, self.music_service,
-                                           self.result_type, fields_query)
+            return "{}/{}/musicsearch/{}/{}/{}".format(base_endpoint, device_name, self.music_service,
+                                                       self.result_type, fields_query)
         else:
             print("Create error case")  # TODO
 
