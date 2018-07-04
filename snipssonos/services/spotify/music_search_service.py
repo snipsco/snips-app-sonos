@@ -15,6 +15,9 @@ class SpotifyMusicSearchService(MusicSearchService):
         self.client_id = client_id
         self.client_secret = client_secret
 
+    def set_node_query_builder(self, device_name):
+        pass
+
     def search_album(self, album_name):
         album_search_query = SpotifyAPISearchQueryBuilder() \
             .set_search_query() \

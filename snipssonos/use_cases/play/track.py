@@ -13,6 +13,8 @@ class PlayTrackUseCase(UseCase):
     def process_request(self, request_object):
 
         device = self.device_discovery_service.get()
+        self.music_search_service.set_node_query_builder(device.name)
+
         track_name = request_object.track_name if request_object.track_name else None
         artist_name = request_object.artist_name if request_object.artist_name else None
         album_name = request_object.album_name if request_object.album_name else None

@@ -13,6 +13,8 @@ class PlayPlaylistUseCase(UseCase):
     def process_request(self, request_object):
 
         device = self.device_discovery_service.get()
+        self.music_search_service.set_node_query_builder(device.name)
+
         results_playlists = list()
 
         if request_object.playlist_name:

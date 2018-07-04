@@ -14,6 +14,7 @@ class PlayArtistUseCase(UseCase):
         tts_feedback = self.feedback_service.get_artist_template()\
             .format(request_object.artist_name)
         device = self.device_discovery_service.get()
+        self.music_search_service.set_node_query_builder(device.name)
 
         results_track = list()
 
