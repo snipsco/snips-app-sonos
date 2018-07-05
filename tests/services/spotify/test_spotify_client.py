@@ -10,10 +10,9 @@ from snipssonos.exceptions import MusicSearchCredentialsError, \
 
 
 # Testing Spotify Client
-@pytest.mark.skip(reason="I didn't have time to do proper mocking. Let's wait for next iteration")
-@mock.patch('snipssonos.services.spotify_music_search_service.requests')
-def test_spotify_client_raises_exception_connection_error(mocked_requests):
-    mocked_requests.post.side_effect = requests.exceptions.ConnectionError
+@mock.patch('snipssonos.helpers.spotify_client.requests.post')
+def test_spotify_client_raises_exception_connection_error(mocked_requests_post):
+    mocked_requests_post.side_effect = requests.exceptions.ConnectionError
 
     client_id = "client_id"
     client_secret = "client_secret"
