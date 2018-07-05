@@ -50,8 +50,7 @@ if __name__ == "__main__":
 
         use_case = InjectEntitiesUseCase(music_customization_service, entities_injection_service)
 
-        response = use_case.process_request(inject_entities_request)
+        response = use_case.execute(inject_entities_request)
         logging.info("Response: {}".format(bool(response)))
-        first_time = False
 
         time.sleep(SECONDS_IN_A_DAY - ((time.time() - starttime) % SECONDS_IN_A_DAY))
