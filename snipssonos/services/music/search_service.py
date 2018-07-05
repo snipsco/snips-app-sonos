@@ -1,4 +1,17 @@
-class MusicSearchService(object):  # TODO : Make this class Abstract
+from snipssonos.services.service import Service
+
+
+class MusicSearchService(Service):  # TODO : Make this class Abstract
+    PORT = 5005
+    HOST = "localhost"
+    PROTOCOL = "http://"
+
+    def __init__(self):
+        self.PORT = self.CONFIGURATION['global']['music_search_service_port'] if (
+            self.CONFIGURATION['global']['music_search_service_port']) else self.PORT
+
+        self.HOST = self.CONFIGURATION['global']['music_search_service_hostname'] if (
+            self.CONFIGURATION['global']['music_search_service_hostname']) else self.HOST
 
     def search_artist(self, artist_name):
         raise NotImplementedError("search_artist() method not implemented for now.")

@@ -33,7 +33,7 @@ from snipssonos.shared.feedback import FR_TTS_SHORT_ERROR
 CONFIG_INI = "config.ini"
 
 # Configuration
-CONFIGURATION = read_configuration_file("config.ini")
+CONFIGURATION = read_configuration_file(CONFIG_INI)
 
 # Logging
 LOG_LEVEL = CONFIGURATION['global']['log_level']

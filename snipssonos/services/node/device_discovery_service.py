@@ -7,9 +7,6 @@ from snipssonos.exceptions import DeviceParsingException, NoReachableDeviceExcep
 
 
 class NodeDeviceDiscoveryService(DeviceDiscoveryService):
-    PORT = 5005
-    HOST = "localhost"
-    PROTOCOL = "http://"
 
     def get(self):
         devices = self.get_devices()

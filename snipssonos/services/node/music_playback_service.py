@@ -1,14 +1,10 @@
 import requests
+from requests_futures.sessions import FuturesSession
 
 from snipssonos.services.music.playback_service import MusicPlaybackService
-from requests_futures.sessions import FuturesSession
 
 
 class NodeMusicPlaybackService(MusicPlaybackService):  # TODO : Refactor this in next iteration ...
-
-    PORT = 5005
-    HOST = "localhost"
-    PROTOCOL = "http://"
 
     def play(self, device, music_item):
         self.device = device if device else self.device
