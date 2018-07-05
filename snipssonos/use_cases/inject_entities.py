@@ -11,9 +11,9 @@ class InjectEntitiesUseCase(UseCase):
         self.entities_injection_service = entities_injection_service
 
     def process_request(self, request_object):
-        entities = request_object.entities
+        entities_type = request_object.entities_type
 
-        for entity_name, entity_slot_name in entities.iteritems():
+        for entity_name, entity_slot_name in entities_type.iteritems():
             logging.info("Inject entities request made for '{}' with slot name '{}'"
                          .format(entity_name, entity_slot_name))
             results_entity = self.music_customization_service.fetch_entity(entity_name)

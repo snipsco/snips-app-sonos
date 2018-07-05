@@ -20,7 +20,7 @@ def test_inject_entities_successful(custom_mock, injection_mock):
     custom_mock_instance.fetch_entity.return_value = [Artist("uri_1", "Kendrick Lamar"),
                                                       Artist("uri_2", "Beyonce")]
     injection_request_dict = {
-        'entities': ENTITIES
+        'entities_type': ENTITIES
     }
     inject_entities_request = InjectEntitiesRequestFactory.from_dict(injection_request_dict)
     inject_entities = InjectEntitiesUseCase(custom_mock_instance, injection_mock_instance)
@@ -37,7 +37,7 @@ def test_inject_entities_failure(custom_mock, injection_mock):
 
     custom_mock_instance.fetch_entity.return_value = []
     injection_request_dict = {
-        'entities': ENTITIES
+        'entities_type': ENTITIES
     }
     inject_entities_request = InjectEntitiesRequestFactory.from_dict(injection_request_dict)
     inject_entities = InjectEntitiesUseCase(custom_mock_instance, injection_mock_instance)

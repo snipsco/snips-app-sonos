@@ -265,34 +265,34 @@ class PlayMusicRequestFactory(RequestObjectFactory):
 class InjectEntitiesRequestObject(ValidRequestObject):
     VALID_ENTITY_NAMES = ["artists", "tracks", "playlists"]
 
-    def __init__(self, entities):
-        self.entities = entities
+    def __init__(self, entities_type):
+        self.entities_type = entities_type
 
     @property
-    def entities(self):
-        return self._entities
+    def entities_type(self):
+        return self._entities_type
 
-    @entities.setter
-    def entities(self, entities):
+    @entities_type.setter
+    def entities_type(self, entities_type):
         invalid_request = InvalidRequestObject()
-        if isinstance(entities, dict):
-            for entity_name, entity_slot_name in entities.iteritems():
+        if isinstance(entities_type, dict):
+            for entity_name, entity_slot_name in entities_type.iteritems():
                 self.entity_name_validation(entity_name, invalid_request)
                 self.entity_slot_name_validation(entity_slot_name, invalid_request)
-            self._entities = entities
+            self._entities_type = entities_type
         else:
-            invalid_request.add_error('entities', 'has to be a dictionary')
+            invalid_request.add_error('entities_type', 'has to be a dictionary')
 
         if invalid_request.has_errors():
             raise RequestObjectInitializationException(invalid_request)
 
     def entity_name_validation(self, entity_name, invalid_request):
         if not isinstance(entity_name, str):
-            invalid_request.add_error('entity name {} in entities'.format(entity_name),
+            invalid_request.add_error('entity name {} in entities_type'.format(entity_name),
                                       'has to be a dictionary')
         if entity_name not in self.VALID_ENTITY_NAMES:
             invalid_request \
-                .add_error('entity name {} in entities'.format(entity_name),
+                .add_error('entity name {} in entities_type'.format(entity_name),
                            'has to be a valid entity name {}'
                            .format([entity_name for entity_name in self.VALID_ENTITY_NAMES]))
             return invalid_request
@@ -308,7 +308,7 @@ class InjectEntitiesRequestObject(ValidRequestObject):
     def from_dict(cls, a_dictionary):
 
         return cls(
-            entities=a_dictionary.get('entities', None),
+            entities_type=a_dictionary.get('entities_type', None),
         )
 
 
