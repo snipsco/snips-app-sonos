@@ -38,9 +38,28 @@ class NodeDeviceTransportControlService(DeviceTransportControlService):
     def _generate_next_track_query(self, room_name):
         return "{}/{}/next".format(self.BASE_URL, room_name)
 
-    def _process_query(self, query_url):
-        req = requests.get(query_url)
-        if req.ok:
+    def _generate_previous_track_query(self, room_name):
+        return "{}/{}/previous".format(self.BASE_URL, room_name)
+
+    def _generate_state_query(self, room_name):
+        return "{}/{}/state".format(self.BASE_URL, room_name)
+
+    def _generate_track_seek_query(self, room_name, track_number):
+        return "{}/{}/trackseek/{}".format(self.BASE_URL, room_name, track_number)
+
+    def _extract_state_track_number(self, response):
+        return response.json()['trackNo']
+
+    def get_track_number(self, device_name):
+        query_url = self._generate_state_query(device_name)
+        response = self._process_query(query_url, True)
+        return self._extract_state_track_number(response)
+
+    def _process_query(self, query_url, return_response=False):
+        response = requests.get(query_url)
+        if response.ok:
+            if return_response:
+                return response
             return True
         raise NoReachableDeviceException("Could not reach your Sonos device")
 
@@ -66,4 +85,12 @@ class NodeDeviceTransportControlService(DeviceTransportControlService):
     def next_track(self, device):
         room_name = device.name
         query_url = self._generate_next_track_query(room_name)
+        return self._process_query(query_url)
+
+    def previous_track(self, device):
+        room_name = device.name
+        if self.get_track_number(room_name) == 1:
+            restart_song_query = self._generate_track_seek_query(room_name, 1)
+            return self._process_query(restart_song_query)
+        query_url = self._generate_previous_track_query(room_name)
         return self._process_query(query_url)
