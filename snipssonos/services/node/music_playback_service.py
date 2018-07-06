@@ -26,6 +26,14 @@ class NodeMusicPlaybackService(MusicPlaybackService):  # TODO : Refactor this in
             query_url = self._generate_queue_query(music_item)
             session.get(query_url)
 
+    def clear_queue(self, device):
+        self.device = device if device else self.device
+        query_url = self._generate_clear_queue_query()
+        req = requests.get(query_url)
+
+        if req.ok:
+            return True
+
     def _generate_play_now_query(self, music_item):
         room_name = self.device.name
         uri = music_item.uri
@@ -35,3 +43,7 @@ class NodeMusicPlaybackService(MusicPlaybackService):  # TODO : Refactor this in
         room_name = self.device.name
         uri = music_item.uri
         return "{}{}:{}/{}/spotify/queue/{}".format(self.PROTOCOL, self.HOST, self.PORT, room_name, uri)
+
+    def _generate_clear_queue_query(self):
+        room_name = self.device.name
+        return "{}{}:{}/{}/clearqueue".format(self.PROTOCOL, self.HOST, self.PORT, room_name)

@@ -48,6 +48,16 @@ def test_generate_correct_url_query_for_queue(connected_device):
     music_playback_service._generate_queue_query(track)
 
 
+def test_generate_correct_url_query_for_clear_queue(connected_device):
+    music_playback_service = NodeMusicPlaybackService(connected_device)
+
+    expected_query = "http://localhost:5005/Antho Room/clearqueue"
+
+    actual_query = music_playback_service._generate_clear_queue_query()
+
+    assert expected_query == actual_query
+
+
 @mock.patch('snipssonos.services.node.music_playback_service.FuturesSession.get')
 def test_calls_queue(mocked_future, connected_device):
     music_playback_service = NodeMusicPlaybackService(connected_device)
