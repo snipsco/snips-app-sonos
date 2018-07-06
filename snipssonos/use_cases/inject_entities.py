@@ -1,3 +1,5 @@
+import logging
+
 from snipssonos.shared.use_case import UseCase
 from snipssonos.shared.response_object import ResponseSuccess, ResponseFailure
 
@@ -9,11 +11,7 @@ class InjectEntitiesUseCase(UseCase):
         self.entities_injection_service = entities_injection_service
 
     def process_request(self, request_object):
-        entity_name = request_object.entity_name
-        results_entity = self.music_customization_service.fetch_entity(entity_name)
-        if len(results_entity):
-            self.entities_injection_service.publish_entities(request_object.entity_slot_name, results_entity)
-        else:
-            return ResponseFailure.build_resource_error("An error occurred, service return an empty response")
-
+        self.entities_injection_service.publish_entities(self.music_customization_service,
+                                                         request_object.entities_type)
         return ResponseSuccess()
+

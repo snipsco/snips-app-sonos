@@ -10,8 +10,11 @@ def test_build_injection_request_object_from_empty_dict():
 
 def test_build_injection_request_object_from_non_string_value_for_entity_slot_name():
     adict = {
-        "entity_name": VALID_ENTITY_NAMES[0],
-        "entity_slot_name": 1,
+        "entities_type": {
+            "artists": 1,
+            "tracks": "snips/song",
+            "playlists": "playlistNameFR"
+        }
     }
     injection_request = InjectEntitiesRequestFactory.from_dict(adict)
     assert bool(injection_request) is False
@@ -19,8 +22,11 @@ def test_build_injection_request_object_from_non_string_value_for_entity_slot_na
 
 def test_build_injection_request_object_from_non_string_value_for_entity_name():
     adict = {
-        "entity_name": 1,
-        "entity_slot_name": "snips/artist",
+        "entities_type": {
+            1: "snips/artist",
+            "tracks": "snips/song",
+            "playlists": "playlistNameFR"
+        }
     }
     injection_request = InjectEntitiesRequestFactory.from_dict(adict)
     assert bool(injection_request) is False
@@ -28,19 +34,25 @@ def test_build_injection_request_object_from_non_string_value_for_entity_name():
 
 def test_build_injection_request_object_from_non_valid_type_for_entity_name():
     adict = {
-        "entity_name": "blabla",
-        "entity_slot_name": "snips/artist",
+        "entities_type": {
+            "blbala": "snips/artist",
+            "tracks": "snips/song",
+            "playlists": "playlistNameFR"
+        }
     }
     injection_request = InjectEntitiesRequestFactory.from_dict(adict)
-    print(injection_request)
     assert bool(injection_request) is False
 
 
 def test_build_injection_request_object_valid():
     adict = {
-        "entity_name": VALID_ENTITY_NAMES[0],
-        "entity_slot_name": "snips/artist"
+        "entities_type": {
+            "artists": "snips/artist",
+            "tracks": "snips/song",
+            "playlists": "playlistNameFR"
+        }
     }
+
     injection_request = InjectEntitiesRequestFactory.from_dict(adict)
     assert bool(injection_request) is True
 
