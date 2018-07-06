@@ -14,7 +14,13 @@ class EntitiesInjectionService:
 
         self.entities_payload = dict()
 
-    def publish_entities(self):
+    def publish_entities(self, music_customization_service, entities_type):
+        for entity_name, entity_slot_name in entities_type.iteritems():
+            logging.info("Inject entities request made for '{}' with slot name '{}'"
+                         .format(entity_name, entity_slot_name))
+            results_entity = music_customization_service.fetch_entity(entity_name)
+            if len(results_entity):
+                self.build_entities_payload(entity_slot_name, results_entity)
         payload = self.build_payload()
 
         injection_topic = self.MQTT_TOPIC_INJECT

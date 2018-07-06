@@ -11,15 +11,7 @@ class InjectEntitiesUseCase(UseCase):
         self.entities_injection_service = entities_injection_service
 
     def process_request(self, request_object):
-        entities_type = request_object.entities_type
-
-        for entity_name, entity_slot_name in entities_type.iteritems():
-            logging.info("Inject entities request made for '{}' with slot name '{}'"
-                         .format(entity_name, entity_slot_name))
-            results_entity = self.music_customization_service.fetch_entity(entity_name)
-            if len(results_entity):
-                self.entities_injection_service.build_entities_payload(entity_slot_name, results_entity)
-            else:
-                return ResponseFailure.build_resource_error("An error occurred, service return an empty response")
-        self.entities_injection_service.publish_entities()
+        self.entities_injection_service.publish_entities(self.music_customization_service,
+                                                         request_object.entities_type)
         return ResponseSuccess()
+
