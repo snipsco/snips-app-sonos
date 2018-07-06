@@ -9,6 +9,15 @@ from snipssonos.entities.device import Device
 
 
 @pytest.fixture
+def node_configuration():
+    return {
+        'global' : {
+            'node_device_transport_control_port' : 5005 ,
+            'node_device_transport_control_host' : 'localhost'
+        }
+    }
+
+@pytest.fixture
 def connected_device():
     return Device.from_dict(
         {
@@ -27,7 +36,7 @@ def test_transport_control_service_initialization():
     assert transport_service.PROTOCOL == NodeDeviceTransportControlService.PROTOCOL
 
 
-def test_generate_url_query_for_volume_up(connected_device):
+def test_generate_url_query_for_volume_up(connected_device, node_configuration):
     PROTOCOL = NodeDeviceTransportControlService.PROTOCOL
     HOST = NodeDeviceTransportControlService.HOST
     PORT = NodeDeviceTransportControlService.PORT
@@ -35,12 +44,12 @@ def test_generate_url_query_for_volume_up(connected_device):
     room_name = connected_device.name
     volume_level = 10
 
-    transport_service = NodeDeviceTransportControlService()
+    transport_service = NodeDeviceTransportControlService(node_configuration)
 
     assert transport_service._generate_volume_query(room_name, volume_level) == "http://localhost:5005/Antho/volume/10"
 
 
-def test_generate_url_query_for_resume(connected_device):
+def test_generate_url_query_for_resume(connected_device, node_configuration):
     PROTOCOL = NodeDeviceTransportControlService.PROTOCOL
     HOST = NodeDeviceTransportControlService.HOST
     PORT = NodeDeviceTransportControlService.PORT
@@ -48,12 +57,12 @@ def test_generate_url_query_for_resume(connected_device):
     room_name = connected_device.name
     volume_level = 10
 
-    transport_service = NodeDeviceTransportControlService()
+    transport_service = NodeDeviceTransportControlService(node_configuration)
 
     assert transport_service._generate_resume_query(room_name) == "http://localhost:5005/Antho/play"
 
 
-def test_generate_url_query_for_mute(connected_device):
+def test_generate_url_query_for_mute(connected_device, node_configuration):
     PROTOCOL = NodeDeviceTransportControlService.PROTOCOL
     HOST = NodeDeviceTransportControlService.HOST
     PORT = NodeDeviceTransportControlService.PORT
@@ -61,12 +70,12 @@ def test_generate_url_query_for_mute(connected_device):
     room_name = connected_device.name
     volume_level = 10
 
-    transport_service = NodeDeviceTransportControlService()
+    transport_service = NodeDeviceTransportControlService(node_configuration)
 
     assert transport_service._generate_mute_query(room_name) == "http://localhost:5005/Antho/mute"
 
 
-def test_generate_url_query_for_next_track(connected_device):
+def test_generate_url_query_for_next_track(connected_device, node_configuration):
     PROTOCOL = NodeDeviceTransportControlService.PROTOCOL
     HOST = NodeDeviceTransportControlService.HOST
     PORT = NodeDeviceTransportControlService.PORT
@@ -74,7 +83,7 @@ def test_generate_url_query_for_next_track(connected_device):
     room_name = connected_device.name
     volume_level = 10
 
-    transport_service = NodeDeviceTransportControlService()
+    transport_service = NodeDeviceTransportControlService(node_configuration)
 
     assert transport_service._generate_next_track_query(room_name) == "http://localhost:5005/Antho/next"
 

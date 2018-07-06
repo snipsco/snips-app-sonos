@@ -1,19 +1,10 @@
-from snipssonos.services.service import Service
+from snipssonos.services.service import ConfigurableHTTPService
 
 
-class DeviceDiscoveryService(Service):
-    PORT = 5005
-    HOST = "localhost"
-    PROTOCOL = "http://"
-
-    def __init__(self, device=None):
+class DeviceDiscoveryService(ConfigurableHTTPService):
+    def __init__(self, CONFIGURATION=None, device=None):
+        super(DeviceDiscoveryService, self).__init__(CONFIGURATION)
         self.device = device
-
-        self.PORT = self.CONFIGURATION['global']['music_service_port'] if (
-            self.CONFIGURATION['global']['music_service_port']) else self.PORT
-
-        self.HOST = self.CONFIGURATION['global']['music_service_hostname'] if (
-            self.CONFIGURATION['global']['music_service_hostname']) else self.HOST
 
     def get(self):
         raise NotImplementedError("get() is not implemented")

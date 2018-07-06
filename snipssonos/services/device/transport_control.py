@@ -1,17 +1,11 @@
-from snipssonos.services.service import Service
+from snipssonos.services.service import ConfigurableHTTPService
 
 
-class DeviceTransportControlService(Service):  # TODO : Make this class abstract
-    PORT = 5005
-    HOST = "localhost"
-    PROTOCOL = "http://"
+class DeviceTransportControlService(ConfigurableHTTPService):  # TODO : Make this class abstract
+    NAME = "device_transport_control"
 
-    def __init__(self):
-        self.PORT = self.CONFIGURATION['global']['music_service_port'] if (
-            self.CONFIGURATION['global']['music_service_port']) else self.PORT
-
-        self.HOST = self.CONFIGURATION['global']['music_service_hostname'] if (
-            self.CONFIGURATION['global']['music_service_hostname']) else self.HOST
+    def __init__(self, CONFIGURATION=None):
+        super(DeviceTransportControlService, self).__init__(CONFIGURATION)
 
     def pause(self, device):
         raise NotImplementedError("pause() is not implemented")

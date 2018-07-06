@@ -5,6 +5,10 @@ from snipssonos.services.music.playback_service import MusicPlaybackService
 
 
 class NodeMusicPlaybackService(MusicPlaybackService):  # TODO : Refactor this in next iteration ...
+    SERVICE_NAME = "node_music_playback"
+
+    def __init__(self, device=None, CONFIGURATION=None):
+        super(NodeMusicPlaybackService, self).__init__(device=device, CONFIGURATION=CONFIGURATION)
 
     def play(self, device, music_item):
         self.device = device if device else self.device

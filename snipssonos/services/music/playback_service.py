@@ -1,19 +1,11 @@
-from snipssonos.services.service import Service
+from snipssonos.services.service import ConfigurableHTTPService
 
 
-class MusicPlaybackService(Service):
-    PORT = 5005
-    HOST = "localhost"
-    PROTOCOL = "http://"
+class MusicPlaybackService(ConfigurableHTTPService):
 
-    def __init__(self, device=None):
+    def __init__(self, device=None, CONFIGURATION=None):
+        super(MusicPlaybackService, self).__init__(CONFIGURATION)
         self.device = device
-
-        self.PORT = self.CONFIGURATION['global']['music_playback_service_port'] if (
-            self.CONFIGURATION['global']['music_service_port']) else self.PORT
-
-        self.HOST = self.CONFIGURATION['global']['music_service_hostname'] if (
-            self.CONFIGURATION['global']['music_service_hostname']) else self.HOST
 
     def play(self, device, artist_name):
         raise NotImplementedError("play() method not implemented for now.")
