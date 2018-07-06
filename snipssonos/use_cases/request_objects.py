@@ -32,6 +32,16 @@ class NextTrackRequestFactory(RequestObjectFactory):
     request_object_class = NextTrackRequestObject
 
 
+class PreviousTrackRequestObject(ValidRequestObject):
+    @classmethod
+    def from_dict(cls, adict):
+        return cls()
+
+
+class PreviousTrackRequestFactory(RequestObjectFactory):
+    request_object_class = PreviousTrackRequestObject
+
+
 class VolumeSetRequestObject(ValidRequestObject):
     def __init__(self, volume_level):
         self.volume_level = volume_level

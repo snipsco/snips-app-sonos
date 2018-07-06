@@ -19,3 +19,6 @@ class DeviceTransportControlService(object):  # TODO : Make this class abstract
 
     def next_track(self, device):
         raise NotImplementedError("next_track() is not implemented")
+
+    def previous_track(self, device):
+        raise NotImplementedError("previous_track() is not implemented")
