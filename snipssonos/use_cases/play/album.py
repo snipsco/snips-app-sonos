@@ -34,6 +34,7 @@ class PlayAlbumUseCase(UseCase):
 
         if len(results_albums):
             first_album = results_albums[0]
+            self.music_playback_service.clear_queue(device)
             self.music_playback_service.play(device, first_album)
         else:
             return ResponseFailure.build_resource_error("An error happened")
