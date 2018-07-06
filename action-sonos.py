@@ -17,11 +17,12 @@ from snipssonos.use_cases.resume_music import ResumeMusicUseCase
 from snipssonos.use_cases.speaker_interrupt import SpeakerInterruptUseCase
 from snipssonos.use_cases.next_track import NextTrackUseCase
 from snipssonos.use_cases.previous_track import PreviousTrackUseCase
+from snipssonos.use_cases.get_track_info import GetTrackInfoUseCase
 
 from snipssonos.adapters.request_adapter import VolumeUpRequestAdapter, PlayTrackRequestAdapter, \
     PlayArtistRequestAdapter, VolumeSetRequestAdapter, VolumeDownRequestAdapter, ResumeMusicRequestAdapter, \
     SpeakerInterruptRequestAdapter, MuteRequestAdapter, PlayMusicRequestAdapter, NextTrackRequestAdapter,\
-    PreviousTrackRequestAdapter
+    PreviousTrackRequestAdapter, GetTrackInfoRequestAdapter
 from snipssonos.services.node.device_discovery_service import NodeDeviceDiscoveryService
 from snipssonos.services.node.device_transport_control import NodeDeviceTransportControlService
 from snipssonos.services.node.music_playback_service import NodeMusicPlaybackService
@@ -57,7 +58,17 @@ def addSong_callback(hermes, intentMessage):
 
 
 def getInfos_callback(hermes, intentMessage):
-    raise NotImplementedError("getInfos_callback() not implemented")
+    use_case = GetTrackInfoUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
+    get_track_request = GetTrackInfoRequestAdapter.from_intent_message(intentMessage)
+
+    response = use_case.execute(get_track_request)
+
+    if not response:
+        feedback = TTSSentenceGenerator("FRENCH").from_response_object(response)
+        hermes.publish_end_session(intentMessage.session_id, feedback)
+    else:
+        logging.debug("Response Success : {}".format(response))
+        hermes.publish_end_session(intentMessage.session_id, response.feedback)
 
 
 def radioOn_callback(hermes, intentMessage):
@@ -238,4 +249,5 @@ if __name__ == "__main__":
             .subscribe_intent("speakerInterrupt4", speakerInterrupt_callback) \
             .subscribe_intent("nextSong4", nextSong_callback) \
             .subscribe_intent("previousSong4", previousSong_callback) \
+            .subscribe_intent("getInfos4", getInfos_callback) \
             .loop_forever()

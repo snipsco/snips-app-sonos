@@ -83,3 +83,9 @@ class SpotifyQueryBuilderNonExistentTimeRange(SpotifyQueryBuilderException):
 # Adapters exceptions
 class AdapterException(SonosActionException):
     """Something wrong happened in the Interface Adapter layer"""
+
+
+# Device Discovery Service
+class DeviceDiscoveryServiceException(Exception):
+    """An error occurred within the Device Discovery Service"""
+

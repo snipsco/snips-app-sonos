@@ -94,3 +94,12 @@ class NodeDeviceTransportControlService(DeviceTransportControlService):
             return self._process_query(restart_song_query)
         query_url = self._generate_previous_track_query(room_name)
         return self._process_query(query_url)
+
+    def get_track_info(self, device):
+        room_name = device.name
+        state_query = self._generate_state_query(room_name)
+        response = self._process_query(state_query, True)
+        current_track = response.json()['currentTrack']
+        title = current_track['title']
+        artist = current_track['artist']
+        return title, artist
