@@ -28,11 +28,13 @@ class PlayArtistUseCase(UseCase):
             first_result = results_track[0]
             other_results = results_track[1:]
 
+            self.music_playback_service.clear_queue(device)
             self.music_playback_service.play(device, first_result)
             self.music_playback_service.queue(device, other_results)
 
         elif len(results_track) == 1:
             first_result = results_track[0]
+            self.music_playback_service.clear_queue(device)
             self.music_playback_service.play(device, first_result)
         else:
             return ResponseFailure.build_resource_error(FR_TTS_GENERIC_ERROR)

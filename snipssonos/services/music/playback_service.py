@@ -8,3 +8,6 @@ class MusicPlaybackService(object):
 
     def queue(self, device, music_items):
         raise NotImplementedError("queue() method not implemented for now.")
+
+    def clear_queue(self, device):
+        raise NotImplementedError("clear_queue() method not implemented for now.")
