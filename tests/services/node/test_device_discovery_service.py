@@ -16,16 +16,26 @@ def connected_device():
     })
 
 
-def test_device_discovery_service_initialization():
-    discovery_service = NodeDeviceDiscoveryService()
+@pytest.fixture
+def configuration():
+    return {
+        'global':{
+            'node_device_discovery_port' : 5005,
+            'node_device_discovery_host' : 'localhost'
+        }
+    }
 
-    assert discovery_service.PORT == NodeDeviceDiscoveryService.PORT
-    assert discovery_service.HOST == NodeDeviceDiscoveryService.HOST
+
+def test_device_discovery_service_initialization(configuration):
+    discovery_service = NodeDeviceDiscoveryService(configuration)
+
+    assert discovery_service.PORT == configuration['global']['node_device_discovery_port']
+    assert discovery_service.HOST == configuration['global']['node_device_discovery_host']
     assert discovery_service.PROTOCOL == NodeDeviceDiscoveryService.PROTOCOL
 
 
-def test_generate_correct_url_query_for_get_method():
-    discovery_service = NodeDeviceDiscoveryService()
+def test_generate_correct_url_query_for_get_method(configuration):
+    discovery_service = NodeDeviceDiscoveryService(configuration)
 
     expected_query = "http://localhost:5005/zones/"
     actual_query = discovery_service.generate_get_query()

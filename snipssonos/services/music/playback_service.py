@@ -1,6 +1,10 @@
-class MusicPlaybackService(object):
+from snipssonos.services.service import ConfigurableHTTPService
 
-    def __init__(self, device=None):
+
+class MusicPlaybackService(ConfigurableHTTPService):
+
+    def __init__(self, device=None, CONFIGURATION=None):
+        super(MusicPlaybackService, self).__init__(CONFIGURATION)
         self.device = device
 
     def play(self, device, artist_name):
