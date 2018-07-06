@@ -213,10 +213,10 @@ if __name__ == "__main__":
     refresh_token = CONFIGURATION['secret']['refresh_token']
 
     with Hermes(HERMES_HOST) as h:
-        h.device_discovery_service = NodeDeviceDiscoveryService()
-        h.device_transport_control_service = NodeDeviceTransportControlService()
+        h.device_discovery_service = NodeDeviceDiscoveryService(CONFIGURATION)
+        h.device_transport_control_service = NodeDeviceTransportControlService(CONFIGURATION)
         h.music_search_service = SpotifyMusicSearchService(client_id, client_secret, refresh_token)
-        h.music_playback_service = NodeMusicPlaybackService()
+        h.music_playback_service = NodeMusicPlaybackService(CONFIGURATION=CONFIGURATION)
         h \
             .subscribe_intent("playMusic4", playMusic_callback) \
             .subscribe_intent("volumeUp4", volumeUp_callback) \
