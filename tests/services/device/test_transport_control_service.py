@@ -20,7 +20,7 @@ def test_cant_use_transport_service_volume_up(connected_device):
 
 
 def test_cant_use_transport_service_volume_down(connected_device):
-    transport_service = DeviceTransportControlService()
+    transport_service = DeviceTransportControlService(None)
 
     with pytest.raises(NotImplementedError):
         transport_service.volume_down(connected_device)

@@ -32,13 +32,10 @@ from snipssonos.shared.feedback import FR_TTS_SHORT_ERROR
 # Utils functions
 CONFIG_INI = "config.ini"
 
-HOSTNAME = "localhost"
+# Configuration
+CONFIGURATION = read_configuration_file(CONFIG_INI)
 
-HERMES_HOST = "{}:1883".format(HOSTNAME)
-MOPIDY_HOST = HOSTNAME
-
-# Config & Logging
-CONFIGURATION = read_configuration_file("config.ini")
+# Logging
 LOG_LEVEL = CONFIGURATION['global']['log_level']
 if LOG_LEVEL == "info":
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -46,6 +43,10 @@ elif LOG_LEVEL == "debug":
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 else:
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+
+# Connection
+HOSTNAME = CONFIGURATION['global']['hostname'] if CONFIGURATION['global']['hostname'] else "localhost"
+HERMES_HOST = "{}:1883".format(HOSTNAME)
 
 
 # Music management functions

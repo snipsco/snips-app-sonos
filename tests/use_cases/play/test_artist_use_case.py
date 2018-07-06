@@ -46,8 +46,3 @@ def test_use_case_no_reachable_device():
 
     assert bool(result_obj) is False
     assert result_obj.message == "NoReachableDeviceException: No reachable Sonos devices"
-
-
-@pytest.mark.skip(reason="I didn't have time to do proper mocking. Let's wait for next iteration")
-def test_use_case_with_wrong_parameter():
-    assert True is False

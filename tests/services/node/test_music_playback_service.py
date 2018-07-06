@@ -14,7 +14,15 @@ def connected_device():
         'volume': 18
     })
 
+@pytest.fixture
+def node_configuration():
+    return {
+        'global' : {
+            'node_music_playback_port' : 5005,
+            'node_music_playback_host': 'localhost',
 
+        }
+    }
 def test_music_playback_service_initialization(connected_device):
     music_playback_service = NodeMusicPlaybackService(connected_device)
 
@@ -23,8 +31,8 @@ def test_music_playback_service_initialization(connected_device):
     assert music_playback_service.PROTOCOL == NodeMusicPlaybackService.PROTOCOL
 
 
-def test_generate_correct_url_query_for_get_method(connected_device):
-    music_playback_service = NodeMusicPlaybackService(connected_device)
+def test_generate_correct_url_query_for_get_method(connected_device, node_configuration):
+    music_playback_service = NodeMusicPlaybackService(connected_device, node_configuration)
 
     track = Track.from_dict({'uri': 'uri'})
 
@@ -35,8 +43,8 @@ def test_generate_correct_url_query_for_get_method(connected_device):
     assert expected_query == actual_query
 
 
-def test_generate_correct_url_query_for_queue(connected_device):
-    music_playback_service = NodeMusicPlaybackService(connected_device)
+def test_generate_correct_url_query_for_queue(connected_device, node_configuration):
+    music_playback_service = NodeMusicPlaybackService(device=connected_device, CONFIGURATION=node_configuration)
 
     track = Track.from_dict({'uri': 'uri'})
 
@@ -46,6 +54,16 @@ def test_generate_correct_url_query_for_queue(connected_device):
 
     assert expected_query == actual_query
     music_playback_service._generate_queue_query(track)
+
+
+def test_generate_correct_url_query_for_clear_queue(connected_device):
+    music_playback_service = NodeMusicPlaybackService(connected_device)
+
+    expected_query = "http://localhost:5005/Antho Room/clearqueue"
+
+    actual_query = music_playback_service._generate_clear_queue_query()
+
+    assert expected_query == actual_query
 
 
 @mock.patch('snipssonos.services.node.music_playback_service.FuturesSession.get')

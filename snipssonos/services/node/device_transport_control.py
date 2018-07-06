@@ -5,11 +5,12 @@ from snipssonos.exceptions import NoReachableDeviceException
 
 
 class NodeDeviceTransportControlService(DeviceTransportControlService):
-    PORT = 5005
-    HOST = "localhost"
-    PROTOCOL = "http://"
+    SERVICE_NAME = "node_device_transport_control"
 
-    BASE_URL = "{}{}:{}".format(PROTOCOL, HOST, PORT)
+    def __init__(self, configuration=None):
+        super(NodeDeviceTransportControlService, self).__init__(configuration)
+        self.BASE_URL = "{}{}:{}".format(self.PROTOCOL, self.HOST,
+                                         self.PORT)
 
     def pause(self, device):
         room_name = device.name

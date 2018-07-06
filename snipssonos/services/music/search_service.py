@@ -1,4 +1,10 @@
-class MusicSearchService(object):  # TODO : Make this class Abstract
+from snipssonos.services.service import ConfigurableHTTPService
+
+
+class MusicSearchService(ConfigurableHTTPService):  # TODO : Make this class Abstract
+
+    def __init__(self, CONFIGURATION=None):
+        super(MusicSearchService, self).__init__(CONFIGURATION)
 
     def search_artist(self, artist_name):
         raise NotImplementedError("search_artist() method not implemented for now.")

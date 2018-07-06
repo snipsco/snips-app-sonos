@@ -18,6 +18,7 @@ class PlayPlaylistUseCase(UseCase):
             results_playlists = self.music_search_service.search_playlist(request_object.playlist_name)
             if len(results_playlists):
                 first_playlist = results_playlists[0]
+                self.music_playback_service.clear_queue(device)
                 self.music_playback_service.play(device, first_playlist)
                 tts_feedback = FR_TTS_PLAYING_PLAYLIST_TEMPLATE.format(first_playlist.name)
             else:

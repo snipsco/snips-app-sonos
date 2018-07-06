@@ -44,6 +44,7 @@ class PlayTrackUseCase(UseCase):
             results_track = self.music_search_service.search_track(request_object.track_name)
             if len(results_track):
                 first_result = results_track[0]
+                self.music_playback_service.clear_queue(device)
                 self.music_playback_service.play(device, first_result)
             else:
                 return ResponseFailure.build_resource_error("An error happened")
