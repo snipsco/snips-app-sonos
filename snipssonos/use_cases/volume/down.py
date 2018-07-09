@@ -25,4 +25,4 @@ class VolumeDownUseCase(UseCase):
         return ResponseSuccess()
 
     def has_devices_persisted(self):
-        return True if len(self.state_persistence_service.get_all(Device)) else False
+        return True if len(self.state_persistence_service.get_all(Device)) > 0 else False

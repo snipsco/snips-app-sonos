@@ -19,17 +19,19 @@ def connected_device():
 
 def test_use_case_empty_parameters(connected_device):
     device_discovery_service = mock.Mock()
-    device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
+    device_discovery_service.get_devices.return_value = [connected_device]  # We mock the device discovery service
+    state_persistence_service = mock.Mock() # We mock the persistence layer
+    state_persistence_service.get_all.return_value = []
 
     initial_volume = connected_device.volume
 
     device_transport_control_service = mock.Mock()
 
-    volume_up_uc = VolumeUpUseCase(device_discovery_service, device_transport_control_service)
+    volume_up_uc = VolumeUpUseCase(device_discovery_service, device_transport_control_service, state_persistence_service)
     volume_up_request = VolumeUpRequestObject.from_dict({})
     result_object = volume_up_uc.execute(volume_up_request)
 
-    device_discovery_service.get.assert_called()
+    device_discovery_service.get_devices.assert_called()
     device_transport_control_service.volume_up.assert_called()
 
     device_transport_control_service.volume_up.assert_called_with(connected_device)
@@ -40,12 +42,14 @@ def test_use_case_empty_parameters(connected_device):
 
 def test_use_case_no_reachable_device():
     device_discovery_service = mock.Mock()
-    device_discovery_service.get.side_effect = NoReachableDeviceException(
+    device_discovery_service.get_devices.side_effect = NoReachableDeviceException(
         "No reachable Sonos devices")  # We mock the device discovery service
+    state_persistence_service = mock.Mock()  # We mock the persistence layer
+    state_persistence_service.get_all.return_value = []
 
     device_transport_control_service = mock.Mock()
 
-    volume_up_uc = VolumeUpUseCase(device_discovery_service, device_transport_control_service)
+    volume_up_uc = VolumeUpUseCase(device_discovery_service, device_transport_control_service, state_persistence_service)
 
     volume_up_request = VolumeUpRequestObject()
     result_obj = volume_up_uc.execute(volume_up_request)
@@ -58,10 +62,12 @@ def test_use_case_with_wrong_parameter():
     volume_level_is_a_string = "duh"
 
     device_discovery_service = mock.Mock()
-    device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
+    device_discovery_service.get_devices.return_value = [connected_device]  # We mock the device discovery service
+    state_persistence_service = mock.Mock()  # We mock the persistence layer
+    state_persistence_service.get_all.return_value = []
 
     device_transport_control_service = mock.Mock()
-    volume_up_uc = VolumeUpUseCase(device_discovery_service, device_transport_control_service)
+    volume_up_uc = VolumeUpUseCase(device_discovery_service, device_transport_control_service, state_persistence_service)
 
     volume_up_request = VolumeUpRequestObject.from_dict({'volume_increase': volume_level_is_a_string})
     response_object = volume_up_uc.execute(volume_up_request)
@@ -73,10 +79,12 @@ def test_use_case_with_maximum_volume(connected_device):
     connected_device.volume = 91
 
     device_discovery_service = mock.Mock()
-    device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
+    device_discovery_service.get_devices.return_value = [connected_device]  # We mock the device discovery service
+    state_persistence_service = mock.Mock()  # We mock the persistence layer
+    state_persistence_service.get_all.return_value = []
 
     device_transport_control_service = mock.Mock()
-    volume_up_uc = VolumeUpUseCase(device_discovery_service, device_transport_control_service)
+    volume_up_uc = VolumeUpUseCase(device_discovery_service, device_transport_control_service, state_persistence_service)
 
     volume_up_request = VolumeUpRequestObject.from_dict({})
     response_object = volume_up_uc.execute(volume_up_request)
