@@ -2,6 +2,7 @@ from snipssonos.shared.use_case import UseCase
 from snipssonos.shared.response_object import ResponseSuccess, ResponseFailure
 from snipssonos.exceptions import NoReachableDeviceException
 
+
 class VolumeDownUseCase(UseCase):
     DEFAULT_VOLUME_DECREMENT = 10
 
@@ -9,11 +10,11 @@ class VolumeDownUseCase(UseCase):
         self.device_discovery_service = device_discovery_service
         self.device_transport_control_service = device_transport_control_service
 
-
     def process_request(self, request_object):
-        device = self.device_discovery_service.get()
+        devices = self.device_discovery_service.get_devices()
 
-        device.decrease_volume(self.DEFAULT_VOLUME_DECREMENT)
-
+        for device in devices:
+            device.decrease_volume(self.DEFAULT_VOLUME_DECREMENT)
         self.device_transport_control_service.volume_down(device)
+
         return ResponseSuccess()

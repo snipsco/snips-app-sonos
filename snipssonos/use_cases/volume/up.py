@@ -11,8 +11,10 @@ class VolumeUpUseCase(UseCase):
         self.device_transport_control_service = device_transport_control_service
 
     def process_request(self, request_object):
-        device = self.device_discovery_service.get()
+        devices = self.device_discovery_service.get_devices()
 
-        device.increase_volume(self.DEFAULT_VOLUME_INCREMENT)
-        self.device_transport_control_service.volume_up(device)
+        for device in devices:
+            device.increase_volume(self.DEFAULT_VOLUME_INCREMENT)
+            self.device_transport_control_service.volume_up(device)
+
         return ResponseSuccess()
