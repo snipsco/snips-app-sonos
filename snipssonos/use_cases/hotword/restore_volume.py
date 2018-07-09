@@ -23,6 +23,8 @@ class HotwordRestoreVolumeUseCase(UseCase):
 
             response = volume_set_use_case.execute(volume_set_request_object)
 
+            self.state_persistence_service.clear() # We clear the state.
+
             return ResponseSuccess() if response else response
         else:
-            return ResponseFailure.build_resource_error("Could not retrieve devices in the state ") # TODO : change me
+            return ResponseFailure.build_resource_error("Could not retrieve devices in the state ") # TODO : Change me.
