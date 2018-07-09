@@ -15,3 +15,6 @@ class StatePersistence(Service):
 
     def get(self, entity_cls):
         raise NotImplementedError("get() method not implemented")
+
+    def clear(self):
+        raise NotImplementedError("clear() method not implemented")

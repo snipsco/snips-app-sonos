@@ -24,3 +24,6 @@ class HermesStatePersistence(StatePersistence):
 
     def get(self, entity_cls):
         return self.get_all(entity_cls)[0]
+
+    def clear(self):
+        self.layer = dict()
