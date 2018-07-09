@@ -56,8 +56,8 @@ def test_generate_correct_url_query_for_queue(connected_device, node_configurati
     music_playback_service._generate_queue_query(track)
 
 
-def test_generate_correct_url_query_for_clear_queue(connected_device):
-    music_playback_service = NodeMusicPlaybackService(connected_device)
+def test_generate_correct_url_query_for_clear_queue(connected_device, node_configuration):
+    music_playback_service = NodeMusicPlaybackService(device=connected_device, CONFIGURATION=node_configuration)
 
     expected_query = "http://localhost:5005/Antho Room/clearqueue"
 
@@ -67,8 +67,8 @@ def test_generate_correct_url_query_for_clear_queue(connected_device):
 
 
 @mock.patch('snipssonos.services.node.music_playback_service.FuturesSession.get')
-def test_calls_queue(mocked_future, connected_device):
-    music_playback_service = NodeMusicPlaybackService(connected_device)
+def test_calls_queue(mocked_future, connected_device, node_configuration):
+    music_playback_service = NodeMusicPlaybackService(device=connected_device, CONFIGURATION=node_configuration)
 
     tracks = [Track.from_dict({'uri': 'uri{}'.format(str(i))})for i in range(10)]
     music_playback_service.queue(connected_device, tracks)

@@ -19,5 +19,6 @@ EN_TTS_TRACK_INFO = "This is {} by {}"
 FR_TTS_TRACK_INFO = "C'est {} par {}"
 
 # TODO complete message and translation
-EN_TTS_TRACK_INFO_NO_TRACKS_ERROR = "There is nothing playing right now. If you want to play any music"
-FR_TTS_TRACK_INFO_NO_TRACKS_ERROR = "Error"
+EN_TTS_TRACK_INFO_NO_TRACKS_ERROR = "There is nothing playing right now. If you want to play any music just ask for it"
+FR_TTS_TRACK_INFO_NO_TRACKS_ERROR = "Il n'y a pas de musique pour le moment. Si vous voulez mettre de la musique vous avez juste à le demander"
+
