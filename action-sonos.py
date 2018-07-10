@@ -28,7 +28,7 @@ from snipssonos.adapters.request_adapter import VolumeUpRequestAdapter, PlayTrac
     PreviousTrackRequestAdapter, GetTrackInfoRequestAdapter
 from snipssonos.services.node.device_discovery_service import NodeDeviceDiscoveryService
 from snipssonos.services.node.device_transport_control import NodeDeviceTransportControlService
-from snipssonos.services.node.music_playback_service import NodeMusicPlaybackService
+from snipssonos.services.spotify.music_playback_service import SpotifyNodeMusicPlaybackService
 from snipssonos.services.deezer.music_playback_service import DeezerNodeMusicPlaybackService
 from snipssonos.services.spotify.music_search_service import SpotifyMusicSearchService
 from snipssonos.services.hermes.state_persistence import HermesStatePersistence
@@ -310,7 +310,7 @@ def get_playback_service(music_service):
     if music_service == "deezer":
         return DeezerNodeMusicPlaybackService()
     if music_service == "spotify":
-        return NodeMusicPlaybackService(CONFIGURATION=CONFIGURATION)
+        return SpotifyNodeMusicPlaybackService(CONFIGURATION=CONFIGURATION)
 
 
 def get_music_search_service(music_service):
