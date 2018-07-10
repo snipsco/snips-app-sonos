@@ -54,8 +54,8 @@ elif LOG_LEVEL == "debug":
 else:
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
-MUSIC_SERVICE = CONFIGURATION['global']['music_service'] \
-    if CONFIGURATION['global']['music_service'] in AVAILABLE_MUSIC_SERVICES else AVAILABLE_MUSIC_SERVICES[0]
+MUSIC_PROVIDER = CONFIGURATION['global']['music_provider'] \
+    if CONFIGURATION['global']['music_provider'] in AVAILABLE_MUSIC_SERVICES else AVAILABLE_MUSIC_SERVICES[0]
 CLIENT_ID = CONFIGURATION['secret']['client_id']
 CLIENT_SECRET = CONFIGURATION['secret']['client_secret']
 REFRESH_TOKEN = CONFIGURATION['secret']['refresh_token']
@@ -303,20 +303,20 @@ def playMusic_callback(hermes, intentMessage):
 
 
 def is_available_music_service():
-    return CONFIGURATION['global']['music_service'] in AVAILABLE_MUSIC_SERVICES
+    return CONFIGURATION['global']['music_provider'] in AVAILABLE_MUSIC_SERVICES
 
 
-def get_playback_service(music_service):
-    if music_service == "deezer":
+def get_playback_service(music_provider):
+    if music_provider == "deezer":
         return DeezerNodeMusicPlaybackService()
-    if music_service == "spotify":
+    if music_provider == "spotify":
         return SpotifyNodeMusicPlaybackService(CONFIGURATION=CONFIGURATION)
 
 
-def get_music_search_service(music_service):
-    if music_service == "spotify":
+def get_music_search_service(music_provider):
+    if music_provider == "spotify":
         return SpotifyMusicSearchService(CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN)
-    if music_service == "deezer":
+    if music_provider == "deezer":
         return DeezerMusicSearchService()
 
 
@@ -326,8 +326,8 @@ if __name__ == "__main__":
         h.device_discovery_service = NodeDeviceDiscoveryService(CONFIGURATION)
         h.device_transport_control_service = NodeDeviceTransportControlService(CONFIGURATION)
         h.feedback_service = FeedbackService(LANGUAGE)
-        h.music_search_service = get_music_search_service(MUSIC_SERVICE)
-        h.music_playback_service = get_playback_service(MUSIC_SERVICE)
+        h.music_search_service = get_music_search_service(MUSIC_PROVIDER)
+        h.music_playback_service = get_playback_service(MUSIC_PROVIDER)
 
         h \
             .subscribe_session_started(hotword_detected_callback) \
