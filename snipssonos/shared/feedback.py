@@ -14,4 +14,11 @@ FR_TTS_PLAYING_PLAYLIST_TEMPLATE = "Lecture de la playlist : {}"
 FR_TTS_DEVICE_DISCOVERY_SERVICE_UNREACHABLE = "Le service de découverte d'équipement n'est pas disponible ... Veuillez consulter la documentation pour plus d'information"
 EN_TTS_DEVICE_DISCOVERY_SERVICE_UNREACHABLE = "The Device Discovery service is unreachable ... Please read our documentation for more information"
 
+# Get Info use case
+EN_TTS_TRACK_INFO = "This is {} by {}"
+FR_TTS_TRACK_INFO = "C'est {} par {}"
+
+# TODO complete message and translation
+EN_TTS_TRACK_INFO_NO_TRACKS_ERROR = "There is nothing playing right now. If you want to play any music just ask for it"
+FR_TTS_TRACK_INFO_NO_TRACKS_ERROR = "Il n'y a pas de musique pour le moment. Si vous voulez mettre de la musique vous avez juste à le demander"
 

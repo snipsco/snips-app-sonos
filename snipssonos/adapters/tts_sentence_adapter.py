@@ -25,6 +25,8 @@ class TTSSentenceGenerator(object):
         if response_object: # ResponseSuccess
             return response_object.message
         else: # ResponseFailure
+            if response_object.type == "ResourceError":
+                return response_object.message
             # TODO : Complete this by mapping specific exceptions to the correct TTS sentences.
             if isinstance(response_object.exception, snipssonos.exceptions.SonosActionException):
                 return feedback.FR_TTS_GENERIC_ERROR

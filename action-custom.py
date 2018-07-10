@@ -10,7 +10,6 @@ from snipssonos.services.spotify.music_customization_service import SpotifyCusto
 from snipssonos.services.entities_injection_service import EntitiesInjectionService
 from snipssonos.use_cases.inject_entities import InjectEntitiesUseCase
 
-HERMES_HOST = "localhost"
 SECONDS_IN_A_DAY = 86400.0
 
 ENTITIES = {
@@ -21,6 +20,8 @@ ENTITIES = {
 
 # Config & Logging
 CONFIGURATION = read_configuration_file("config.ini")
+HOSTNAME = CONFIGURATION['global']['hostname'] if CONFIGURATION['global']['hostname'] else "localhost"
+
 LOG_LEVEL = CONFIGURATION['global']['log_level']
 if LOG_LEVEL == "info":
     logging.basicConfig(level=logging.INFO)
@@ -38,7 +39,7 @@ if __name__ == "__main__":
         'entities': ENTITIES
     }
     music_customization_service = SpotifyCustomizationService(client_id, client_secret, refresh_token)
-    entities_injection_service = EntitiesInjectionService(HERMES_HOST)
+    entities_injection_service = EntitiesInjectionService(HOSTNAME)
 
     starttime = time.time()
     # Code for scheduling taken from: https://stackoverflow.com/a/25251804

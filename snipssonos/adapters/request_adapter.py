@@ -2,7 +2,7 @@ from snipssonos.use_cases.request_objects import VolumeUpRequestFactory, PlayTra
     PlayArtistRequestFactory, \
     VolumeSetRequestFactory, VolumeDownRequestFactory, ResumeMusicRequestFactory, SpeakerInterruptRequestFactory, \
     MuteRequestFactory, PlayPlaylistRequestFactory, PlayAlbumRequestFactory, PlayMusicRequestFactory, \
-    NextTrackRequestFactory, PreviousTrackRequestFactory
+    NextTrackRequestFactory, PreviousTrackRequestFactory, GetTrackInfoRequestFactory
 
 
 class VolumeUpRequestAdapter(object):
@@ -61,6 +61,17 @@ class PreviousTrackRequestAdapter(object):
     def from_intent_message(cls, intentMessage):
         slots_dict = cls.extract_slots_dictionary(intentMessage)
         return PreviousTrackRequestFactory.from_dict(slots_dict)
+
+    @staticmethod
+    def extract_slots_dictionary(intentMessage):
+        return dict()
+
+
+class GetTrackInfoRequestAdapter(object):
+    @classmethod
+    def from_intent_message(cls, intentMessage):
+        slots_dict = cls.extract_slots_dictionary(intentMessage)
+        return GetTrackInfoRequestFactory.from_dict(slots_dict)
 
     @staticmethod
     def extract_slots_dictionary(intentMessage):

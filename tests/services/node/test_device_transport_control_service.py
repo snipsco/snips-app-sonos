@@ -230,3 +230,45 @@ def test_transport_service_previous_track_correct_api_query_for_first_track_in_q
     transport_service.previous_track(connected_device)
     mock_request.get.assert_called_with(
         transport_service._generate_track_seek_query(connected_device.name, 1))
+
+
+@mock.patch('snipssonos.services.node.device_transport_control.requests')
+def test_transport_service_get_info_does_correct_api_query(mock_request, connected_device):
+    mocked_response_object = mock.create_autospec(requests.Response)
+    mocked_response_object.ok = True
+    mocked_response_object.json.return_value = {
+        'currentTrack': {
+            'title': 'Teenage Fantasy',
+            'artist': 'Jorja Smith'
+        }
+    }
+
+    mock_request.get.return_value = mocked_response_object
+    transport_service = NodeDeviceTransportControlService()
+
+    transport_service.get_track_info(connected_device)
+
+    mock_request.get.assert_called_with(
+        transport_service._generate_state_query(connected_device.name))
+
+
+@mock.patch('snipssonos.services.node.device_transport_control.requests')
+def test_transport_service_get_info_return_title_and_artist(mock_request, connected_device):
+    mocked_response_object = mock.create_autospec(requests.Response)
+    mocked_response_object.ok = True
+    mocked_response_object.json.return_value = {
+        'currentTrack': {
+            'title': 'Teenage Fantasy',
+            'artist': 'Jorja Smith'
+        }
+    }
+
+    mock_request.get.return_value = mocked_response_object
+    transport_service = NodeDeviceTransportControlService()
+
+    transport_service.get_track_info(connected_device)
+    track, artist = transport_service.get_track_info(connected_device)
+
+    assert track.name == "Teenage Fantasy"
+    assert artist.name == "Jorja Smith"
+
