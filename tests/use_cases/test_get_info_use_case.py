@@ -2,6 +2,9 @@ import pytest
 from mock import mock
 
 from snipssonos.entities.device import Device
+from snipssonos.entities.track import Track
+from snipssonos.entities.artist import Artist
+
 from snipssonos.use_cases.get_track_info import GetTrackInfoUseCase
 from snipssonos.use_cases.request_objects import GetTrackInfoRequestFactory
 
@@ -22,7 +25,7 @@ def test_get_track_info_use_case_success_tts(connected_device):
     device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
 
     device_transport_control_service = mock.Mock()
-    device_transport_control_service.get_track_info.return_value = "Away Away", "Ibeyi"
+    device_transport_control_service.get_track_info.return_value = Track("", "Away Away"), Artist("", "Ibeyi")
 
     get_track_info_uc = GetTrackInfoUseCase(device_discovery_service, device_transport_control_service)
     get_track_info_request = GetTrackInfoRequestFactory.from_dict({})
@@ -40,7 +43,7 @@ def test_get_track_info_use_case_failure_tts(connected_device):
     device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
 
     device_transport_control_service = mock.Mock()
-    device_transport_control_service.get_track_info.return_value = "", ""
+    device_transport_control_service.get_track_info.return_value = Track("", ""), Artist("", "")
 
     get_track_info_uc = GetTrackInfoUseCase(device_discovery_service, device_transport_control_service)
     get_track_info_request = GetTrackInfoRequestFactory.from_dict({})

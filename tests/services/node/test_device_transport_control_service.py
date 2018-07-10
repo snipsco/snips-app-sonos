@@ -267,9 +267,8 @@ def test_transport_service_get_info_return_title_and_artist(mock_request, connec
     transport_service = NodeDeviceTransportControlService()
 
     transport_service.get_track_info(connected_device)
-    title, artist = transport_service.get_track_info(connected_device)
-    print(title, artist)
+    track, artist = transport_service.get_track_info(connected_device)
 
-    assert title == "Teenage Fantasy"
-    assert artist == "Jorja Smith"
+    assert track.name == "Teenage Fantasy"
+    assert artist.name == "Jorja Smith"
 

@@ -1,6 +1,8 @@
 import requests
 
 from snipssonos.services.device.transport_control import DeviceTransportControlService
+from snipssonos.entities.track import Track
+from snipssonos.entities.artist import Artist
 from snipssonos.exceptions import NoReachableDeviceException
 
 
@@ -100,6 +102,6 @@ class NodeDeviceTransportControlService(DeviceTransportControlService):
         state_query = self._generate_state_query(room_name)
         response = self._process_query(state_query, True)
         current_track = response.json()['currentTrack']
-        title = current_track['title']
-        artist = current_track['artist']
-        return title, artist
+        track = Track("", current_track['title'])
+        artist = Artist("", current_track['artist'])
+        return track, artist

@@ -12,9 +12,11 @@ class GetTrackInfoUseCase(UseCase):
 
     def process_request(self, request_object):
         device = self.device_discovery_service.get()
-        title, artist = self.device_transport_control_service.get_track_info(device)
-        if title and artist:
-            tts_feedback = FR_TTS_TRACK_INFO.format(title, artist)
+        track, artist = self.device_transport_control_service.get_track_info(device)
+        title = track.name
+        artist_name = artist.name
+        if title and artist_name:
+            tts_feedback = FR_TTS_TRACK_INFO.format(title, artist_name)
             return ResponseSuccess(feedback=tts_feedback)
         return ResponseFailure.build_resource_error(FR_TTS_TRACK_INFO_NO_TRACKS_ERROR)
 
