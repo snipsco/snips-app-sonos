@@ -14,15 +14,18 @@ def connected_device():
         'volume': 18
     })
 
+
 @pytest.fixture
 def node_configuration():
     return {
-        'global' : {
-            'node_music_playback_port' : 5005,
+        'global': {
+            'node_music_playback_port': 5005,
             'node_music_playback_host': 'localhost',
 
         }
     }
+
+
 def test_music_playback_service_initialization(connected_device):
     music_playback_service = NodeMusicPlaybackService(connected_device)
 
@@ -56,9 +59,8 @@ def test_generate_correct_url_query_for_queue(connected_device, node_configurati
     music_playback_service._generate_queue_query(track)
 
 
-
 def test_generate_correct_url_query_for_clear_queue(connected_device, node_configuration):
-    music_playback_service = NodeMusicPlaybackService(device=connected_device, CONFIGURATION=node_configuration)
+    music_playback_service = NodeMusicPlaybackService(connected_device, CONFIGURATION=node_configuration)
 
     expected_query = "http://localhost:5005/Antho Room/clearqueue"
 
@@ -71,7 +73,7 @@ def test_generate_correct_url_query_for_clear_queue(connected_device, node_confi
 def test_calls_queue(mocked_future, connected_device, node_configuration):
     music_playback_service = NodeMusicPlaybackService(device=connected_device, CONFIGURATION=node_configuration)
 
-    tracks = [Track.from_dict({'uri': 'uri{}'.format(str(i))})for i in range(10)]
+    tracks = [Track.from_dict({'uri': 'uri{}'.format(str(i))}) for i in range(10)]
     music_playback_service.queue(connected_device, tracks)
 
     assert mocked_future.call_count == len(tracks)

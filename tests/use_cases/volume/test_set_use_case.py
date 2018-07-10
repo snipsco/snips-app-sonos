@@ -19,7 +19,7 @@ def connected_device():
 
 def test_use_case_empty_parameters(connected_device):
     device_discovery_service = mock.Mock()
-    device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
+    device_discovery_service.get_devices.return_value = [connected_device]  # We mock the device discovery service
 
     initial_volume = connected_device.volume
 
@@ -38,7 +38,7 @@ def test_use_case_empty_parameters(connected_device):
 
 def test_use_case_no_reachable_device():
     device_discovery_service = mock.Mock()
-    device_discovery_service.get.side_effect = NoReachableDeviceException(
+    device_discovery_service.get_devices.side_effect = NoReachableDeviceException(
         "No reachable Sonos devices")  # We mock the device discovery service
 
     device_transport_control_service = mock.Mock()
@@ -56,7 +56,7 @@ def test_use_case_with_wrong_parameter():
     volume_level_is_a_string = "duh"
 
     device_discovery_service = mock.Mock()
-    device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
+    device_discovery_service.get_devices.return_value = [connected_device]  # We mock the device discovery service
 
     device_transport_control_service = mock.Mock()
     volume_set_uc = VolumeSetUseCase(device_discovery_service, device_transport_control_service)
@@ -71,7 +71,7 @@ def test_use_case_with_parameter_out_of_range(connected_device):
     volume_increase_in_percentage = 123456789
 
     device_discovery_service = mock.Mock()
-    device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
+    device_discovery_service.get_devices.return_value = [connected_device]  # We mock the device discovery service
 
     device_transport_control_service = mock.Mock()
     volume_set_uc = VolumeSetUseCase(device_discovery_service, device_transport_control_service)
@@ -88,7 +88,7 @@ def test_use_case_with_positive_percentage(connected_device):
     initial_volume = connected_device.volume
 
     device_discovery_service = mock.Mock()
-    device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
+    device_discovery_service.get_devices.return_value = [connected_device]  # We mock the device discovery service
 
     device_transport_control_service = mock.Mock()
     volume_set_uc = VolumeSetUseCase(device_discovery_service, device_transport_control_service)
@@ -106,7 +106,7 @@ def test_use_case_with_negative_percentage(connected_device):
     volume_negative_level = -10
 
     device_discovery_service = mock.Mock()
-    device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
+    device_discovery_service.get_devices.return_value = [connected_device]  # We mock the device discovery service
 
     device_transport_control_service = mock.Mock()
     volume_set_uc = VolumeSetUseCase(device_discovery_service, device_transport_control_service)
@@ -123,7 +123,7 @@ def test_use_case_with_positive_integer(connected_device):
     initial_volume = connected_device.volume
 
     device_discovery_service = mock.Mock()
-    device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
+    device_discovery_service.get_devices.return_value = [connected_device]  # We mock the device discovery service
     device_transport_control_service = mock.Mock()
 
     volume_set_uc = VolumeSetUseCase(device_discovery_service, device_transport_control_service)
@@ -141,7 +141,7 @@ def test_use_case_with_negative_integer(connected_device):
     volume_level_negative = -10
 
     device_discovery_service = mock.Mock()
-    device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
+    device_discovery_service.get_devices.return_value = [connected_device]  # We mock the device discovery service
 
     device_transport_control_service = mock.Mock()
     volume_set_uc = VolumeSetUseCase(device_discovery_service, device_transport_control_service)
@@ -157,7 +157,7 @@ def test_use_case_with_maximum_volume(connected_device):
     volume_level = 100
 
     device_discovery_service = mock.Mock()
-    device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
+    device_discovery_service.get_devices.return_value = [connected_device]  # We mock the device discovery service
 
     device_transport_control_service = mock.Mock()
     volume_set_uc = VolumeSetUseCase(device_discovery_service, device_transport_control_service)

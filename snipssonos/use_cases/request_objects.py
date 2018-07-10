@@ -334,3 +334,15 @@ class InjectEntitiesRequestObject(ValidRequestObject):
 
 class InjectEntitiesRequestFactory(RequestObjectFactory):
     request_object_class = InjectEntitiesRequestObject
+
+
+class HotwordLowerVolumeRequestObject(ValidRequestObject):
+    @classmethod
+    def from_dict(cls, a_dictionary):
+        return cls()
+
+
+class HotwordRestoreVolumeRequestObject(ValidRequestObject):
+    @classmethod
+    def from_dict(cls, a_dictionary):
+        return cls()
