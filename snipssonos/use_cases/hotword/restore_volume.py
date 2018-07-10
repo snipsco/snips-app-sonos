@@ -16,9 +16,9 @@ class HotwordRestoreVolumeUseCase(UseCase):
     def process_request(self, request_object):
         devices = self.state_persistence_service.get_all(Device)
         if len(devices):
-            FIRST_DEVICE_VOLUME = devices[0].volume
+            first_device_volume = devices[0].volume
 
-            volume_set_request_object = VolumeSetRequestObject(FIRST_DEVICE_VOLUME)
+            volume_set_request_object = VolumeSetRequestObject(first_device_volume)
             volume_set_use_case = VolumeSetUseCase(self.device_discovery_service, self.device_transport_control_service)
 
             response = volume_set_use_case.execute(volume_set_request_object)
