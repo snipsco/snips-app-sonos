@@ -8,3 +8,6 @@ class DeezerNodeMusicPlaybackService(MusicPlaybackService):  # Dumb playback ser
 
     def queue(self, device, music_items):
         return True
+
+    def clear_queue(self, device):
+        return True
