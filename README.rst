@@ -2,12 +2,8 @@
 Snips Action Sonos
 ===============================
 
-
-.. image:: https://img.shields.io/pypi/v/snipssonos.svg
-        :target: https://pypi.python.org/pypi/snipssonos
-
-.. image:: https://img.shields.io/pypi/v/snipssonos.svg
-        :target: https://travis-ci.org/snipsco/snips-skill-sonos
+.. image:: https://travis-ci.org/snipsco/snips-app-sonos.svg?branch=dev
+        :target: https://travis-ci.org/snipsco/snips-app-sonos
 
 Snips action code for your Sonos speaker(s)
 
