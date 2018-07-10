@@ -11,6 +11,7 @@ from snipssonos.entities.track import Track
 from snipssonos.use_cases.play.track import PlayTrackUseCase
 from snipssonos.use_cases.request_objects import PlayTrackRequestFactory
 
+pytestmark = pytest.mark.skip("all tests still WIP")
 
 @pytest.fixture
 def connected_device():
