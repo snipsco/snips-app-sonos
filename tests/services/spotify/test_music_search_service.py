@@ -1,4 +1,4 @@
-import pytest
+import json
 
 from snipssonos.services.spotify.music_search_service import SpotifyMusicSearchService
 from tests.services.spotify.raw_responses import *
@@ -11,6 +11,8 @@ def test_correct_parsing_of_tracks_for_correct_response():
 
     assert len(tracks) == 20
     assert tracks[0].uri == "spotify:track:3f9HJzevC4sMYGDwj7yQwd"
+    assert tracks[0].name == "April the 14th Part 1"
+    assert tracks[0].artist_name == "Gillian Welch"
 
 
 def test_correct_parsing_of_tracks_with_empty_response():
@@ -40,8 +42,19 @@ def test_correct_parsing_of_artists_for_correct_response():
 
 def test_correct_parsing_of_albums_for_correct_response():
     client = SpotifyMusicSearchService("client_id", "client_secret", "refresh_token")
-    artists = client._parse_album_results(ALBUMS)
+    albums = client._parse_album_results(ALBUMS)
 
-    assert len(artists) == 2
-    assert artists[0].name == "KIDS SEE GHOSTS"
-    assert artists[0].uri == "spotify:album:6pwuKxMUkNg673KETsXPUV"
+    assert len(albums) == 2
+    assert albums[0].name == "KIDS SEE GHOSTS"
+    assert albums[0].uri == "spotify:album:6pwuKxMUkNg673KETsXPUV"
+    assert albums[0].artist_name == "KIDS SEE GHOSTS, Kanye West, Kid Cudi"
+
+
+def test_get_artists_from_album():
+    client = SpotifyMusicSearchService("client_id", "client_secret", "refresh_token")
+    response = json.loads(ALBUMS)
+    albums = response['albums']
+
+    artists_name = client._get_artists_name_from_item(albums['items'][0])
+
+    assert artists_name == "KIDS SEE GHOSTS, Kanye West, Kid Cudi"

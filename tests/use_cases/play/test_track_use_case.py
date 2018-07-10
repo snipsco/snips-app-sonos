@@ -11,6 +11,8 @@ from snipssonos.entities.track import Track
 from snipssonos.use_cases.play.track import PlayTrackUseCase
 from snipssonos.use_cases.request_objects import PlayTrackRequestFactory
 
+from snipssonos.shared.feedback import FR_TTS_GENERIC_ERROR, FR_TTS_PLAYING_TRACK_TEMPLATE
+
 pytestmark = pytest.mark.skip("all tests still WIP")
 
 @pytest.fixture
@@ -295,3 +297,40 @@ def test_use_case_with_track_name_and_empty_parameter():
     assert isinstance(req_obj, ValidRequestObject)
     assert isinstance(response, ResponseSuccess)
     mock_music_search_service.search_track.assert_called_with("I'm upset")
+
+
+def test_use_case_with_track_name_and_empty_parameter_success_tts():
+    req_obj = PlayTrackRequestFactory.from_dict(
+        {'track_name': "I'm upset", 'album_name': '', 'artist_name': '',
+         'playlist_name': ''})
+    mock_device_discovery_service = mock.Mock()
+    mock_device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
+
+    mock_music_search_service = mock.Mock()
+
+    mock_music_search_service.search_track.return_value = [Track("URI", "I'm upset", "Drake")]
+
+    mock_music_playback_service = mock.Mock()
+
+    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service, mock_music_playback_service)
+    response = use_case.execute(req_obj)
+
+    assert response.feedback == FR_TTS_PLAYING_TRACK_TEMPLATE.format("I'm upset", "Drake")
+
+
+def test_use_case_with_track_name_failure_tts():
+    req_obj = PlayTrackRequestFactory.from_dict(
+        {'track_name': "I'm upset"})
+    mock_device_discovery_service = mock.Mock()
+    mock_device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
+
+    mock_music_search_service = mock.Mock()
+
+    mock_music_search_service.search_track.return_value = []
+
+    mock_music_playback_service = mock.Mock()
+
+    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service, mock_music_playback_service)
+    response = use_case.execute(req_obj)
+
+    assert response.message == FR_TTS_GENERIC_ERROR
