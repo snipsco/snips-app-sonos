@@ -7,8 +7,20 @@ EN_TTS_SHORT_ERROR = "Sorry, I did not understand that."
 FR_TTS_SHORT_ERROR = "Désolé, je n'ai pas compris."
 
 # PlayListUseCase
-EN_TTS_PLAYING_PLAYLIST_TEMPLATE = "Playing playlist : {}"
+EN_TTS_PLAYING_PLAYLIST_TEMPLATE = "Playing the playlist {}"
 FR_TTS_PLAYING_PLAYLIST_TEMPLATE = "Lecture de la playlist : {}"
+
+# TrackUseCase
+EN_TTS_PLAYING_TRACK_TEMPLATE = "Playing {} by artist {}"
+FR_TTS_PLAYING_TRACK_TEMPLATE = "Lecture de : {} par {}"
+
+# ArtistUseCase
+EN_TTS_PLAYING_ARTIST_TEMPLATE = "Playing music by artist {}"
+FR_TTS_PLAYING_ARTIST_TEMPLATE = "Lecture de la musique par {}"
+
+# AlbumUseCase
+EN_TTS_ALBUM_ALBUM_TEMPLATE = "Playing the album {} by artist {}"
+FR_TTS_PLAYING_ALBUM_TEMPLATE = "Lecture de l'album {} par {}"
 
 # Device Discovery
 FR_TTS_DEVICE_DISCOVERY_SERVICE_UNREACHABLE = "Le service de découverte d'équipement n'est pas disponible ... Veuillez consulter la documentation pour plus d'information"

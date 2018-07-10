@@ -1,7 +1,7 @@
 from snipssonos.shared.use_case import UseCase
 from snipssonos.shared.response_object import ResponseSuccess, ResponseFailure
 
-from snipssonos.shared.feedback import FR_TTS_GENERIC_ERROR  # TODO : This might violate the dependency rule of clean Architecture ...
+from snipssonos.shared.feedback import FR_TTS_GENERIC_ERROR, FR_TTS_PLAYING_ARTIST_TEMPLATE  # TODO : This might violate the dependency rule of clean Architecture ...
 
 
 class PlayArtistUseCase(UseCase):
@@ -12,7 +12,7 @@ class PlayArtistUseCase(UseCase):
         self.music_playback_service = music_playback_service
 
     def process_request(self, request_object):
-
+        tts_feedback = FR_TTS_PLAYING_ARTIST_TEMPLATE.format(request_object.artist_name)
         device = self.device_discovery_service.get()
 
         results_track = list()
@@ -39,4 +39,4 @@ class PlayArtistUseCase(UseCase):
         else:
             return ResponseFailure.build_resource_error(FR_TTS_GENERIC_ERROR)
 
-        return ResponseSuccess()
+        return ResponseSuccess(feedback=tts_feedback)

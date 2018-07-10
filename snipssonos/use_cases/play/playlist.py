@@ -13,15 +13,17 @@ class PlayPlaylistUseCase(UseCase):
     def process_request(self, request_object):
 
         device = self.device_discovery_service.get()
+        results_playlists = list()
 
         if request_object.playlist_name:
             results_playlists = self.music_search_service.search_playlist(request_object.playlist_name)
-            if len(results_playlists):
-                first_playlist = results_playlists[0]
-                self.music_playback_service.clear_queue(device)
-                self.music_playback_service.play(device, first_playlist)
-                tts_feedback = FR_TTS_PLAYING_PLAYLIST_TEMPLATE.format(first_playlist.name)
-            else:
-                return ResponseFailure.build_resource_error(FR_TTS_GENERIC_ERROR)
 
-        return ResponseSuccess(feedback=tts_feedback)
+        if len(results_playlists):
+            first_playlist = results_playlists[0]
+            self.music_playback_service.clear_queue(device)
+            self.music_playback_service.play(device, first_playlist)
+            tts_feedback = FR_TTS_PLAYING_PLAYLIST_TEMPLATE.format(first_playlist.name)
+            return ResponseSuccess(feedback=tts_feedback)
+
+        return ResponseFailure.build_resource_error(FR_TTS_GENERIC_ERROR)
+

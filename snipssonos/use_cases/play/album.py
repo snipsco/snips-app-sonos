@@ -1,5 +1,6 @@
 from snipssonos.shared.use_case import UseCase
 from snipssonos.shared.response_object import ResponseSuccess, ResponseFailure
+from snipssonos.shared.feedback import FR_TTS_GENERIC_ERROR, FR_TTS_PLAYING_ALBUM_TEMPLATE
 
 
 class PlayAlbumUseCase(UseCase):
@@ -36,7 +37,8 @@ class PlayAlbumUseCase(UseCase):
             first_album = results_albums[0]
             self.music_playback_service.clear_queue(device)
             self.music_playback_service.play(device, first_album)
-        else:
-            return ResponseFailure.build_resource_error("An error happened")
+            tts_feedback = FR_TTS_PLAYING_ALBUM_TEMPLATE.format(first_album.name, first_album.artist_name)
+            return ResponseSuccess(feedback=tts_feedback)
 
-        return ResponseSuccess()
+        return ResponseFailure.build_resource_error(FR_TTS_GENERIC_ERROR)
+
