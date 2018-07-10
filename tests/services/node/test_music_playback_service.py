@@ -56,6 +56,7 @@ def test_generate_correct_url_query_for_queue(connected_device, node_configurati
     music_playback_service._generate_queue_query(track)
 
 
+
 def test_generate_correct_url_query_for_clear_queue(connected_device, node_configuration):
     music_playback_service = NodeMusicPlaybackService(device=connected_device, CONFIGURATION=node_configuration)
 
