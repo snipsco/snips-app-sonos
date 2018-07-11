@@ -1,5 +1,5 @@
 ===============================
-Snips Action Sonos
+Snips App Sonos
 ===============================
 
 .. image:: https://travis-ci.org/snipsco/snips-app-sonos.svg?branch=dev
