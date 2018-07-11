@@ -1,8 +1,8 @@
-from snipssonos.shared.feedback import *
+from snipssonos.services.feedback.feedback_messages import *
 
 
 class FeedbackService:
-    FEEDBACK_MESSAGES = {
+    FEEDBACK_OBJECT = {
         'en': {
             'generic_error': EN_TTS_GENERIC_ERROR,
             'short_error': EN_TTS_SHORT_ERROR,
@@ -34,25 +34,25 @@ class FeedbackService:
         self.language = language
 
     def get_generic_error_message(self):
-        return self.FEEDBACK_MESSAGES[self.language]['generic_error']
+        return self.FEEDBACK_OBJECT[self.language]['generic_error']
 
     def get_short_error_message(self):
-        return self.FEEDBACK_MESSAGES[self.language]['short_error']
+        return self.FEEDBACK_OBJECT[self.language]['short_error']
 
     def get_device_discovery_message(self):
-        return self.FEEDBACK_MESSAGES[self.language]['device_discovery']
+        return self.FEEDBACK_OBJECT[self.language]['device_discovery']
 
     def get_playlist_template(self):
-        return self.FEEDBACK_MESSAGES[self.language]['playlist']
+        return self.FEEDBACK_OBJECT[self.language]['playlist']
 
     def get_track_template(self):
-        return self.FEEDBACK_MESSAGES[self.language]['track']
+        return self.FEEDBACK_OBJECT[self.language]['track']
 
     def get_album_template(self):
-        return self.FEEDBACK_MESSAGES[self.language]['album']
+        return self.FEEDBACK_OBJECT[self.language]['album']
 
     def get_artist_template(self):
-        return self.FEEDBACK_MESSAGES[self.language]['artist']
+        return self.FEEDBACK_OBJECT[self.language]['artist']
 
     def validate_language(self, language):
         return language in self.AVAILABLE_LANGUAGES
