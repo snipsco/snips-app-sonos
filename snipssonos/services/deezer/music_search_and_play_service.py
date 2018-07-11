@@ -8,6 +8,12 @@ from snipssonos.exceptions import MusicSearchProviderConnectionError
 
 
 class DeezerMusicSearchService(MusicSearchService):
+    """
+    This service is able to search and directly play music on the Sonos device. The middleware we are
+    using to search and play is the Node Sonos server and  it does not offer a way to play songs coming from
+    Deezer through an ID. What it does offer is an endpoint to be able to do the search and then play
+    the results directly.
+    """
     SERVICE_NAME = "deezer"
     DUMMY_LIST = [""]
 
