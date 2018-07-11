@@ -1,6 +1,6 @@
 from snipssonos.shared.use_case import UseCase
 from snipssonos.shared.response_object import ResponseSuccess, ResponseFailure
-from snipssonos.shared.feedback import FR_TTS_GENERIC_ERROR, FR_TTS_PLAYING_TRACK_TEMPLATE
+from snipssonos.services.feedback.feedback_messages import FR_TTS_GENERIC_ERROR, FR_TTS_PLAYING_TRACK_TEMPLATE
 
 
 class PlayTrackUseCase(UseCase):

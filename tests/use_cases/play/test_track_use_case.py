@@ -11,7 +11,7 @@ from snipssonos.entities.track import Track
 from snipssonos.use_cases.play.track import PlayTrackUseCase
 from snipssonos.use_cases.request_objects import PlayTrackRequestFactory
 
-from snipssonos.shared.feedback import FR_TTS_GENERIC_ERROR, FR_TTS_PLAYING_TRACK_TEMPLATE
+from snipssonos.services.feedback.feedback_messages import FR_TTS_GENERIC_ERROR, FR_TTS_PLAYING_TRACK_TEMPLATE
 
 pytestmark = pytest.mark.skip("all tests still WIP")
 

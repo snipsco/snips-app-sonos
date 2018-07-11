@@ -34,7 +34,7 @@ from snipssonos.services.hermes.state_persistence import HermesStatePersistence
 
 from snipssonos.adapters.tts_sentence_adapter import TTSSentenceGenerator
 
-from snipssonos.shared.feedback import FR_TTS_SHORT_ERROR
+from snipssonos.services.feedback.feedback_messages import FR_TTS_SHORT_ERROR
 
 # Utils functions
 CONFIG_INI = "config.ini"

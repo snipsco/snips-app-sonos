@@ -7,7 +7,7 @@ from snipssonos.entities.playlist import Playlist
 from snipssonos.use_cases.play.playlist import PlayPlaylistUseCase
 from snipssonos.use_cases.request_objects import PlayPlaylistRequestFactory
 
-from snipssonos.shared.feedback import FR_TTS_GENERIC_ERROR, FR_TTS_PLAYING_PLAYLIST_TEMPLATE
+from snipssonos.services.feedback.feedback_messages import FR_TTS_GENERIC_ERROR, FR_TTS_PLAYING_PLAYLIST_TEMPLATE
 
 @pytest.fixture
 def connected_device():

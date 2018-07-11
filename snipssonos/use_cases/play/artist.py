@@ -1,7 +1,7 @@
 from snipssonos.shared.use_case import UseCase
 from snipssonos.shared.response_object import ResponseSuccess, ResponseFailure
 
-from snipssonos.shared.feedback import FR_TTS_GENERIC_ERROR, FR_TTS_PLAYING_ARTIST_TEMPLATE  # TODO : This might violate the dependency rule of clean Architecture ...
+from snipssonos.services.feedback.feedback_messages import FR_TTS_GENERIC_ERROR, FR_TTS_PLAYING_ARTIST_TEMPLATE  # TODO : This might violate the dependency rule of clean Architecture ...
 
 
 class PlayArtistUseCase(UseCase):

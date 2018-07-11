@@ -1,4 +1,4 @@
-from snipssonos.shared import feedback
+from snipssonos.services.feedback import feedback_messages
 import snipssonos.exceptions
 
 
@@ -29,10 +29,10 @@ class TTSSentenceGenerator(object):
                 return response_object.message
             # TODO : Complete this by mapping specific exceptions to the correct TTS sentences.
             if isinstance(response_object.exception, snipssonos.exceptions.SonosActionException):
-                return feedback.FR_TTS_GENERIC_ERROR
+                return feedback_messages.FR_TTS_GENERIC_ERROR
 
             if isinstance(response_object.exception, snipssonos.exceptions.DeviceDiscoveryException):
-                return feedback.FR_TTS_DEVICE_DISCOVERY_SERVICE_UNREACHABLE
+                return feedback_messages.FR_TTS_DEVICE_DISCOVERY_SERVICE_UNREACHABLE
 
             else:
-                return feedback.FR_TTS_SHORT_ERROR
+                return feedback_messages.FR_TTS_SHORT_ERROR

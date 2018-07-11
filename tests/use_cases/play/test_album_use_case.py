@@ -7,7 +7,7 @@ from snipssonos.entities.album import Album
 from snipssonos.use_cases.play.album import PlayAlbumUseCase
 from snipssonos.use_cases.request_objects import PlayAlbumRequestFactory
 
-from snipssonos.shared.feedback import FR_TTS_GENERIC_ERROR, FR_TTS_ALBUM_TEMPLATE
+from snipssonos.services.feedback.feedback_messages import FR_TTS_GENERIC_ERROR, FR_TTS_ALBUM_TEMPLATE
 
 @pytest.fixture
 def connected_device():
