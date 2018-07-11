@@ -15,7 +15,6 @@ required = [
     "requests",
     "paho-mqtt",
     "requests-futures",
-    "hermes-python"
 ]
 
 extras_require = {
@@ -23,9 +22,11 @@ extras_require = {
         "mock",
         "pytest",
         "coverage",
-        "hermes-python",
         "pytest-cov"
     ],
+    "prod" : [
+        "hermes-python"
+    ]
 }
 
 
