@@ -20,8 +20,8 @@ class DeezerMusicSearchService(MusicSearchService):
     def __init__(self):
         self.query_builder = None
 
-    def set_node_query_builder(self, device_name):
-        self.query_builder = NodeQueryBuilder(device_name, self.SERVICE_NAME)
+    def set_query_builder(self, device_name, query_builder):
+        self.query_builder = query_builder(device_name, self.SERVICE_NAME)
 
     def search_album(self, album_name):
         search_query = self.query_builder\

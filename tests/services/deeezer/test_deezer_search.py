@@ -1,5 +1,6 @@
 import mock, pytest
 from snipssonos.services.deezer.music_search_and_play_service import DeezerMusicSearchService
+from snipssonos.services.node.query_builder import NodeQueryBuilder
 from snipssonos.exceptions import MusicSearchProviderConnectionError
 
 BASE_ENDPOINT = "http://localhost:5005"
@@ -9,15 +10,14 @@ DEVICE_NAME = "a_device"
 def deezer_search():
     deezer = DeezerMusicSearchService()
     device_name = DEVICE_NAME
-    deezer.set_node_query_builder(device_name)
+    deezer.set_query_builder(device_name, NodeQueryBuilder)
     return deezer
 
 
-# check if the execution happened with the expected query
-@mock.patch('snipssonos.services.deezer.music_search_and_play_service.NodeQueryBuilder')
-def test_correctly_sets_node_query_builder(node_query_builder):
+def test_correctly_sets_node_query_builder():
     deezer = DeezerMusicSearchService()
-    deezer.set_node_query_builder("a_device")
+    node_query_builder = mock.Mock()
+    deezer.set_query_builder("a_device", node_query_builder)
 
     node_query_builder.assert_called_with("a_device", "deezer")
 

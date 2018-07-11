@@ -6,7 +6,7 @@ class MusicSearchService(ConfigurableHTTPService):  # TODO : Make this class Abs
     def __init__(self, CONFIGURATION=None):
         super(MusicSearchService, self).__init__(CONFIGURATION)
 
-    def set_node_query_builder(self, device_name):
+    def set_query_builder(self, device_name, query_builder):
         raise NotImplementedError("set_query_builder() method not implemented for now.")
 
     def search_artist(self, artist_name):
