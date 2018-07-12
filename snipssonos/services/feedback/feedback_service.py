@@ -1,4 +1,5 @@
 from snipssonos.services.feedback.feedback_messages import *
+import snipssonos.exceptions
 
 
 class FeedbackService:
@@ -23,11 +24,11 @@ class FeedbackService:
         }
     }
 
-    AVAILABLE_LANGUAGES = ['en', 'fr']
+    SUPPORTED_LANGUAGES = ['en', 'fr']
 
-    def __init__(self):
-        self.language = None
-        pass
+    def __init__(self, language):
+        self.validate_language(language)
+        self.language = language
 
     def set_language(self, language):
         self.validate_language(language)
@@ -55,6 +56,23 @@ class FeedbackService:
         return self.FEEDBACK_OBJECT[self.language]['artist']
 
     def validate_language(self, language):
-        return language in self.AVAILABLE_LANGUAGES
+        if not (language in self.SUPPORTED_LANGUAGES):
+            class_name = self.__class__.__name__
+            raise AttributeError(
+                "Tried to assign an unsupported language to the language property of {}".format(class_name))
+        return True
+
+    def from_response_object(self, response_object):
+        if response_object:  # ResponseSuccess
+            return response_object.message
+        else: # ResponseFailure
+            # TODO : Complete this by mapping specific exceptions to the correct TTS sentences.
+            if isinstance(response_object.exception, snipssonos.exceptions.SonosActionException):
+                return self.get_generic_error_message()
+
+            if isinstance(response_object.exception, snipssonos.exceptions.DeviceDiscoveryException):
+                return self.get_device_discovery_message()
+
+            return self.get_short_error_message()
 
 
