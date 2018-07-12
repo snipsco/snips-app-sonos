@@ -2,7 +2,7 @@ from snipssonos.entities.entities import Entity
 
 
 class Artist(object):
-    def __init__(self, uri, name):
+    def __init__(self, uri=None, name=None):
         self.uri = uri
         self.name = name
 

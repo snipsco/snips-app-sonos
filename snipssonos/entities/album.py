@@ -2,17 +2,17 @@ from snipssonos.entities.entities import Entity
 
 
 class Album(object):
-    def __init__(self, uri, name, artist_name=None):
+    def __init__(self, uri, name, artists=None):
         self.uri = uri
         self.name = name
-        self.artist_name = artist_name
+        self.artists = artists
 
     @classmethod
     def from_dict(cls, a_dict):
         album = cls(
             uri=a_dict['uri'],
             name=a_dict['name'],
-            artist_name=a_dict['artist_name']
+            artists=a_dict['artists']
         )
 
         return album
