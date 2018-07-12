@@ -51,6 +51,11 @@ def test_fr_get_artist_template():
     assert feedback_service.get_artist_template() == FR_TTS_PLAYING_ARTIST_TEMPLATE
 
 
+def test_fr_get_track_info_template():
+    feedback_service = FeedbackService('fr')
+    assert feedback_service.get_track_info_template() == FR_TTS_TRACK_INFO
+
+
 def test_validate_language_success():
     feedback_service = FeedbackService('fr')
     assert feedback_service.validate_language('fr') is True
@@ -84,3 +89,10 @@ def test_fr_get_message_from_failure_response_object_other():
     response = ResponseFailure.build_system_error("", Exception)
     feedback_service = FeedbackService('fr')
     assert feedback_service.from_response_object(response) == FR_TTS_SHORT_ERROR
+
+def test_get_message_from_resource_error():
+    msg = "something went really really wrong"
+    response = ResponseFailure.build_resource_error(msg)
+    feedback_service = FeedbackService('fr')
+    assert feedback_service.from_response_object(response) == msg
+

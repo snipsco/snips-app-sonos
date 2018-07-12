@@ -94,7 +94,8 @@ def addSong_callback(hermes, intentMessage):
 
 @restore_volume_for_hotword
 def getInfos_callback(hermes, intentMessage):
-    use_case = GetTrackInfoUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
+    use_case = GetTrackInfoUseCase(hermes.device_discovery_service,
+                                   hermes.device_transport_control_service, hermes.feedback_service)
     get_track_request = GetTrackInfoRequestAdapter.from_intent_message(intentMessage)
 
     response = use_case.execute(get_track_request)
