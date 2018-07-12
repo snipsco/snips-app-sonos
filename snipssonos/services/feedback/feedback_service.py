@@ -65,6 +65,11 @@ class FeedbackService:
     def get_no_tracks_error_message(self):
         return self.FEEDBACK_OBJECT[self.language]['no_tracks_error']
 
+    def concatenate_artists_in_string(self, artists):
+        # if more than one artist is found we concatenate them in a string
+        artist_names = [artist.name for artist in artists]
+        return ", ".join(artist_names).strip()
+
     def validate_language(self, language):
         if not (language in self.SUPPORTED_LANGUAGES):
             class_name = self.__class__.__name__

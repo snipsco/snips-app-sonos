@@ -37,8 +37,9 @@ class PlayAlbumUseCase(UseCase):
             first_album = results_albums[0]
             self.music_playback_service.clear_queue(device)
             self.music_playback_service.play(device, first_album)
+            artist_names = self.feedback_service.concatenate_artists_in_string(first_album.artists)
             tts_feedback = self.feedback_service.get_album_template()\
-                .format(first_album.name, first_album.artist_name)
+                .format(first_album.name, artist_names)
             return ResponseSuccess(feedback=tts_feedback)
 
         return ResponseFailure.build_resource_error(self.feedback_service.get_generic_error_message())

@@ -50,8 +50,9 @@ class PlayTrackUseCase(UseCase):
             first_result = results_tracks[0]
             self.music_playback_service.clear_queue(device)
             self.music_playback_service.play(device, first_result)
+            artist_names = self.feedback_service.concatenate_artists_in_string(first_result.artists)
             tts_feedback = self.feedback_service.get_track_template()\
-                .format(first_result.name, first_result.artist_name)
+                .format(first_result.name, artist_names)
             return ResponseSuccess(feedback=tts_feedback)
 
         return ResponseFailure.build_resource_error(self.feedback_service.get_generic_error_message())
