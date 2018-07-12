@@ -22,8 +22,10 @@ def test_use_case_empty_parameters(connected_device):
     device_disco_service = mock.Mock()
     music_playback_service = mock.Mock()
     music_search_service = mock.Mock()
+    feedback_service = mock.Mock()
 
-    play_artist_uc = PlayMusicUseCase(device_disco_service, music_search_service, music_playback_service)
+    play_artist_uc = PlayMusicUseCase(device_disco_service, music_search_service,
+                                      music_playback_service, feedback_service)
 
     play_artist_request = PlayMusicRequestFactory.from_dict({})
 
@@ -40,8 +42,10 @@ def test_use_case_no_reachable_device():
 
     music_search_service = mock.Mock()
     music_playback_service = mock.Mock()
+    feedback_service = mock.Mock()
 
-    playmusic_up_uc = PlayMusicUseCase(device_discovery_service, music_search_service, music_playback_service)
+    playmusic_up_uc = PlayMusicUseCase(device_discovery_service, music_search_service,
+                                       music_playback_service, feedback_service)
 
     playmusic_request = PlayMusicRequestFactory.from_dict({'artist_name': 'Antho'})
     result_obj = playmusic_up_uc.execute(playmusic_request)

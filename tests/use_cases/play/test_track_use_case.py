@@ -11,6 +11,7 @@ from snipssonos.entities.track import Track
 from snipssonos.use_cases.play.track import PlayTrackUseCase
 from snipssonos.use_cases.request_objects import PlayTrackRequestFactory
 
+from snipssonos.services.feedback.feedback_service import FeedbackService
 from snipssonos.services.feedback.feedback_messages import FR_TTS_GENERIC_ERROR, FR_TTS_PLAYING_TRACK_TEMPLATE
 
 pytestmark = pytest.mark.skip("all tests still WIP")
@@ -24,13 +25,19 @@ def connected_device():
     )
 
 
-def test_use_case_empty_parameters():
+@pytest.fixture
+def feedback_service():
+    return FeedbackService('fr')
+
+
+def test_use_case_empty_parameters(connected_device, feedback_service):
     empty_params_req_object = PlayTrackRequestFactory.from_dict({})
     mock_device_discovery_service = mock.Mock()
     mock_music_search_service = mock.Mock()
     mock_music_playback_service = mock.Mock()
 
-    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service, mock_music_playback_service)
+    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service,
+                                mock_music_playback_service, feedback_service)
 
     response = use_case.execute(empty_params_req_object)
     assert isinstance(empty_params_req_object, InvalidRequestObject)
@@ -38,7 +45,7 @@ def test_use_case_empty_parameters():
     assert response.type == ResponseFailure.PARAMETERS_ERROR
 
 
-def test_use_case_no_reachable_device():
+def test_use_case_no_reachable_device(connected_device, feedback_service):
     mock_device_discovery_service = mock.Mock()
     mock_device_discovery_service.get.side_effect = NoReachableDeviceException(
         "No reachable Sonos devices")  # We mock the device discovery service
@@ -47,7 +54,8 @@ def test_use_case_no_reachable_device():
     mock_music_playback_service = mock.Mock()
 
     req_object = PlayTrackRequestFactory.from_dict({'track_name': "I thought it was you"})
-    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service, mock_music_playback_service)
+    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service,
+                                mock_music_playback_service, feedback_service)
 
     response = use_case.execute(req_object)
 
@@ -57,7 +65,7 @@ def test_use_case_no_reachable_device():
     assert response.message == "NoReachableDeviceException: No reachable Sonos devices"
 
 
-def test_wrong_credentials(connected_device):
+def test_wrong_credentials(connected_device, feedback_service):
     req_object = PlayTrackRequestFactory.from_dict({'track_name': "I thought it was you"})
     mock_device_discovery_service = mock.Mock()
     mock_device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
@@ -66,7 +74,8 @@ def test_wrong_credentials(connected_device):
     mock_music_search_service.search_track.side_effect = MusicSearchCredentialsError("Wrong credentials")
     mock_music_playback_service = mock.Mock()
 
-    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service, mock_music_playback_service)
+    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service,
+                                mock_music_playback_service, feedback_service)
 
     response = use_case.execute(req_object)
 
@@ -76,7 +85,7 @@ def test_wrong_credentials(connected_device):
     assert response.message == "MusicSearchCredentialsError: Wrong credentials"
 
 
-def test_music_search_service_not_responding(connected_device):
+def test_music_search_service_not_responding(connected_device, feedback_service):
     req_obj = PlayTrackRequestFactory.from_dict({'track_name': "I thought it was you"})
     mock_device_discovery_service = mock.Mock()
     mock_device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
@@ -86,7 +95,8 @@ def test_music_search_service_not_responding(connected_device):
     mock_music_search_service.client.execute_query.side_effect = MusicSearchProviderConnectionError()
     mock_music_playback_service = mock.Mock()
 
-    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service, mock_music_playback_service)
+    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service,
+                                mock_music_playback_service, feedback_service)
 
     response = use_case.execute(req_obj)
     assert isinstance(response, ResponseFailure)
@@ -94,21 +104,22 @@ def test_music_search_service_not_responding(connected_device):
     assert response.type == ResponseFailure.SYSTEM_ERROR
 
 
-def test_use_case_with_wrong_type_parameter(connected_device):
+def test_use_case_with_wrong_type_parameter(connected_device, feedback_service):
     req_obj = PlayTrackRequestFactory.from_dict({'wrong_key': "This is on purpose"})
     mock_device_discovery_service = mock.Mock()
     mock_device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
     mock_music_search_service = mock.Mock()
     mock_music_playback_service = mock.Mock()
 
-    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service, mock_music_playback_service)
+    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service,
+                                mock_music_playback_service, feedback_service)
 
     response = use_case.execute(req_obj)
     assert isinstance(response, ResponseFailure)
     assert isinstance(req_obj, InvalidRequestObject)
 
 
-def test_use_case_with_track_name():
+def test_use_case_with_track_name(connected_device, feedback_service):
     req_obj = PlayTrackRequestFactory.from_dict({'track_name': "I'm upset"})
     mock_device_discovery_service = mock.Mock()
     mock_device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
@@ -118,7 +129,8 @@ def test_use_case_with_track_name():
 
     mock_music_playback_service = mock.Mock()
 
-    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service, mock_music_playback_service)
+    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service,
+                                mock_music_playback_service, feedback_service)
     response = use_case.execute(req_obj)
 
     assert isinstance(req_obj, ValidRequestObject)
@@ -126,7 +138,7 @@ def test_use_case_with_track_name():
     mock_music_search_service.search_track.assert_called_with("I'm upset")
 
 
-def test_use_case_with_track_name_and_playlist_name():
+def test_use_case_with_track_name_and_playlist_name(connected_device, feedback_service):
     req_obj = PlayTrackRequestFactory.from_dict({'track_name': "I'm upset", 'playlist_name': 'Discover Weekly'})
     mock_device_discovery_service = mock.Mock()
     mock_device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
@@ -136,7 +148,8 @@ def test_use_case_with_track_name_and_playlist_name():
 
     mock_music_playback_service = mock.Mock()
 
-    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service, mock_music_playback_service)
+    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service,
+                                mock_music_playback_service, feedback_service)
     response = use_case.execute(req_obj)
 
     assert isinstance(req_obj, ValidRequestObject)
@@ -144,7 +157,7 @@ def test_use_case_with_track_name_and_playlist_name():
     mock_music_search_service.search_track_for_playlist.assert_called_with("I'm upset", "Discover Weekly")
 
 
-def test_use_case_with_track_name_and_artist_name():
+def test_use_case_with_track_name_and_artist_name(connected_device, feedback_service):
     req_obj = PlayTrackRequestFactory.from_dict({'track_name': "I'm upset", 'artist_name': 'Drake'})
     mock_device_discovery_service = mock.Mock()
     mock_device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
@@ -154,7 +167,8 @@ def test_use_case_with_track_name_and_artist_name():
 
     mock_music_playback_service = mock.Mock()
 
-    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service, mock_music_playback_service)
+    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service,
+                                mock_music_playback_service, feedback_service)
     response = use_case.execute(req_obj)
 
     assert isinstance(req_obj, ValidRequestObject)
@@ -162,7 +176,7 @@ def test_use_case_with_track_name_and_artist_name():
     mock_music_search_service.search_track_for_artist.assert_called_with("I'm upset", "Drake")
 
 
-def test_use_case_with_track_name_and_artist_name_and_playlist_name():
+def test_use_case_with_track_name_and_artist_name_and_playlist_name(connected_device, feedback_service):
     req_obj = PlayTrackRequestFactory.from_dict(
         {'track_name': "I'm upset", 'artist_name': 'Drake', 'playlist_name': 'Discover Weekly'})
     mock_device_discovery_service = mock.Mock()
@@ -173,7 +187,8 @@ def test_use_case_with_track_name_and_artist_name_and_playlist_name():
 
     mock_music_playback_service = mock.Mock()
 
-    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service, mock_music_playback_service)
+    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service,
+                                mock_music_playback_service, feedback_service)
     response = use_case.execute(req_obj)
 
     assert isinstance(req_obj, ValidRequestObject)
@@ -182,7 +197,7 @@ def test_use_case_with_track_name_and_artist_name_and_playlist_name():
                                                                                           "Discover Weekly")  # TODO : Complete me
 
 
-def test_use_case_with_track_name_and_album_name():
+def test_use_case_with_track_name_and_album_name(connected_device, feedback_service):
     req_obj = PlayTrackRequestFactory.from_dict({'track_name': "I'm upset", 'album_name': 'Scorpion'})
     mock_device_discovery_service = mock.Mock()
     mock_device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
@@ -192,7 +207,8 @@ def test_use_case_with_track_name_and_album_name():
 
     mock_music_playback_service = mock.Mock()
 
-    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service, mock_music_playback_service)
+    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service,
+                                mock_music_playback_service, feedback_service)
     response = use_case.execute(req_obj)
 
     assert isinstance(req_obj, ValidRequestObject)
@@ -200,7 +216,7 @@ def test_use_case_with_track_name_and_album_name():
     mock_music_search_service.search_track_for_album.assert_called_with("I'm upset", "Scorpion")
 
 
-def test_use_case_with_track_name_album_name_and_playlist_name():
+def test_use_case_with_track_name_album_name_and_playlist_name(connected_device, feedback_service):
     req_obj = PlayTrackRequestFactory.from_dict(
         {'track_name': "I'm upset", 'album_name': 'Scorpion', 'playlist_name': 'Discover Weekly'})
     mock_device_discovery_service = mock.Mock()
@@ -211,7 +227,8 @@ def test_use_case_with_track_name_album_name_and_playlist_name():
 
     mock_music_playback_service = mock.Mock()
 
-    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service, mock_music_playback_service)
+    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service,
+                                mock_music_playback_service, feedback_service)
     response = use_case.execute(req_obj)
 
     assert isinstance(req_obj, ValidRequestObject)
@@ -220,7 +237,7 @@ def test_use_case_with_track_name_album_name_and_playlist_name():
                                                                                          "Discover Weekly")
 
 
-def test_use_case_with_track_name_album_name_and_artist_name():
+def test_use_case_with_track_name_album_name_and_artist_name(connected_device, feedback_service):
     req_obj = PlayTrackRequestFactory.from_dict(
         {'track_name': "I'm upset", 'album_name': 'Scorpion', 'artist_name': 'Drake'})
     mock_device_discovery_service = mock.Mock()
@@ -231,7 +248,8 @@ def test_use_case_with_track_name_album_name_and_artist_name():
 
     mock_music_playback_service = mock.Mock()
 
-    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service, mock_music_playback_service)
+    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service,
+                                mock_music_playback_service, feedback_service)
     response = use_case.execute(req_obj)
 
     assert isinstance(req_obj, ValidRequestObject)
@@ -239,7 +257,7 @@ def test_use_case_with_track_name_album_name_and_artist_name():
     mock_music_search_service.search_track_for_album_and_for_artist.assert_called_with("I'm upset", "Scorpion", "Drake")
 
 
-def test_use_case_with_track_name_album_name_artist_name_and_playlist_name():
+def test_use_case_with_track_name_album_name_artist_name_and_playlist_name(connected_device, feedback_service):
     req_obj = PlayTrackRequestFactory.from_dict(
         {'track_name': "I'm upset", 'album_name': 'Scorpion', 'artist_name': 'Drake',
          'playlist_name': 'Discover Weekly'})
@@ -252,7 +270,8 @@ def test_use_case_with_track_name_album_name_artist_name_and_playlist_name():
 
     mock_music_playback_service = mock.Mock()
 
-    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service, mock_music_playback_service)
+    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service,
+                                mock_music_playback_service, feedback_service)
     response = use_case.execute(req_obj)
 
     assert isinstance(req_obj, ValidRequestObject)
@@ -263,7 +282,7 @@ def test_use_case_with_track_name_album_name_artist_name_and_playlist_name():
                                                                                                         "Discover Weekly")
 
 
-def test_use_case_with_empty_track_name():
+def test_use_case_with_empty_track_name(connected_device, feedback_service):
     req_obj = PlayTrackRequestFactory.from_dict({'track_name': ""})
     mock_device_discovery_service = mock.Mock()
     mock_device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
@@ -271,14 +290,15 @@ def test_use_case_with_empty_track_name():
     mock_music_search_service = mock.Mock()
     mock_music_playback_service = mock.Mock()
 
-    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service, mock_music_playback_service)
+    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service,
+                                mock_music_playback_service, feedback_service)
     response = use_case.execute(req_obj)
 
     assert isinstance(req_obj, InvalidRequestObject)
     assert isinstance(response, ResponseFailure)
 
 
-def test_use_case_with_track_name_and_empty_parameter():
+def test_use_case_with_track_name_and_empty_parameter(connected_device, feedback_service):
     req_obj = PlayTrackRequestFactory.from_dict(
         {'track_name': "I'm upset", 'album_name': '', 'artist_name': '',
          'playlist_name': ''})
@@ -291,7 +311,8 @@ def test_use_case_with_track_name_and_empty_parameter():
 
     mock_music_playback_service = mock.Mock()
 
-    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service, mock_music_playback_service)
+    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service,
+                                mock_music_playback_service, feedback_service)
     response = use_case.execute(req_obj)
 
     assert isinstance(req_obj, ValidRequestObject)
@@ -299,7 +320,7 @@ def test_use_case_with_track_name_and_empty_parameter():
     mock_music_search_service.search_track.assert_called_with("I'm upset")
 
 
-def test_use_case_with_track_name_and_empty_parameter_success_tts():
+def test_use_case_with_track_name_and_empty_parameter_success_tts(connected_device, feedback_service):
     req_obj = PlayTrackRequestFactory.from_dict(
         {'track_name': "I'm upset", 'album_name': '', 'artist_name': '',
          'playlist_name': ''})
@@ -312,13 +333,14 @@ def test_use_case_with_track_name_and_empty_parameter_success_tts():
 
     mock_music_playback_service = mock.Mock()
 
-    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service, mock_music_playback_service)
+    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service,
+                                mock_music_playback_service, feedback_service)
     response = use_case.execute(req_obj)
 
     assert response.feedback == FR_TTS_PLAYING_TRACK_TEMPLATE.format("I'm upset", "Drake")
 
 
-def test_use_case_with_track_name_failure_tts():
+def test_use_case_with_track_name_failure_tts(connected_device, feedback_service):
     req_obj = PlayTrackRequestFactory.from_dict(
         {'track_name': "I'm upset"})
     mock_device_discovery_service = mock.Mock()
@@ -330,7 +352,8 @@ def test_use_case_with_track_name_failure_tts():
 
     mock_music_playback_service = mock.Mock()
 
-    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service, mock_music_playback_service)
+    use_case = PlayTrackUseCase(mock_device_discovery_service, mock_music_search_service,
+                                mock_music_playback_service, feedback_service)
     response = use_case.execute(req_obj)
 
     assert response.message == FR_TTS_GENERIC_ERROR

@@ -1,14 +1,14 @@
 from snipssonos.shared.use_case import UseCase
 from snipssonos.shared.response_object import ResponseSuccess, ResponseFailure
-from snipssonos.services.feedback.feedback_messages import FR_TTS_GENERIC_ERROR, FR_TTS_ALBUM_TEMPLATE
 
 
 class PlayAlbumUseCase(UseCase):
 
-    def __init__(self, device_discovery_service, music_search_service, music_playback_service):
+    def __init__(self, device_discovery_service, music_search_service, music_playback_service, feedback_service):
         self.device_discovery_service = device_discovery_service
         self.music_search_service = music_search_service
         self.music_playback_service = music_playback_service
+        self.feedback_service = feedback_service
 
     def process_request(self, request_object):
 
@@ -37,8 +37,9 @@ class PlayAlbumUseCase(UseCase):
             first_album = results_albums[0]
             self.music_playback_service.clear_queue(device)
             self.music_playback_service.play(device, first_album)
-            tts_feedback = FR_TTS_ALBUM_TEMPLATE.format(first_album.name, first_album.artist_name)
+            tts_feedback = self.feedback_service.get_album_template()\
+                .format(first_album.name, first_album.artist_name)
             return ResponseSuccess(feedback=tts_feedback)
 
-        return ResponseFailure.build_resource_error(FR_TTS_GENERIC_ERROR)
+        return ResponseFailure.build_resource_error(self.feedback_service.get_generic_error_message())
 
