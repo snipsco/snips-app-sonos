@@ -19,8 +19,8 @@ EN_TTS_PLAYING_ARTIST_TEMPLATE = "Playing music by artist {}"
 FR_TTS_PLAYING_ARTIST_TEMPLATE = "Lecture de la musique par {}"
 
 # AlbumUseCase
-EN_TTS_ALBUM_ALBUM_TEMPLATE = "Playing the album {} by artist {}"
-FR_TTS_ALBUM_TEMPLATE = "Lecture de l'album {} par {}"
+EN_TTS_PLAYING_ALBUM_TEMPLATE = "Playing the album {} by artist {}"
+FR_TTS_PLAYING_ALBUM_TEMPLATE = "Lecture de l'album {} par {}"
 
 # Device Discovery
 FR_TTS_DEVICE_DISCOVERY_SERVICE_UNREACHABLE = "Le service de découverte d'équipement n'est pas disponible ... Veuillez consulter la documentation pour plus d'information"

@@ -10,7 +10,7 @@ class FeedbackService:
             'device_discovery': EN_TTS_DEVICE_DISCOVERY_SERVICE_UNREACHABLE,
             'playlist': EN_TTS_PLAYING_PLAYLIST_TEMPLATE,
             'track': EN_TTS_PLAYING_TRACK_TEMPLATE,
-            'album': EN_TTS_ALBUM_ALBUM_TEMPLATE,
+            'album': EN_TTS_PLAYING_ALBUM_TEMPLATE,
             'artist': EN_TTS_PLAYING_ARTIST_TEMPLATE
         },
         'fr': {
@@ -19,7 +19,7 @@ class FeedbackService:
             'device_discovery': FR_TTS_DEVICE_DISCOVERY_SERVICE_UNREACHABLE,
             'playlist': FR_TTS_PLAYING_PLAYLIST_TEMPLATE,
             'track': FR_TTS_PLAYING_TRACK_TEMPLATE,
-            'album': FR_TTS_ALBUM_TEMPLATE,
+            'album': FR_TTS_PLAYING_ALBUM_TEMPLATE,
             'artist': FR_TTS_PLAYING_ARTIST_TEMPLATE
         }
     }
@@ -64,7 +64,7 @@ class FeedbackService:
 
     def from_response_object(self, response_object):
         if response_object:  # ResponseSuccess
-            return response_object.message
+            return response_object.feedback
         else: # ResponseFailure
             # TODO : Complete this by mapping specific exceptions to the correct TTS sentences.
             if isinstance(response_object.exception, snipssonos.exceptions.SonosActionException):

@@ -8,7 +8,7 @@ from snipssonos.use_cases.play.album import PlayAlbumUseCase
 from snipssonos.use_cases.request_objects import PlayAlbumRequestFactory
 
 from snipssonos.services.feedback.feedback_service import FeedbackService
-from snipssonos.services.feedback.feedback_messages import FR_TTS_GENERIC_ERROR, FR_TTS_ALBUM_TEMPLATE
+from snipssonos.services.feedback.feedback_messages import FR_TTS_GENERIC_ERROR, FR_TTS_PLAYING_ALBUM_TEMPLATE
 
 @pytest.fixture
 def connected_device():
@@ -40,7 +40,7 @@ def test_use_case_with_track_name_and_empty_parameter_success_tts(connected_devi
                                 mock_music_playback_service, feedback_service)
     response = use_case.execute(req_obj)
 
-    assert response.feedback == FR_TTS_ALBUM_TEMPLATE.format("Ash", "Ibeyi")
+    assert response.feedback == FR_TTS_PLAYING_ALBUM_TEMPLATE.format("Ash", "Ibeyi")
 
 
 def test_use_case_with_track_name_failure_tts(connected_device, feedback_service):
