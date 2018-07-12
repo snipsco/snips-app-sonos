@@ -4,6 +4,7 @@ from mock import mock
 
 from snipssonos.entities.device import Device
 from snipssonos.entities.album import Album
+from snipssonos.entities.artist import Artist
 from snipssonos.use_cases.play.album import PlayAlbumUseCase
 from snipssonos.use_cases.request_objects import PlayAlbumRequestFactory
 
@@ -32,7 +33,8 @@ def test_use_case_with_track_name_and_empty_parameter_success_tts(connected_devi
 
     mock_music_search_service = mock.Mock()
 
-    mock_music_search_service.search_album.return_value = [Album("URI", "Ash", "Ibeyi")]
+    artists = [Artist(name="Ibeyi")]
+    mock_music_search_service.search_album.return_value = [Album("URI", "Ash", artists)]
 
     mock_music_playback_service = mock.Mock()
 

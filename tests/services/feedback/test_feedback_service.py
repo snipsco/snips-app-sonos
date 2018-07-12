@@ -1,4 +1,6 @@
 import pytest
+
+from snipssonos.entities.artist import Artist
 from snipssonos.shared.response_object import ResponseFailure, ResponseSuccess
 from snipssonos.services.feedback.feedback_service import FeedbackService
 from snipssonos.services.feedback.feedback_messages import *
@@ -90,9 +92,18 @@ def test_fr_get_message_from_failure_response_object_other():
     feedback_service = FeedbackService('fr')
     assert feedback_service.from_response_object(response) == FR_TTS_SHORT_ERROR
 
+
 def test_get_message_from_resource_error():
     msg = "something went really really wrong"
     response = ResponseFailure.build_resource_error(msg)
     feedback_service = FeedbackService('fr')
     assert feedback_service.from_response_object(response) == msg
+
+
+def test_concatenate_artist_entity_names():
+    feedback_service = FeedbackService('fr')
+    artists = [Artist(name="Drake"), Artist(name="Kendrick Lamar"), Artist(name="Alicia Keys")]
+
+    artist_names = feedback_service.concatenate_artists_in_string(artists)
+    assert artist_names == "Drake, Kendrick Lamar, Alicia Keys"
 
