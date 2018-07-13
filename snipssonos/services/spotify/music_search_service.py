@@ -187,7 +187,8 @@ class SpotifyMusicSearchService(MusicSearchService):
         response = json.loads(raw_response)
         tracks = response['tracks']
 
-        tracks = [Track(item['uri']) for item in tracks['items']]
+        tracks = [Track(item['uri'], item['name'], self._get_artists_from_item(item))
+                  for item in tracks['items']]
 
         return tracks
 
@@ -209,8 +210,16 @@ class SpotifyMusicSearchService(MusicSearchService):
         response = json.loads(raw_response)
         albums = response['albums']
 
-        artists = [Album(item['uri'], item['name']) for item in albums['items']]
+        albums = [Album(item['uri'], item['name'], self._get_artists_from_item(item))
+                  for item in albums['items']]
+        return albums
+
+    def _get_artists_from_item(self, item):
+        # if more than one artist is found we concatenate them in a string
+        artists = [Artist(name=artist["name"]) for artist in item["artists"]]
+
         return artists
+
 
 
 

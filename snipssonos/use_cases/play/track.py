@@ -4,10 +4,11 @@ from snipssonos.shared.response_object import ResponseSuccess, ResponseFailure
 
 class PlayTrackUseCase(UseCase):
 
-    def __init__(self, device_discovery_service, music_search_service, music_playback_service):
+    def __init__(self, device_discovery_service, music_search_service, music_playback_service, feedback_service):
         self.device_discovery_service = device_discovery_service
         self.music_search_service = music_search_service
         self.music_playback_service = music_playback_service
+        self.feedback_service = feedback_service
 
     def process_request(self, request_object):
 
@@ -16,6 +17,8 @@ class PlayTrackUseCase(UseCase):
         artist_name = request_object.artist_name if request_object.artist_name else None
         album_name = request_object.album_name if request_object.album_name else None
         playlist_name = request_object.playlist_name if request_object.playlist_name else None
+
+        results_tracks = list()
 
         if track_name and album_name and artist_name and playlist_name:  # Track - Album - Artist - Playlist
             results_tracks = self.music_search_service.search_track_for_album_and_for_artist_and_for_playlist(
@@ -41,12 +44,16 @@ class PlayTrackUseCase(UseCase):
 
         # Track
         if track_name and not (artist_name or playlist_name or album_name):
-            results_track = self.music_search_service.search_track(request_object.track_name)
-            if len(results_track):
-                first_result = results_track[0]
-                self.music_playback_service.clear_queue(device)
-                self.music_playback_service.play(device, first_result)
-            else:
-                return ResponseFailure.build_resource_error("An error happened")
+            results_tracks = self.music_search_service.search_track(request_object.track_name)
 
-        return ResponseSuccess()
+        if len(results_tracks):
+            first_result = results_tracks[0]
+            self.music_playback_service.clear_queue(device)
+            self.music_playback_service.play(device, first_result)
+            artist_names = self.feedback_service.concatenate_artists_in_string(first_result.artists)
+            tts_feedback = self.feedback_service.get_track_template()\
+                .format(first_result.name, artist_names)
+            return ResponseSuccess(feedback=tts_feedback)
+
+        return ResponseFailure.build_resource_error(self.feedback_service.get_generic_error_message())
+

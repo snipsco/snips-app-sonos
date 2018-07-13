@@ -4,10 +4,11 @@ from snipssonos.shared.response_object import ResponseSuccess, ResponseFailure
 
 class PlayAlbumUseCase(UseCase):
 
-    def __init__(self, device_discovery_service, music_search_service, music_playback_service):
+    def __init__(self, device_discovery_service, music_search_service, music_playback_service, feedback_service):
         self.device_discovery_service = device_discovery_service
         self.music_search_service = music_search_service
         self.music_playback_service = music_playback_service
+        self.feedback_service = feedback_service
 
     def process_request(self, request_object):
 
@@ -36,7 +37,10 @@ class PlayAlbumUseCase(UseCase):
             first_album = results_albums[0]
             self.music_playback_service.clear_queue(device)
             self.music_playback_service.play(device, first_album)
-        else:
-            return ResponseFailure.build_resource_error("An error happened")
+            artist_names = self.feedback_service.concatenate_artists_in_string(first_album.artists)
+            tts_feedback = self.feedback_service.get_album_template()\
+                .format(first_album.name, artist_names)
+            return ResponseSuccess(feedback=tts_feedback)
 
-        return ResponseSuccess()
+        return ResponseFailure.build_resource_error(self.feedback_service.get_generic_error_message())
+

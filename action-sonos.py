@@ -31,10 +31,8 @@ from snipssonos.services.node.device_transport_control import NodeDeviceTranspor
 from snipssonos.services.node.music_playback_service import NodeMusicPlaybackService
 from snipssonos.services.spotify.music_search_service import SpotifyMusicSearchService
 from snipssonos.services.hermes.state_persistence import HermesStatePersistence
+from snipssonos.services.feedback.feedback_service import FeedbackService
 
-from snipssonos.adapters.tts_sentence_adapter import TTSSentenceGenerator
-
-from snipssonos.shared.feedback import FR_TTS_SHORT_ERROR
 
 # Utils functions
 CONFIG_INI = "config.ini"
@@ -54,6 +52,9 @@ else:
 # Connection
 HOSTNAME = CONFIGURATION['global']['hostname'] if CONFIGURATION['global']['hostname'] else "localhost"
 HERMES_HOST = "{}:1883".format(HOSTNAME)
+
+# Language
+LANGUAGE = CONFIGURATION['global']['language'] if CONFIGURATION['global']['language'] else "fr"
 
 
 # Hotword callback
@@ -93,13 +94,14 @@ def addSong_callback(hermes, intentMessage):
 
 @restore_volume_for_hotword
 def getInfos_callback(hermes, intentMessage):
-    use_case = GetTrackInfoUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
+    use_case = GetTrackInfoUseCase(hermes.device_discovery_service,
+                                   hermes.device_transport_control_service, hermes.feedback_service)
     get_track_request = GetTrackInfoRequestAdapter.from_intent_message(intentMessage)
 
     response = use_case.execute(get_track_request)
 
     if not response:
-        feedback = TTSSentenceGenerator("FRENCH").from_response_object(response)
+        feedback = hermes.feedback_service.from_response_object(response)
         hermes.publish_end_session(intentMessage.session_id, feedback)
     else:
         logging.debug("Response Success : {}".format(response))
@@ -119,7 +121,7 @@ def previousSong_callback(hermes, intentMessage):
     response = use_case.execute(previous_track_request)
     if not response:
         logging.info(response.value)
-        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
+        hermes.publish_end_session(intentMessage.session_id, hermes.feedback_service.get_short_error_message())
     else:
         logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, "")
@@ -133,7 +135,7 @@ def nextSong_callback(hermes, intentMessage):
     response = use_case.execute(next_track_request)
     if not response:
         logging.info(response.value)
-        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
+        hermes.publish_end_session(intentMessage.session_id, hermes.feedback_service.get_short_error_message())
     else:
         logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, "")
@@ -147,7 +149,7 @@ def resumeMusic_callback(hermes, intentMessage):  # Playback functions
     response = use_case.execute(resume_music_request)
     if not response:
         logging.info(response.value)
-        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
+        hermes.publish_end_session(intentMessage.session_id, hermes.feedback_service.get_short_error_message())
     else:
         logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, "")
@@ -161,7 +163,7 @@ def speakerInterrupt_callback(hermes, intentMessage):
     response = use_case.execute(speaker_interrupt_request)
     if not response:
         logging.info(response.value)
-        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
+        hermes.publish_end_session(intentMessage.session_id, hermes.feedback_service.get_short_error_message())
     else:
         logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, "")
@@ -175,7 +177,7 @@ def volumeDown_callback(hermes, intentMessage):
     response = use_case.execute(volume_down_request)
     if not response:
         logging.info(response.value)
-        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
+        hermes.publish_end_session(intentMessage.session_id, hermes.feedback_service.get_short_error_message())
     else:
         logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, "")
@@ -189,7 +191,7 @@ def volumeUp_callback(hermes, intentMessage):
     response = use_case.execute(volume_up_request)
     if not response:
         logging.info(response.value)
-        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
+        hermes.publish_end_session(intentMessage.session_id, hermes.feedback_service.get_short_error_message())
     else:
         logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, "")
@@ -202,7 +204,7 @@ def volumeSet_callback(hermes, intentMessage):
     response = use_case.execute(volume_set_request)
     if not response:
         logging.info(response.value)
-        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
+        hermes.publish_end_session(intentMessage.session_id, hermes.feedback_service.get_short_error_message())
     else:
         logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, "")
@@ -216,7 +218,7 @@ def mute_callback(hermes, intentMessage):
     response = use_case.execute(mute_request)
     if not response:
         logging.info(response.value)
-        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
+        hermes.publish_end_session(intentMessage.session_id, hermes.feedback_service.get_short_error_message())
     else:
         logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, "")
@@ -225,14 +227,14 @@ def mute_callback(hermes, intentMessage):
 @restore_volume_for_hotword
 def playTrack_callback(hermes, intentMessage):
     use_case = PlayTrackUseCase(hermes.device_discovery_service, hermes.music_search_service,
-                                hermes.music_playback_service)
+                                hermes.music_playback_service, hermes.feedback_service)
     play_track_request = PlayTrackRequestAdapter.from_intent_message(intentMessage)
 
     response = use_case.execute(play_track_request)
 
     if not response:
         logging.info(response.value)
-        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
+        hermes.publish_end_session(intentMessage.session_id, hermes.feedback_service.get_short_error_message())
     else:
         logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, "")
@@ -241,7 +243,7 @@ def playTrack_callback(hermes, intentMessage):
 @restore_volume_for_hotword
 def playArtist_callback(hermes, intentMessage):
     use_case = PlayArtistUseCase(hermes.device_discovery_service, hermes.music_search_service,
-                                 hermes.music_playback_service)
+                                 hermes.music_playback_service, hermes.feedback_service)
     play_artist_request = PlayArtistRequestAdapter.from_intent_message(intentMessage)
 
     logging.info(play_artist_request)
@@ -249,7 +251,7 @@ def playArtist_callback(hermes, intentMessage):
 
     if not response:
         logging.info(response.value)
-        hermes.publish_end_session(intentMessage.session_id, FR_TTS_SHORT_ERROR)
+        hermes.publish_end_session(intentMessage.session_id, hermes.feedback_service.get_short_error_message())
     else:
         logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, "")
@@ -258,7 +260,7 @@ def playArtist_callback(hermes, intentMessage):
 @restore_volume_for_hotword
 def playMusic_callback(hermes, intentMessage):
     use_case = PlayMusicUseCase(hermes.device_discovery_service, hermes.music_search_service,
-                                hermes.music_playback_service)
+                                hermes.music_playback_service, hermes.feedback_service)
     play_music_request = PlayMusicRequestAdapter.from_intent_message(intentMessage)
 
     response = use_case.execute(play_music_request)
@@ -268,7 +270,7 @@ def playMusic_callback(hermes, intentMessage):
         logging.error('Error message : {}'.format(response.message))
         logging.error('Error exception : {}'.format(response.exception))
 
-        feedback = TTSSentenceGenerator("FRENCH").from_response_object(response)
+        feedback = hermes.feedback_service.from_response_object(response)
         hermes.publish_end_session(intentMessage.session_id, feedback)
     else:
         logging.debug("Response Success : {}".format(response))
@@ -286,6 +288,7 @@ if __name__ == "__main__":
         h.device_transport_control_service = NodeDeviceTransportControlService(CONFIGURATION)
         h.music_search_service = SpotifyMusicSearchService(client_id, client_secret, refresh_token)
         h.music_playback_service = NodeMusicPlaybackService(CONFIGURATION=CONFIGURATION)
+        h.feedback_service = FeedbackService(LANGUAGE)
         h \
             .subscribe_session_started(hotword_detected_callback) \
             .subscribe_intent("playMusic4", playMusic_callback) \
