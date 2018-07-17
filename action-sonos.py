@@ -50,11 +50,11 @@ else:
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Connection
-HOSTNAME = CONFIGURATION['global']['hostname'] if CONFIGURATION['global']['hostname'] else "localhost"
+HOSTNAME = CONFIGURATION['global'].get('hostname', "localhost")
 HERMES_HOST = "{}:1883".format(HOSTNAME)
 
 # Language
-LANGUAGE = CONFIGURATION['global']['language'] if CONFIGURATION['global']['language'] else "fr"
+LANGUAGE = CONFIGURATION['global'].get('language', "fr")
 
 
 # Hotword callback
