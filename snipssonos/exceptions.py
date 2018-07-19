@@ -70,6 +70,16 @@ class SpotifyClientException(Exception):
     """An error occurred within the Spotify Client """
 
 
+class SpotifyClientAuthException(SpotifyClientException):
+    """An error occured when trying to auth the user from Spotify"""
+
+class SpotifyClientAuthorizationException(SpotifyClientAuthException):
+    """An error occured when retrieving authorization code from Spotify"""
+
+class SpotifyClientAuthRefreshAccessTokenException(SpotifyClientAuthException):
+    """An error occured when retrieving authorization code from Spotify"""
+
+
 # Spotify query builder
 class SpotifyQueryBuilderException(Exception):
     """An error occurred within the Spotify Query Builder"""

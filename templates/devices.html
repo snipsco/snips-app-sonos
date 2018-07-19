@@ -1,0 +1,13 @@
+<html>
+
+<h5>Connected devices</h5>
+{% if devices %}
+<ul>
+    {% for device in devices %}
+        <li>{{device.name}} <i>#{{device.identifier}}</i></li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No connected devices</p>
+{% endif %}
+</html>
