@@ -21,8 +21,9 @@ class HotwordLowerVolumeUseCase(UseCase):
 
         self.state_persistence_service.save(states)
 
+        min_device_volume = min([device.volume for device in devices])
         volume_set_use_case = VolumeSetUseCase(self.device_discovery_service, self.device_transport_control_service)
-        volume_set_request_object = VolumeSetRequestObject(self.DEFAULT_LOW_VOLUME)
+        volume_set_request_object = VolumeSetRequestObject(min(self.DEFAULT_LOW_VOLUME, min_device_volume))
 
         response = volume_set_use_case.execute(volume_set_request_object)
 
