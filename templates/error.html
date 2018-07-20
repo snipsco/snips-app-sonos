@@ -1,0 +1,40 @@
+
+
+
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <nav>
+                <h2>SNIPS Sonos APP</h2>
+        </nav>
+        <nav>
+                <ul>
+                    <li><a class="active"><i class="far fa-user"></i> Login</a></li>
+                    <li><a><i class="far fa-gem"></i> Devices</a></li>
+                    <li><a><i class="fas fa-book"></i> Injection</a></li>
+                </ul>
+        </nav>
+        <div class="content">
+
+            <!-- CONTENT GOES HERE -->
+            <h1><i class="fas fa-exclamation-circle"></i> Error</h1>
+            <p>Something bad happened ...</p>
+            <pre>{{exception}}</pre>
+            {% if message %}
+            <pre>{{message}}</pre>
+            {% endif %}
+            <a href="/">Back to home</a>
+            <!-- CONTENT ENDS HERE -->
+
+        </div>
+    </div>
+    <p style="text-align:center">Made by <a href="https://snips.ai/">Snips</a></p>
+    <p style="text-align:center"><i class="fab fa-github"></i><a href="https://github.com/snipsco/snips-app-sonos"> Source code </a></p>
+    </body>
+</html>
+
+

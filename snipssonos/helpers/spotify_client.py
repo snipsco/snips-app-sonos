@@ -1,12 +1,20 @@
 import base64
+import logging
 import requests
 import time
 
-from snipssonos.exceptions import MusicSearchProviderConnectionError, MusicSearchCredentialsError,\
-     SpotifyQueryBuilderNonExistentTimeRange
+from snipssonos.exceptions import MusicSearchProviderConnectionError, MusicSearchCredentialsError, \
+    SpotifyQueryBuilderNonExistentTimeRange, SpotifyClientAuthorizationException, \
+    SpotifyClientAuthRefreshAccessTokenException
 
 
 class SpotifyClient(object):
+    """
+    This class contains helper methods to request the Spotify Web API.
+    It covers all endpoints of the API, but most helpers functions are for authentication.
+
+    Please refer to the Authorization Code Flow section on this page : https://developer.spotify.com/documentation/general/guides/authorization-guide/
+    """
     AUTH_SERVICE_ENDPOINT = "https://accounts.spotify.com/api/token"
 
     def __init__(self, client_id, client_secret, refresh_token=None):
@@ -18,6 +26,44 @@ class SpotifyClient(object):
         self.endpoint = None
 
         self._check_credentials_validity()
+
+    def request_access_and_refresh_tokens(self, authorization_code):
+        """
+        This method is called when making a first authentication with the Spotify We API.
+
+        """
+        if authorization_code is None:
+            logging.error("No authorization was provided to the SpotifyClient. Cannot pursue authentication process.")
+            raise SpotifyClientAuthorizationException("No Authorization code was provided.")
+        try:
+            logging.debug("An authorization code was retrieved. Now requesting refresh and access tokens from Spotify.")
+            headers = self._get_authorization_headers_from_client_credentials()
+            response = requests.post(
+                self.AUTH_SERVICE_ENDPOINT,
+                headers=headers,
+                data={
+                    'grant_type': 'authorization_code',  # This is problematic for me here ....
+                    'code': authorization_code,
+                    'redirect_uri': 'http://localhost:5000/callback/'
+                }
+            )
+
+            if response.ok:
+                logging.debug("Succesfully retrieved the refresh and access tokens.")
+
+                access_token = self._extract_access_token(response)
+                refresh_token = self._extract_refresh_token(response)
+                expires_in = self._extract_access_token_expiration(response)
+                return access_token, refresh_token, expires_in
+            else:
+                logging.error(
+                    "We successfully retrieved the authorization code, but something happened while requesting refresh token and access token")
+                raise SpotifyClientAuthRefreshAccessTokenException(
+                    "We successfully retrieved the authorization code, but something happened while requesting refresh token and access token")
+
+        except requests.exceptions.ConnectionError as e:
+            raise MusicSearchProviderConnectionError(
+                "Connection error, could not connnect to Spotify Services : {}".format(e.message))
 
     def _check_credentials_validity(self):
         if not (len(self.client_id) * len(self.client_secret)):
@@ -31,8 +77,14 @@ class SpotifyClient(object):
     def _extract_access_token(self, response):
         return response.json()['access_token']
 
+    def _extract_refresh_token(self, response):
+        return response.json()['refresh_token']
+
+    def _extract_access_token_expiration(self, response):
+        return response.json()['expires_in']
+
     def _set_access_token_expiration_time(self, response):
-        expires_in = response.json()['expires_in']
+        expires_in = self._extract_access_token_expiration(response)
         self.access_token_expiration = time.time() + expires_in
 
     def _get_authorization_headers_from_client_credentials(self):
@@ -51,16 +103,14 @@ class SpotifyClient(object):
         try:
 
             headers = self._get_authorization_headers_from_client_credentials()
-
             response = requests.post(
                 self.AUTH_SERVICE_ENDPOINT,
                 headers=headers,
                 data={
-                    'grant_type': 'refresh_token',
+                    'grant_type': 'refresh_token',  # This is problematic for me here ....
                     'refresh_token': self.refresh_token
                 }
             )
-
             access_token = self._extract_access_token(response)
             self._set_access_token_expiration_time(response)
             return access_token
@@ -70,6 +120,10 @@ class SpotifyClient(object):
                 "There was a problem retrieving the access token: {}".format(e.message))
 
     def authenticate(self):
+        """
+        This method assumes that you already requested an acces and refresh token with the request_access_and_refresh_token method.
+        This method is used to refresh the access token when you already have a valid refresh token.
+        """
         if self.access_token is None or time.time() > self.access_token_expiration:
             self.access_token = self.retrieve_access_token()
 
@@ -87,7 +141,7 @@ class SpotifyClient(object):
                 raise MusicSearchProviderConnectionError(
                     "There was a problem while making a request to Spotify: '{} with status code {}',"
                     " while hitting the endpoint {}"
-                    .format(response.reason, response.status_code, query.endpoint))
+                        .format(response.reason, response.status_code, query.endpoint))
         except requests.exceptions.ConnectionError as e:
             raise MusicSearchProviderConnectionError(
                 "There was a problem while querying to Spotify api: {}".format(e.message))
