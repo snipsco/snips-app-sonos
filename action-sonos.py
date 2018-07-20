@@ -24,7 +24,7 @@ from snipssonos.use_cases.get_track_info import GetTrackInfoUseCase
 from snipssonos.use_cases.request_objects import HotwordLowerVolumeRequestObject, HotwordRestoreVolumeRequestObject
 from snipssonos.adapters.request_adapter import VolumeUpRequestAdapter, PlayTrackRequestAdapter, \
     PlayArtistRequestAdapter, VolumeSetRequestAdapter, VolumeDownRequestAdapter, ResumeMusicRequestAdapter, \
-    SpeakerInterruptRequestAdapter, MuteRequestAdapter, PlayMusicRequestAdapter, NextTrackRequestAdapter,\
+    SpeakerInterruptRequestAdapter, MuteRequestAdapter, PlayMusicRequestAdapter, NextTrackRequestAdapter, \
     PreviousTrackRequestAdapter, GetTrackInfoRequestAdapter
 from snipssonos.services.node.device_discovery_service import NodeDeviceDiscoveryService
 from snipssonos.services.node.device_transport_control import NodeDeviceTransportControlService
@@ -32,7 +32,6 @@ from snipssonos.services.node.music_playback_service import NodeMusicPlaybackSer
 from snipssonos.services.spotify.music_search_service import SpotifyMusicSearchService
 from snipssonos.services.hermes.state_persistence import HermesStatePersistence
 from snipssonos.services.feedback.feedback_service import FeedbackService
-
 
 # Utils functions
 CONFIG_INI = "config.ini"
@@ -212,7 +211,6 @@ def volumeUp_callback(hermes, intentMessage):
 
 
 def volumeSet_callback(hermes, intentMessage):
-
     use_case = VolumeSetUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
     volume_set_request = VolumeSetRequestAdapter.from_intent_message(intentMessage)
 
