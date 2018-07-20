@@ -15,6 +15,8 @@ CONFIGURATION = read_configuration_file(CONFIG_INI)
 
 CLIENT_ID = CONFIGURATION["secret"].get('client_id')
 CLIENT_SECRET = CONFIGURATION["secret"].get('client_secret')
+REDIRECT_URI = CONFIGURATION["secret"].get('redirect_uri')
+
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 app = Flask(__name__)
@@ -22,7 +24,8 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return app.send_static_file("index.html")
+    return render_template("index.html", client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI)
+
 
 @app.route("/callback/")
 def authorize_callback():
@@ -43,7 +46,7 @@ def authorize_callback():
 
         try:
             access_token, refresh_token, expires_in = SpotifyClient(CLIENT_ID, CLIENT_SECRET) \
-                .request_access_and_refresh_tokens(authorization_code)
+                .request_access_and_refresh_tokens(authorization_code, REDIRECT_URI)
             return render_template('auth.html', authorization_code=authorization_code,
                                    access_token=access_token,
                                    refresh_token=refresh_token,
