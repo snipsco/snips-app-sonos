@@ -29,9 +29,9 @@ def index():
 
 @app.route("/callback/")
 def authorize_callback():
-    if (not CLIENT_SECRET) or (not CLIENT_ID):
+    if (not CLIENT_SECRET) or (not CLIENT_ID) or not(REDIRECT_URI):
         return render_template('error.html',
-                               exception="The client_id or client_secret is missing from the config.ini file. Please fill these and restart the server.")
+                               exception="The client_id, client_secret or redirect_uri is missing from the config.ini file. Please fill these and restart the server.")
 
     error = request.args.get('error', None)
 
