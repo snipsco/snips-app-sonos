@@ -184,7 +184,7 @@ def speakerInterrupt_callback(hermes, intentMessage):
 
 @restore_volume_for_hotword
 def volumeDown_callback(hermes, intentMessage):
-    use_case = VolumeDownUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
+    use_case = VolumeDownUseCase(hermes.device_discovery_service, hermes.device_transport_control_service, hermes.state_persistence_service)
     volume_down_request = VolumeDownRequestAdapter.from_intent_message(intentMessage)
 
     response = use_case.execute(volume_down_request)
@@ -198,7 +198,7 @@ def volumeDown_callback(hermes, intentMessage):
 
 @restore_volume_for_hotword
 def volumeUp_callback(hermes, intentMessage):
-    use_case = VolumeUpUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
+    use_case = VolumeUpUseCase(hermes.device_discovery_service, hermes.device_transport_control_service, hermes.state_persistence_service)
     volume_up_request = VolumeUpRequestAdapter.from_intent_message(intentMessage)
 
     response = use_case.execute(volume_up_request)
