@@ -13,9 +13,11 @@ CONFIG_INI = "config.ini"
 # Configuration
 CONFIGURATION = read_configuration_file(CONFIG_INI)
 
+HOSTNAME = CONFIGURATION["global"].get('hostname')
 CLIENT_ID = CONFIGURATION["secret"].get('client_id')
 CLIENT_SECRET = CONFIGURATION["secret"].get('client_secret')
 REDIRECT_URI = CONFIGURATION["secret"].get('redirect_uri')
+
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -24,7 +26,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return render_template("index.html", client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI)
+    return render_template("index.html", client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, hostname=HOSTNAME)
 
 
 @app.route("/callback/")
