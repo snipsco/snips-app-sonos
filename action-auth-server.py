@@ -4,7 +4,7 @@ import logging
 from flask import Flask, request, render_template
 
 from snipssonos.exceptions import MusicSearchProviderConnectionError, SpotifyClientAuthorizationException, \
-    SpotifyClientAuthRefreshAccessTokenException
+    SpotifyClientAuthRefreshAccessTokenException, DeviceDiscoveryException
 from snipssonos.helpers.snips_config_parser import read_configuration_file
 from snipssonos.helpers.spotify_client import SpotifyClient
 from snipssonos.services.node.device_discovery_service import NodeDeviceDiscoveryService
@@ -61,9 +61,12 @@ def authorize_callback():
 
 @app.route('/devices/')
 def get_devices():  # TODO : refactor this into a use case.
-    device_discovery_service = NodeDeviceDiscoveryService(CONFIGURATION)
-    devices = device_discovery_service.get_devices()
-    return render_template('devices.html', devices=devices)
+    try:
+        device_discovery_service = NodeDeviceDiscoveryService(CONFIGURATION)
+        devices = device_discovery_service.get_devices()
+        return render_template('devices.html', devices=devices)
+    except DeviceDiscoveryException as e:
+        return render_template('error.html', exception=e)
 
 
 if __name__ == '__main__':
