@@ -24,7 +24,7 @@ from snipssonos.use_cases.get_track_info import GetTrackInfoUseCase
 from snipssonos.use_cases.request_objects import HotwordLowerVolumeRequestObject, HotwordRestoreVolumeRequestObject
 from snipssonos.adapters.request_adapter import VolumeUpRequestAdapter, PlayTrackRequestAdapter, \
     PlayArtistRequestAdapter, VolumeSetRequestAdapter, VolumeDownRequestAdapter, ResumeMusicRequestAdapter, \
-    SpeakerInterruptRequestAdapter, MuteRequestAdapter, PlayMusicRequestAdapter, NextTrackRequestAdapter,\
+    SpeakerInterruptRequestAdapter, MuteRequestAdapter, PlayMusicRequestAdapter, NextTrackRequestAdapter, \
     PreviousTrackRequestAdapter, GetTrackInfoRequestAdapter
 from snipssonos.services.node.device_discovery_service import NodeDeviceDiscoveryService
 from snipssonos.services.node.device_transport_control import NodeDeviceTransportControlService
@@ -32,7 +32,6 @@ from snipssonos.services.node.music_playback_service import NodeMusicPlaybackSer
 from snipssonos.services.spotify.music_search_service import SpotifyMusicSearchService
 from snipssonos.services.hermes.state_persistence import HermesStatePersistence
 from snipssonos.services.feedback.feedback_service import FeedbackService
-
 
 # Utils functions
 CONFIG_INI = "config.ini"
@@ -185,7 +184,7 @@ def speakerInterrupt_callback(hermes, intentMessage):
 
 @restore_volume_for_hotword
 def volumeDown_callback(hermes, intentMessage):
-    use_case = VolumeDownUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
+    use_case = VolumeDownUseCase(hermes.device_discovery_service, hermes.device_transport_control_service, hermes.state_persistence_service)
     volume_down_request = VolumeDownRequestAdapter.from_intent_message(intentMessage)
 
     response = use_case.execute(volume_down_request)
@@ -199,7 +198,7 @@ def volumeDown_callback(hermes, intentMessage):
 
 @restore_volume_for_hotword
 def volumeUp_callback(hermes, intentMessage):
-    use_case = VolumeUpUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
+    use_case = VolumeUpUseCase(hermes.device_discovery_service, hermes.device_transport_control_service, hermes.state_persistence_service)
     volume_up_request = VolumeUpRequestAdapter.from_intent_message(intentMessage)
 
     response = use_case.execute(volume_up_request)
@@ -212,7 +211,6 @@ def volumeUp_callback(hermes, intentMessage):
 
 
 def volumeSet_callback(hermes, intentMessage):
-
     use_case = VolumeSetUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
     volume_set_request = VolumeSetRequestAdapter.from_intent_message(intentMessage)
 

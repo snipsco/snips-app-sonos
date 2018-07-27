@@ -27,7 +27,7 @@ class SpotifyClient(object):
 
         self._check_credentials_validity()
 
-    def request_access_and_refresh_tokens(self, authorization_code):
+    def request_access_and_refresh_tokens(self, authorization_code, host_redirect_uri):
         """
         This method is called when making a first authentication with the Spotify We API.
 
@@ -42,9 +42,9 @@ class SpotifyClient(object):
                 self.AUTH_SERVICE_ENDPOINT,
                 headers=headers,
                 data={
-                    'grant_type': 'authorization_code',  # This is problematic for me here ....
+                    'grant_type': 'authorization_code',
                     'code': authorization_code,
-                    'redirect_uri': 'http://localhost:5000/callback/'
+                    'redirect_uri': host_redirect_uri
                 }
             )
 

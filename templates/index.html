@@ -1,0 +1,48 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="static/style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" integrity="sha384-O8whS3fhG2OnA5Kas0Y9l3cfpmYjapjI0E4theH4iuMD+pLhbf6JI0jIMfYcK3yZ" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <nav>
+                <h2>SNIPS Sonos APP</h2>
+        </nav>
+        <nav>
+                <ul>
+                    <li><a href="/" class="active"><i class="far fa-user"></i> Login</a></li>
+                    <li><a href="/devices/" ><i class="far fa-gem"></i> Devices</a></li>
+                    <li><a><i class="fas fa-book"></i> Injection</a></li>
+                </ul>
+        </nav>
+        <div class="content">
+            <h1>Setup Instructions</h1>
+            <ul>
+                <li>Create a configuration file <b>config.ini</b> at the root of the snips-app-sonos folder</li>
+                <li>Make sure the configuration file has the following fields, in the <b>global section</b></li>
+                <pre>hostname={{hostname}}</pre>
+            </ul>
+            <h1>Accounts</h1>
+            <h2><i class="fab fa-spotify"></i> Spotify</h2>
+            <ul>
+                <li>Head over to your <a href="https://developer.spotify.com/dashboard/applications">Spotify Developper Dashboard</a></li>
+                <li>Create an application, give it a name, and add a <i>Redirect URIs</i> that has the following structure :</li>
+                <pre>http://{{hostname}}:5000/callback/</pre>
+                <li>You are now ready to edit your configuration file on your raspberry pi</li>
+                <li>Make sure the configuration file has the following fields, in the <b>global section</b></li>
+                <pre>redirect_uri</pre>
+                <li>Make sure the configuration file has the following fields, in the <b>secret section</b></li>
+                <pre>client_id</pre>
+                <pre>client_secret</pre>
+                <pre>redirect_uri</pre>
+            </ul>
+            <a class="btn" href="https://accounts.spotify.com/authorize/?client_id={{client_id}}&response_type=code&scope=user-read-private%20user-top-read%20user-library-read%20playlist-read-private&redirect_uri={{redirect_uri|urlencode}}">Connect Spotify Account</a>
+
+            <h2>Deezer</h2>
+            <a href="/">Connnect Deezer account</a>
+        </div>
+    </div>
+    <p style="text-align:center">Made by <a href="https://snips.ai/">Snips</a></p>
+    <p style="text-align:center"><i class="fab fa-github"></i><a href="https://github.com/snipsco/snips-app-sonos"> Source code </a></p>
+    </body>
+</html>

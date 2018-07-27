@@ -13,8 +13,12 @@ CONFIG_INI = "config.ini"
 # Configuration
 CONFIGURATION = read_configuration_file(CONFIG_INI)
 
+HOSTNAME = CONFIGURATION["global"].get('hostname')
 CLIENT_ID = CONFIGURATION["secret"].get('client_id')
 CLIENT_SECRET = CONFIGURATION["secret"].get('client_secret')
+REDIRECT_URI = CONFIGURATION["secret"].get('redirect_uri')
+
+
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 app = Flask(__name__)
@@ -22,13 +26,14 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return app.send_static_file("index.html")
+    return render_template("index.html", client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI, hostname=HOSTNAME)
+
 
 @app.route("/callback/")
 def authorize_callback():
-    if (not CLIENT_SECRET) or (not CLIENT_ID):
+    if (not CLIENT_SECRET) or (not CLIENT_ID) or not(REDIRECT_URI):
         return render_template('error.html',
-                               exception="The client_id or client_secret is missing from the config.ini file. Please fill these and restart the server.")
+                               exception="The client_id, client_secret or redirect_uri is missing from the config.ini file. Please fill these and restart the server.")
 
     error = request.args.get('error', None)
 
@@ -43,7 +48,7 @@ def authorize_callback():
 
         try:
             access_token, refresh_token, expires_in = SpotifyClient(CLIENT_ID, CLIENT_SECRET) \
-                .request_access_and_refresh_tokens(authorization_code)
+                .request_access_and_refresh_tokens(authorization_code, REDIRECT_URI)
             return render_template('auth.html', authorization_code=authorization_code,
                                    access_token=access_token,
                                    refresh_token=refresh_token,
