@@ -86,6 +86,20 @@ def restore_volume_for_hotword(intent_callback):
     return restore_volume_wrapper
 
 
+def session_ended_callback(hermes, sessionEndedMessage):
+    INTENT_NOT_RECOGNIZED = 4  # TODO : refactor this.
+    # We restore the volume to what it was before the hotword was detected.
+    if sessionEndedMessage.termination.termination_type == INTENT_NOT_RECOGNIZED:
+        use_case = HotwordRestoreVolumeUseCase(hermes.device_discovery_service, hermes.device_transport_control_service,
+                                               hermes.state_persistence_service)
+        request_object = HotwordRestoreVolumeRequestObject()
+        response = use_case.execute(request_object)
+
+        if not response:
+            logging.error("Error when recovering the volume")
+            logging.error(response.message)
+
+
 # Music management functions
 @restore_volume_for_hotword
 def addSong_callback(hermes, intentMessage):
@@ -198,6 +212,7 @@ def volumeUp_callback(hermes, intentMessage):
 
 
 def volumeSet_callback(hermes, intentMessage):
+
     use_case = VolumeSetUseCase(hermes.device_discovery_service, hermes.device_transport_control_service)
     volume_set_request = VolumeSetRequestAdapter.from_intent_message(intentMessage)
 
@@ -301,4 +316,5 @@ if __name__ == "__main__":
             .subscribe_intent("nextSong4", nextSong_callback) \
             .subscribe_intent("previousSong4", previousSong_callback) \
             .subscribe_intent("getInfos4", getInfos_callback) \
+            .subscribe_session_ended(session_ended_callback) \
             .loop_forever()
