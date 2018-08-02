@@ -12,10 +12,11 @@ class ResponseFailure(object):
     PARAMETERS_ERROR = 'ParametersError'
     SYSTEM_ERROR = 'SystemError'
 
-    def __init__(self, type_, message, exception=None):
+    def __init__(self, type_, message, exception=None, errors=None):
         self.type = type_
         self.message = self._format_message(message)
         self.exception = exception
+        self.errors = errors
 
     def _format_message(self, str_or_exception):
         if isinstance(str_or_exception, Exception):
@@ -37,7 +38,7 @@ class ResponseFailure(object):
         message = "\n".join(
             ["{}: {}".format(error['parameter'], error['message']) for error in invalid_request_object.errors])
 
-        return cls(cls.PARAMETERS_ERROR, message)
+        return cls(cls.PARAMETERS_ERROR, message, errors=invalid_request_object.errors)
 
     @classmethod
     def build_resource_error(cls, message):

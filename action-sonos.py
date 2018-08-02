@@ -217,7 +217,8 @@ def volumeSet_callback(hermes, intentMessage):
     response = use_case.execute(volume_set_request)
     if not response:
         logging.info(response.value)
-        hermes.publish_end_session(intentMessage.session_id, hermes.feedback_service.get_short_error_message())
+        feedback = hermes.feedback_service.from_response_object(response)
+        hermes.publish_end_session(intentMessage.session_id, feedback)
     else:
         logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, "")

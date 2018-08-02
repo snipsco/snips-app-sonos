@@ -81,8 +81,8 @@ def test_response_failure_from_invalid_request_object():
 def test_response_failure_from_invalid_request_object_with_errors():
     request_object = reqo.InvalidRequestObject()
 
-    request_object.add_error('path', 'is mandatory')
-    request_object.add_error('path', 'cannot be blank')
+    request_object.add_error('path', 'is mandatory', 'MANDATORY')
+    request_object.add_error('path', 'cannot be blank', 'BLANK')
 
     response = reso.ResponseFailure.build_from_invalid_request_object(request_object)
 

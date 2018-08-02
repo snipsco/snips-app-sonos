@@ -16,7 +16,7 @@ def test_use_case_cannot_process_valid_requests():
 
 def test_use_case_can_process_invalid_requests_and_returns_response_failure():
     invalid_request_object = InvalidRequestObject()
-    invalid_request_object.add_error('param', 'value')
+    invalid_request_object.add_error('param', 'value','type')
 
     use_case = UseCase()
     response = use_case.execute(invalid_request_object)

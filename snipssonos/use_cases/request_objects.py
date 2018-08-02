@@ -1,4 +1,5 @@
 from snipssonos.shared.request_object import InvalidRequestObject, ValidRequestObject, RequestObjectFactory
+from snipssonos.shared.error import OutOfRangeError, Volume
 from snipssonos.exceptions import RequestObjectInitializationException
 
 
@@ -65,13 +66,13 @@ class VolumeSetRequestObject(ValidRequestObject):
         invalid_request = InvalidRequestObject()
 
         if not isinstance(volume_level, int):
-            invalid_request.add_error('volume_level', 'must be an integer')
+            invalid_request.add_error('volume_level', 'must be an integer', 'WRONG_TYPE')
 
         if isinstance(volume_level, int) and volume_level < 0:
-            invalid_request.add_error('volume_level', 'must be positive')
+            invalid_request.add_error('volume_level', 'must be positive', 'OUT_OF_RANGE')
 
         if isinstance(volume_level, int) and volume_level > 100:
-            invalid_request.add_error('volume_level', 'must be lower than 100')
+            invalid_request.add_error(Volume, 'must be lower than 100', OutOfRangeError)
 
         if invalid_request.has_errors():
             raise RequestObjectInitializationException(invalid_request)
@@ -140,7 +141,7 @@ class PlayTrackRequestObject(ValidRequestObject):
         if isinstance(track_name, str):
             self._track_name = track_name
         else:
-            invalid_request_object.add_error('track_name', 'is missing')
+            invalid_request_object.add_error('track_name', 'is missing', 'MISSING')
             raise RequestObjectInitializationException(invalid_request_object)
 
     @classmethod
@@ -175,7 +176,7 @@ class PlayArtistRequestObject(ValidRequestObject):
             self._artist_name = artist_name
 
         else:
-            invalid_request.add_error('artist_name', 'is missing')
+            invalid_request.add_error('artist_name', 'is missing', 'MISSING')
 
         if invalid_request.has_errors():
             raise RequestObjectInitializationException(invalid_request)
@@ -208,7 +209,7 @@ class PlayPlaylistRequestObject(ValidRequestObject):
         if isinstance(playlist_name, str):
             self._playlist_name = playlist_name
         else:
-            invalid_request.add_error('playlist_name', 'is missing')
+            invalid_request.add_error('playlist_name', 'is missing', 'MISSING')
 
         if invalid_request.has_errors():
             raise RequestObjectInitializationException(invalid_request)
@@ -242,7 +243,7 @@ class PlayAlbumRequestObject(ValidRequestObject):
         if isinstance(album_name, str):
             self._album_name = album_name
         else:
-            invalid_request.add_error('album_name', 'is missing')
+            invalid_request.add_error('album_name', 'is missing', 'MISSING')
 
         if invalid_request.has_errors():
             raise RequestObjectInitializationException(invalid_request)
@@ -301,27 +302,29 @@ class InjectEntitiesRequestObject(ValidRequestObject):
                 self.entity_slot_name_validation(entity_slot_name, invalid_request)
             self._entities_type = entities_type
         else:
-            invalid_request.add_error('entities_type', 'has to be a dictionary')
+            invalid_request.add_error('entities_type', 'has to be a dictionary', 'WRONG_TYPE')
 
         if invalid_request.has_errors():
             raise RequestObjectInitializationException(invalid_request)
 
     def entity_name_validation(self, entity_name, invalid_request):
         if not isinstance(entity_name, str):
-            invalid_request.add_error('entity name {} in entities_type'.format(entity_name),
-                                      'has to be a dictionary')
+            invalid_request.add_error('entity_name',
+                                      'has to be a dictionary',
+                                      'WRONG_TYPE')
         if entity_name not in self.VALID_ENTITY_NAMES:
             invalid_request \
-                .add_error('entity name {} in entities_type'.format(entity_name),
+                .add_error(entity_name,
                            'has to be a valid entity name {}'
-                           .format([entity_name for entity_name in self.VALID_ENTITY_NAMES]))
+                           .format([entity_name for entity_name in self.VALID_ENTITY_NAMES]),
+                           'OUT_OF_RANGE')
             return invalid_request
 
     def entity_slot_name_validation(self, entity_slot_name, invalid_request):
         # TODO once entity names are set in stone figure validation here
         if not isinstance(entity_slot_name, str):
             invalid_request.add_error('entity slot name {} in entities'.format(entity_slot_name),
-                                      'has to be a string')
+                                      'has to be a string', 'WRONG_TYPE')
         return invalid_request
 
     @classmethod

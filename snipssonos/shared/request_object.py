@@ -9,8 +9,8 @@ class InvalidRequestObject(object):
 
     __bool__ = __nonzero__
 
-    def add_error(self, parameter, value):
-        self.errors.append({'parameter': parameter, 'message': value})
+    def add_error(self, parameter, value, type):
+        self.errors.append({'parameter': parameter, 'message': value, 'type': type})
 
     def has_errors(self):
         return bool(len(self.errors))

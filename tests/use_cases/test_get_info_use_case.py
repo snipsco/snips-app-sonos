@@ -1,3 +1,4 @@
+#coding: utf-8
 import pytest
 from mock import mock
 
@@ -42,7 +43,7 @@ def test_get_track_info_use_case_success_tts(connected_device, feedback_service)
     device_transport_control_service.get_track_info.assert_called()
 
     assert bool(result_object) is True
-    assert result_object.feedback == "C'est Away Away par Ibeyi"
+    assert result_object.feedback == "Vous écoutez, Away Away par Ibeyi"
 
 
 def test_get_track_info_use_case_failure_tts(connected_device, feedback_service):
