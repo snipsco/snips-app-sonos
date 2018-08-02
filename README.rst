@@ -11,15 +11,10 @@ Features
 --------
 
 * Discover your Sonos devices in your local Network
-* Support for Spotify
+* Support for Spotify and Deezer
 * Search for any Artist, Song, Album on Spotify with your voice
 * Control Music Playback with your voice
-
-
-TODO
-----
-* Set up unittests environment
-* Set up Tox 
+* Web Interface for authentication, and devices management
 
 Copyright
 ---------
