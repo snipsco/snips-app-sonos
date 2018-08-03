@@ -1,7 +1,7 @@
 import requests
 import logging
 
-from snipssonos.services.node.query_builder import NodeQueryBuilder
+from snipssonos.services.node.query_builder import DeezerNodeQueryBuilder
 from snipssonos.services.music.search_service import MusicSearchService
 
 from snipssonos.exceptions import MusicSearchProviderConnectionError
@@ -17,11 +17,10 @@ class DeezerMusicSearchService(MusicSearchService):
     SERVICE_NAME = "deezer"
     DUMMY_LIST = [""]
 
-    def __init__(self):
-        self.query_builder = None
-
-    def set_query_builder(self, device_name, query_builder):
-        self.query_builder = query_builder(device_name, self.SERVICE_NAME)
+    def __init__(self, device_discovery_service):
+        self.device_discovery_service = device_discovery_service
+        first_device = self.device_discovery_service.get().name # TODO : adapt this behaviour if needed.
+        self.query_builder = DeezerNodeQueryBuilder(first_device.name)
 
     def search_album(self, album_name):
         search_query = self.query_builder\
