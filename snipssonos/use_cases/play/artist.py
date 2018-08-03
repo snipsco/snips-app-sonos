@@ -1,4 +1,4 @@
-from snipssonos.services.node.query_builder import NodeQueryBuilder
+
 
 from snipssonos.shared.use_case import UseCase
 from snipssonos.shared.response_object import ResponseSuccess, ResponseFailure
@@ -16,7 +16,6 @@ class PlayArtistUseCase(UseCase):
         tts_feedback = self.feedback_service.get_artist_template()\
             .format(request_object.artist_name)
         device = self.device_discovery_service.get()
-        self.music_search_service.set_query_builder(device.name, NodeQueryBuilder)
 
         results_track = list()
 

@@ -14,7 +14,6 @@ class PlayPlaylistUseCase(UseCase):
     def process_request(self, request_object):
 
         device = self.device_discovery_service.get()
-        self.music_search_service.set_node_query_builder(device.name, NodeQueryBuilder)
 
         results_playlists = list()
 
@@ -30,3 +29,4 @@ class PlayPlaylistUseCase(UseCase):
             return ResponseSuccess(feedback=tts_feedback)
 
         return ResponseFailure.build_resource_error(self.feedback_service.get_generic_error_message())
+
