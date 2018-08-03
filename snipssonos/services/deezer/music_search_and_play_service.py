@@ -19,7 +19,7 @@ class DeezerMusicSearchService(MusicSearchService):
 
     def __init__(self, device_discovery_service):
         self.device_discovery_service = device_discovery_service
-        first_device = self.device_discovery_service.get().name # TODO : adapt this behaviour if needed.
+        first_device = self.device_discovery_service.get() # TODO : adapt this behaviour if needed.
         self.query_builder = DeezerNodeQueryBuilder(first_device.name)
 
     def search_album(self, album_name):
