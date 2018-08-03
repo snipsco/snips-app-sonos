@@ -117,3 +117,6 @@ class DeezerSearchServiceException(Exception):
 class DeviceDiscoveryServiceException(Exception):
     """An error occurred within the Device Discovery Service"""
 
+# Configuration File Parsing
+class ConfigurationFileValidationException(Exception):
+    pass
