@@ -109,12 +109,12 @@ class NodeQueryBuilderMissingQueryData(NodeQueryBuilderException):
 
 
 # Deezer search and play
-class DeezerSearchServiceException(Exception):
+class DeezerSearchServiceException(ServiceException):
     """An error occurred within the Deezer Search service"""
 
 
 # Device Discovery Service
-class DeviceDiscoveryServiceException(Exception):
+class DeviceDiscoveryServiceException(ServiceException):
     """An error occurred within the Device Discovery Service"""
 
 # Configuration File Parsing
