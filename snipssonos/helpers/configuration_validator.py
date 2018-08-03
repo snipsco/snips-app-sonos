@@ -28,6 +28,15 @@ class ConfigurationValidator(object):
     def add_field_value(self, field):
         self.value_fields.append(field)
 
+
+    def add_field_values(self, *args):
+        for field in args:
+            self.value_fields.append(field)
+
+    def add_mandatory_fields(self, *args):
+        for field in args:
+            self.mandatory_fields.append(field)
+
     def validate_configuration(self, configuration_dict):
         errors = list()
 
