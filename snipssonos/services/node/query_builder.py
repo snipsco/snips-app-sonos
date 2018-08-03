@@ -70,3 +70,13 @@ class NodeQueryBuilder(object):
 
     def is_available_music_service(self, music_service):
         return music_service in self.AVAILABLE_MUSIC_SERVICES
+
+
+class DeezerNodeQueryBuilder(NodeQueryBuilder):
+    def __init__(self, device_name):
+        super(DeezerNodeQueryBuilder, self).__init__(device_name, "deezer")
+
+
+class SpotifyNodeQueryBuilder():
+    def __init__(self, device_name):
+        super(DeezerNodeQueryBuilder, self).__init__(device_name, "spotify")
