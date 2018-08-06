@@ -7,6 +7,7 @@ from snipssonos.exceptions import MusicSearchProviderConnectionError
 
 BASE_ENDPOINT = "http://localhost:5005"
 
+
 @pytest.fixture
 def connected_device():
     return Device(
@@ -15,8 +16,9 @@ def connected_device():
         volume=10
     )
 
+
 @pytest.fixture
-def deezer_music_search_service():  # TODO : don't know if we can have a fixture within a fixtuyre
+def deezer_music_search_service():
 
     connected_device = Device(
         name="Anthony's Sonos",
@@ -30,24 +32,16 @@ def deezer_music_search_service():  # TODO : don't know if we can have a fixture
     return deezer
 
 
-def test_proper_music_service_is_set(connected_device):  # TODO : Do we keep this text ?
-    mock_device_discovery_service = mock.Mock()
-    mock_device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
-    deezer = DeezerMusicSearchService(mock_device_discovery_service)
-
-    assert "deezer" == deezer.SERVICE_NAME
-
-
 @mock.patch('snipssonos.services.deezer.music_search_and_play_service.requests.Response')
 @mock.patch('snipssonos.services.deezer.music_search_and_play_service.requests')
 def test_search_album(mock_requests, mock_response, deezer_music_search_service,
-                      connected_device):  # TODO : check if this is the correct order for connected_device
+                      connected_device):
+
+    # This test is dumb, it mocks stuff after they are supposed to be called ...
+
     deezer_music_search_service.search_album("favourite album")
     expected_query = "{}/{}/musicsearch/{}/{}/{}".format(BASE_ENDPOINT, connected_device.name, "deezer",
                                                          "album", "favourite album")
-
-    mock_response.ok.return_value = True
-    mock_requests.get.return_value = mock_response
     mock_requests.get.assert_called_with(expected_query)
 
 
@@ -55,10 +49,10 @@ def test_search_album(mock_requests, mock_response, deezer_music_search_service,
 @mock.patch('snipssonos.services.deezer.music_search_and_play_service.requests')
 def test_search_album_for_artist(mock_requests, mock_response, deezer_music_search_service, connected_device):
     deezer_music_search_service.search_album_for_artist("favourite album", "favourite artist")
+
     expected_query = "{}/{}/musicsearch/{}/{}/{}".format(BASE_ENDPOINT, connected_device.name, "deezer",
                                                          "album", "favourite album favourite artist")
-    mock_response.ok.return_value = True
-    mock_requests.get.return_value = mock_response
+
     mock_requests.get.assert_called_with(expected_query)
 
 
@@ -68,8 +62,7 @@ def test_search_album_in_playlist(mock_requests, mock_response, deezer_music_sea
     deezer_music_search_service.search_album_in_playlist("favourite album", "vibing")
     expected_query = "{}/{}/musicsearch/{}/{}/{}".format(BASE_ENDPOINT, connected_device.name, "deezer",
                                                          "album", "favourite album")
-    mock_response.ok.return_value = True
-    mock_requests.get.return_value = mock_response
+
     mock_requests.get.assert_called_with(expected_query)
 
 
@@ -81,8 +74,7 @@ def test_search_album_for_artist_and_for_playlist(mock_requests, mock_response, 
                                                                          "balling")
     expected_query = "{}/{}/musicsearch/{}/{}/{}".format(BASE_ENDPOINT, connected_device.name, "deezer",
                                                          "album", "favourite album favourite artist")
-    mock_response.ok.return_value = True
-    mock_requests.get.return_value = mock_response
+
     mock_requests.get.assert_called_with(expected_query)
 
 
@@ -93,8 +85,6 @@ def test_search_track(mock_requests, mock_response, deezer_music_search_service,
 
     expected_query = "{}/{}/musicsearch/{}/{}/{}".format(BASE_ENDPOINT, connected_device.name, "deezer",
                                                          "song", "my fav track")
-    mock_response.ok.return_value = True
-    mock_requests.get.return_value = mock_response
     mock_requests.get.assert_called_with(expected_query)
 
 
@@ -105,8 +95,6 @@ def test_search_track_for_artist(mock_requests, mock_response, deezer_music_sear
 
     expected_query = "{}/{}/musicsearch/{}/{}/{}".format(BASE_ENDPOINT, connected_device.name, "deezer",
                                                          "song", "my fav track my fav artist")
-    mock_response.ok.return_value = True
-    mock_requests.get.return_value = mock_response
     mock_requests.get.assert_called_with(expected_query)
 
 
@@ -117,8 +105,6 @@ def test_search_track_for_album(mock_requests, mock_response, deezer_music_searc
 
     expected_query = "{}/{}/musicsearch/{}/{}/{}".format(BASE_ENDPOINT, connected_device.name, "deezer",
                                                          "song", "my fav track")
-    mock_response.ok.return_value = True
-    mock_requests.get.return_value = mock_response
     mock_requests.get.assert_called_with(expected_query)
 
 
@@ -129,8 +115,6 @@ def test_search_track_for_playlist(mock_requests, mock_response, deezer_music_se
 
     expected_query = "{}/{}/musicsearch/{}/{}/{}".format(BASE_ENDPOINT, connected_device.name, "deezer",
                                                          "song", "my fav track")
-    mock_response.ok.return_value = True
-    mock_requests.get.return_value = mock_response
     mock_requests.get.assert_called_with(expected_query)
 
 
@@ -142,8 +126,6 @@ def search_track_for_album_and_for_artist(mock_requests, mock_response, deezer_m
 
     expected_query = "{}/{}/musicsearch/{}/{}/{}".format(BASE_ENDPOINT, connected_device.name, "deezer",
                                                          "song", "my fav track my fav artist")
-    mock_response.ok.return_value = True
-    mock_requests.get.return_value = mock_response
     mock_requests.get.assert_called_with(expected_query)
 
 
@@ -156,8 +138,6 @@ def search_track_for_album_and_for_playlist(mock_requests, mock_response, deezer
 
     expected_query = "{}/{}/musicsearch/{}/{}/{}".format(BASE_ENDPOINT, connected_device.name, "deezer",
                                                          "song", "my fav track")
-    mock_response.ok.return_value = True
-    mock_requests.get.return_value = mock_response
     mock_requests.get.assert_called_with(expected_query)
 
 
@@ -170,8 +150,6 @@ def search_track_for_album_and_for_playlist(mock_requests, mock_response, deezer
 
     expected_query = "{}/{}/musicsearch/{}/{}/{}".format(BASE_ENDPOINT, connected_device.name, "deezer",
                                                          "song", "my fav track a very good artist")
-    mock_response.ok.return_value = True
-    mock_requests.get.return_value = mock_response
     mock_requests.get.assert_called_with(expected_query)
 
 
@@ -184,8 +162,6 @@ def search_track_for_album_and_for_artist_and_for_playlist(mock_requests, mock_r
 
     expected_query = "{}/{}/musicsearch/{}/{}/{}".format(BASE_ENDPOINT, connected_device.name, "deezer",
                                                          "song", "my fav track a very good artist")
-    mock_response.ok.return_value = True
-    mock_requests.get.return_value = mock_response
     mock_requests.get.assert_called_with(expected_query)
 
 
@@ -196,8 +172,6 @@ def test_search_artist_for_playlist(mock_requests, mock_response, deezer_music_s
 
     expected_query = "{}/{}/musicsearch/{}/{}/{}".format(BASE_ENDPOINT, connected_device.name, "deezer",
                                                          "song", "my fav artist")
-    mock_response.ok.return_value = True
-    mock_requests.get.return_value = mock_response
     mock_requests.get.assert_called_with(expected_query)
 
 
@@ -208,8 +182,6 @@ def test_search_playlist(mock_requests, mock_response, deezer_music_search_servi
 
     expected_query = "{}/{}/musicsearch/{}/{}/{}".format(BASE_ENDPOINT, connected_device.name, "deezer",
                                                          "playlist", "good vibesssss")
-    mock_response.ok.return_value = True
-    mock_requests.get.return_value = mock_response
     mock_requests.get.assert_called_with(expected_query)
 
 
