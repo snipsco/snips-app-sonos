@@ -3,11 +3,12 @@ import logging
 
 from snipssonos.services.node.query_builder import DeezerNodeQueryBuilder
 from snipssonos.services.music.search_service import MusicSearchService
+from snipssonos.services.music.playback_service import MusicPlaybackService
 
 from snipssonos.exceptions import MusicSearchProviderConnectionError
 
 
-class DeezerMusicSearchService(MusicSearchService):
+class DeezerMusicSearchService(MusicSearchService, MusicPlaybackService):
     """
     This service is able to search and directly play music on the Sonos device. The middleware we are
     using to search and play is the Node Sonos server and  it does not offer a way to play songs coming from
@@ -19,7 +20,7 @@ class DeezerMusicSearchService(MusicSearchService):
 
     def __init__(self, device_discovery_service):
         self.device_discovery_service = device_discovery_service
-        first_device = self.device_discovery_service.get() # TODO : adapt this behaviour if needed.
+        first_device = self.device_discovery_service.get()
         self.query_builder = DeezerNodeQueryBuilder(first_device.name)
 
     def search_album(self, album_name):
@@ -117,7 +118,7 @@ class DeezerMusicSearchService(MusicSearchService):
     def execute_query(self, query):
         try:
             response = requests.get(query)
-            if not response.ok():
+            if not response.ok:
                 raise MusicSearchProviderConnectionError(
                     "There was a problem while making a request to the Node server: '{} with status code {}',"
                     " while hitting the endpoint {}"

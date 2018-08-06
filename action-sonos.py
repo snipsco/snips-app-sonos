@@ -3,6 +3,7 @@
 
 import logging
 import sys
+import traceback
 
 from hermes_python.hermes import Hermes
 
@@ -295,6 +296,7 @@ def playMusic_callback(hermes, intentMessage):
         logging.error('Error type : {}'.format(response.type))
         logging.error('Error message : {}'.format(response.message))
         logging.error('Error exception : {}'.format(response.exception))
+        logging.error(response.tb)
 
         feedback = hermes.feedback_service.from_response_object(response)
         hermes.publish_end_session(intentMessage.session_id, feedback)
@@ -310,11 +312,11 @@ def get_playback_service(music_provider):
         return SpotifyNodeMusicPlaybackService(CONFIGURATION=CONFIGURATION)
 
 
-def get_music_search_service(music_provider):
+def get_music_search_service(music_provider, device_disco_service):
     if music_provider == "spotify":
         return SpotifyMusicSearchService(CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN)
     if music_provider == "deezer":
-        return DeezerMusicSearchService()
+        return DeezerMusicSearchService(device_disco_service)
 
 
 if __name__ == "__main__":
@@ -323,7 +325,7 @@ if __name__ == "__main__":
         h.device_discovery_service = NodeDeviceDiscoveryService(CONFIGURATION)
         h.device_transport_control_service = NodeDeviceTransportControlService(CONFIGURATION)
         h.feedback_service = FeedbackService(LANGUAGE)
-        h.music_search_service = get_music_search_service(MUSIC_PROVIDER)
+        h.music_search_service = get_music_search_service(MUSIC_PROVIDER, h.device_discovery_service)
         h.music_playback_service = get_playback_service(MUSIC_PROVIDER)
 
         h \
