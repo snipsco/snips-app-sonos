@@ -1,3 +1,5 @@
+import traceback
+
 from snipssonos.shared.response_object import ResponseFailure
 
 
@@ -10,8 +12,9 @@ class UseCase(object):
         try:
             return self.process_request(request_object)
         except Exception as exc:
+            tb_formatted = traceback.format_exc()
             return ResponseFailure.build_system_error(
-                "{}: {}".format(exc.__class__.__name__, str(exc)), exc
+                "{}: {}".format(exc.__class__.__name__, str(exc)), exc, tb=tb_formatted
             )
 
     def process_request(self, request_object):
