@@ -2,10 +2,13 @@
 # -*-: coding utf-8 -*-
 
 import logging
+import sys
+import traceback
 
 from hermes_python.hermes import Hermes
 
 from snipssonos.helpers.snips_config_parser import read_configuration_file
+from snipssonos.helpers.snips_configuration_validator import validate_configuration_file, AVAILABLE_MUSIC_SERVICES
 from snipssonos.use_cases.hotword.lower_volume import HotwordLowerVolumeUseCase
 from snipssonos.use_cases.hotword.restore_volume import HotwordRestoreVolumeUseCase
 from snipssonos.use_cases.volume.up import VolumeUpUseCase
@@ -28,16 +31,31 @@ from snipssonos.adapters.request_adapter import VolumeUpRequestAdapter, PlayTrac
     PreviousTrackRequestAdapter, GetTrackInfoRequestAdapter
 from snipssonos.services.node.device_discovery_service import NodeDeviceDiscoveryService
 from snipssonos.services.node.device_transport_control import NodeDeviceTransportControlService
-from snipssonos.services.node.music_playback_service import NodeMusicPlaybackService
+from snipssonos.services.spotify.music_playback_service import SpotifyNodeMusicPlaybackService
+from snipssonos.services.deezer.music_playback_service import DeezerNodeMusicPlaybackService
 from snipssonos.services.spotify.music_search_service import SpotifyMusicSearchService
 from snipssonos.services.hermes.state_persistence import HermesStatePersistence
 from snipssonos.services.feedback.feedback_service import FeedbackService
 
+from snipssonos.services.deezer.music_search_and_play_service import DeezerMusicSearchService
+
 # Utils functions
 CONFIG_INI = "config.ini"
 
+
 # Configuration
 CONFIGURATION = read_configuration_file(CONFIG_INI)
+validate_configuration_file(CONFIGURATION)
+
+MUSIC_PROVIDER = CONFIGURATION["global"].get('music_provider', AVAILABLE_MUSIC_SERVICES[0])
+CLIENT_ID = CONFIGURATION['secret']['client_id']
+CLIENT_SECRET = CONFIGURATION['secret']['client_secret']
+REFRESH_TOKEN = CONFIGURATION['secret']['refresh_token']
+# Connection
+HOSTNAME = CONFIGURATION['global'].get('hostname', "localhost")
+HERMES_HOST = "{}:1883".format(HOSTNAME)
+# Language
+LANGUAGE = CONFIGURATION['global'].get('language', "fr")
 
 # Logging
 LOG_LEVEL = CONFIGURATION['global']['log_level']
@@ -48,12 +66,6 @@ elif LOG_LEVEL == "debug":
 else:
     logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Connection
-HOSTNAME = CONFIGURATION['global'].get('hostname', "localhost")
-HERMES_HOST = "{}:1883".format(HOSTNAME)
-
-# Language
-LANGUAGE = CONFIGURATION['global'].get('language', "fr")
 
 
 # Hotword callback
@@ -184,7 +196,8 @@ def speakerInterrupt_callback(hermes, intentMessage):
 
 @restore_volume_for_hotword
 def volumeDown_callback(hermes, intentMessage):
-    use_case = VolumeDownUseCase(hermes.device_discovery_service, hermes.device_transport_control_service, hermes.state_persistence_service)
+    use_case = VolumeDownUseCase(hermes.device_discovery_service, hermes.device_transport_control_service,
+                                 hermes.state_persistence_service)
     volume_down_request = VolumeDownRequestAdapter.from_intent_message(intentMessage)
 
     response = use_case.execute(volume_down_request)
@@ -198,7 +211,8 @@ def volumeDown_callback(hermes, intentMessage):
 
 @restore_volume_for_hotword
 def volumeUp_callback(hermes, intentMessage):
-    use_case = VolumeUpUseCase(hermes.device_discovery_service, hermes.device_transport_control_service, hermes.state_persistence_service)
+    use_case = VolumeUpUseCase(hermes.device_discovery_service, hermes.device_transport_control_service,
+                               hermes.state_persistence_service)
     volume_up_request = VolumeUpRequestAdapter.from_intent_message(intentMessage)
 
     response = use_case.execute(volume_up_request)
@@ -282,6 +296,7 @@ def playMusic_callback(hermes, intentMessage):
         logging.error('Error type : {}'.format(response.type))
         logging.error('Error message : {}'.format(response.message))
         logging.error('Error exception : {}'.format(response.exception))
+        logging.error(response.tb)
 
         feedback = hermes.feedback_service.from_response_object(response)
         hermes.publish_end_session(intentMessage.session_id, feedback)
@@ -290,18 +305,29 @@ def playMusic_callback(hermes, intentMessage):
         hermes.publish_end_session(intentMessage.session_id, response.feedback)
 
 
-if __name__ == "__main__":
-    client_id = CONFIGURATION['secret']['client_id']
-    client_secret = CONFIGURATION['secret']['client_secret']
-    refresh_token = CONFIGURATION['secret']['refresh_token']
+def get_playback_service(music_provider):
+    if music_provider == "deezer":
+        return DeezerNodeMusicPlaybackService()
+    if music_provider == "spotify":
+        return SpotifyNodeMusicPlaybackService(CONFIGURATION=CONFIGURATION)
 
+
+def get_music_search_service(music_provider, device_disco_service):
+    if music_provider == "spotify":
+        return SpotifyMusicSearchService(CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN)
+    if music_provider == "deezer":
+        return DeezerMusicSearchService(device_disco_service)
+
+
+if __name__ == "__main__":
     with Hermes(HERMES_HOST) as h:
         h.state_persistence_service = HermesStatePersistence(dict())
         h.device_discovery_service = NodeDeviceDiscoveryService(CONFIGURATION)
         h.device_transport_control_service = NodeDeviceTransportControlService(CONFIGURATION)
-        h.music_search_service = SpotifyMusicSearchService(client_id, client_secret, refresh_token)
-        h.music_playback_service = NodeMusicPlaybackService(CONFIGURATION=CONFIGURATION)
         h.feedback_service = FeedbackService(LANGUAGE)
+        h.music_search_service = get_music_search_service(MUSIC_PROVIDER, h.device_discovery_service)
+        h.music_playback_service = get_playback_service(MUSIC_PROVIDER)
+
         h \
             .subscribe_session_started(hotword_detected_callback) \
             .subscribe_intent("playMusic4", playMusic_callback) \

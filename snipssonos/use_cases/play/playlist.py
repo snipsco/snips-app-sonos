@@ -1,3 +1,4 @@
+from snipssonos.services.node.query_builder import NodeQueryBuilder
 from snipssonos.shared.use_case import UseCase
 from snipssonos.shared.response_object import ResponseSuccess, ResponseFailure
 
@@ -13,6 +14,7 @@ class PlayPlaylistUseCase(UseCase):
     def process_request(self, request_object):
 
         device = self.device_discovery_service.get()
+
         results_playlists = list()
 
         if request_object.playlist_name:

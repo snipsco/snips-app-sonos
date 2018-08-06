@@ -3,7 +3,7 @@ import pytest
 
 from snipssonos.entities.device import Device
 from snipssonos.entities.track import Track
-from snipssonos.services.node.music_playback_service import NodeMusicPlaybackService
+from snipssonos.services.spotify.music_playback_service import SpotifyNodeMusicPlaybackService
 
 
 @pytest.fixture
@@ -27,15 +27,15 @@ def node_configuration():
 
 
 def test_music_playback_service_initialization(connected_device):
-    music_playback_service = NodeMusicPlaybackService(connected_device)
+    music_playback_service = SpotifyNodeMusicPlaybackService(connected_device)
 
-    assert music_playback_service.PORT == NodeMusicPlaybackService.PORT
-    assert music_playback_service.HOST == NodeMusicPlaybackService.HOST
-    assert music_playback_service.PROTOCOL == NodeMusicPlaybackService.PROTOCOL
+    assert music_playback_service.PORT == SpotifyNodeMusicPlaybackService.PORT
+    assert music_playback_service.HOST == SpotifyNodeMusicPlaybackService.HOST
+    assert music_playback_service.PROTOCOL == SpotifyNodeMusicPlaybackService.PROTOCOL
 
 
 def test_generate_correct_url_query_for_get_method(connected_device, node_configuration):
-    music_playback_service = NodeMusicPlaybackService(connected_device, node_configuration)
+    music_playback_service = SpotifyNodeMusicPlaybackService(connected_device, node_configuration)
 
     track = Track.from_dict({'uri': 'uri'})
 
@@ -47,7 +47,7 @@ def test_generate_correct_url_query_for_get_method(connected_device, node_config
 
 
 def test_generate_correct_url_query_for_queue(connected_device, node_configuration):
-    music_playback_service = NodeMusicPlaybackService(device=connected_device, CONFIGURATION=node_configuration)
+    music_playback_service = SpotifyNodeMusicPlaybackService(device=connected_device, CONFIGURATION=node_configuration)
 
     track = Track.from_dict({'uri': 'uri'})
 
@@ -60,7 +60,7 @@ def test_generate_correct_url_query_for_queue(connected_device, node_configurati
 
 
 def test_generate_correct_url_query_for_clear_queue(connected_device, node_configuration):
-    music_playback_service = NodeMusicPlaybackService(connected_device, CONFIGURATION=node_configuration)
+    music_playback_service = SpotifyNodeMusicPlaybackService(connected_device, CONFIGURATION=node_configuration)
 
     expected_query = "http://localhost:5005/Antho Room/clearqueue"
 
@@ -69,9 +69,9 @@ def test_generate_correct_url_query_for_clear_queue(connected_device, node_confi
     assert expected_query == actual_query
 
 
-@mock.patch('snipssonos.services.node.music_playback_service.FuturesSession.get')
+@mock.patch('snipssonos.services.spotify.music_playback_service.FuturesSession.get')
 def test_calls_queue(mocked_future, connected_device, node_configuration):
-    music_playback_service = NodeMusicPlaybackService(device=connected_device, CONFIGURATION=node_configuration)
+    music_playback_service = SpotifyNodeMusicPlaybackService(device=connected_device, CONFIGURATION=node_configuration)
 
     tracks = [Track.from_dict({'uri': 'uri{}'.format(str(i))}) for i in range(10)]
     music_playback_service.queue(connected_device, tracks)

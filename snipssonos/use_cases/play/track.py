@@ -1,3 +1,5 @@
+from snipssonos.services.node.query_builder import NodeQueryBuilder
+
 from snipssonos.shared.use_case import UseCase
 from snipssonos.shared.response_object import ResponseSuccess, ResponseFailure
 
@@ -13,6 +15,7 @@ class PlayTrackUseCase(UseCase):
     def process_request(self, request_object):
 
         device = self.device_discovery_service.get()
+
         track_name = request_object.track_name if request_object.track_name else None
         artist_name = request_object.artist_name if request_object.artist_name else None
         album_name = request_object.album_name if request_object.album_name else None
@@ -56,4 +59,3 @@ class PlayTrackUseCase(UseCase):
             return ResponseSuccess(feedback=tts_feedback)
 
         return ResponseFailure.build_resource_error(self.feedback_service.get_generic_error_message())
-

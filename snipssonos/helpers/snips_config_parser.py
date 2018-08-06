@@ -1,5 +1,6 @@
 import io
 import ConfigParser
+import logging
 
 CONFIGURATION_ENCODING_FORMAT = "utf-8"
 
