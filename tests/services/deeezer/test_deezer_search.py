@@ -188,7 +188,7 @@ def test_search_playlist(mock_requests, mock_response, deezer_music_search_servi
 @mock.patch('snipssonos.services.deezer.music_search_and_play_service.requests.Response')
 @mock.patch('snipssonos.services.deezer.music_search_and_play_service.requests')
 def test_error_raised_on_request(mock_requests, mock_response, deezer_music_search_service, connected_device):
-    mock_response.ok.return_value = False
+    mock_response.ok = False
     mock_requests.get.return_value = mock_response
 
     with pytest.raises(MusicSearchProviderConnectionError):
