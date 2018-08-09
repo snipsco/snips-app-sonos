@@ -6,11 +6,10 @@ body {
 }
 
 body {
-  background-color : #eee;
+  background-color : #f2f2f2;
   color: #555;
   line-height: 1.5;
   width:100%;
-
 }
 
 
@@ -38,6 +37,7 @@ pre {
 }
 
 .container {
+    border-radius: 4px;
     background-color: white;
     width : 80%;
     margin: 50 auto;
@@ -45,45 +45,62 @@ pre {
 
 .content {
     padding-top : 25px;
-    padding-left : 1em;
+    padding-left : 3em;
+    padding-right : 3em;
     padding-bottom : 50px;
 }
 
-
 nav {
-
-    border-bottom:1px solid #ddd;
     color: #ccc;
     text-transform: uppercase;
     font-size:0.8em;
-    padding-left : 1em;
-    padding-top : 0.2em;
+    padding-left : 3em;
+    padding-right : 3em;
+    padding-top : 0.3em;
 }
 
-nav h2 {
-    color : #bbb;
-}
-
-nav ul {
-    margin : 0 auto 15;
-    list-style-type: none;
-    width: 800px;
-    text-align : center;
+nav svg {
+    display: inline;
+    width: 55px;
     height: 25px;
+    fill : blue;
 }
 
-nav ul li {
-    width : 33%;
-    float : left;
+nav .left_menu {
+    float: right;
 }
 
-nav ul li .active {
-    color : blue;
-    font-weight: 700;
+nav .left_menu a {
+    margin-right: 1em;
 }
 
-nav ul li a {
-    display : block;
-    padding : 8px;
+
+.deck {
+    text-align: center;
 }
 
+.card {
+    position: relative;
+    width : 300px;
+    height: 150px;
+    border: 1px solid #f2f2f2;
+    text-align : center;
+    display: inline-block;
+    padding: 20px;
+
+}
+
+.card.active{
+    border-color:#69c;;
+}
+
+.card img {
+    width : 100px;
+    height: 100px;
+}
+
+.card i {
+    position: absolute;
+    bottom: 0;
+    right:0;
+}

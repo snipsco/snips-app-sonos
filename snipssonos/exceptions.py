@@ -13,6 +13,7 @@ class RequestObjectException(SonosActionException):
 
 class RequestObjectInitializationException(RequestObjectException):
     """An exception occurred with a request object"""
+
     def __init__(self, invalid_request_object):
         self.invalid_request_object = invalid_request_object
 
@@ -65,19 +66,39 @@ class InvalidEntitySlotName(EntityInjectionService):
     """An unknown entity slot name has been used to build the payload"""
 
 
+# Client
+class ClientException(Exception):
+    """An exception occured with the web client"""
+
+
 # Spotify client
-class SpotifyClientException(Exception):
+class SpotifyClientException(ClientException):
     """An error occurred within the Spotify Client """
+
+
+class DeezerClientException(ClientException):
+    """An error occured within the Deezer Client """
 
 
 class SpotifyClientAuthException(SpotifyClientException):
     """An error occured when trying to auth the user from Spotify"""
 
+
 class SpotifyClientAuthorizationException(SpotifyClientAuthException):
     """An error occured when retrieving authorization code from Spotify"""
 
+
 class SpotifyClientAuthRefreshAccessTokenException(SpotifyClientAuthException):
     """An error occured when retrieving authorization code from Spotify"""
+
+
+# Deezer client
+class DeezerClientAuthorizationException(DeezerClientException):
+    """An error occured when retrieving auth code from Deezer"""
+
+
+class DeezerClientAuthRefreshAccessTokenException(DeezerClientException):
+    """An error occured when retrieving code from Spotify"""
 
 
 # Spotify query builder
@@ -116,6 +137,7 @@ class DeezerSearchServiceException(ServiceException):
 # Device Discovery Service
 class DeviceDiscoveryServiceException(ServiceException):
     """An error occurred within the Device Discovery Service"""
+
 
 # Configuration File Parsing
 class ConfigurationFileValidationException(Exception):
