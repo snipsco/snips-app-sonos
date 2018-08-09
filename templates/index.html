@@ -13,14 +13,31 @@
     </nav>
     <div class="container">
         <div class="content">
+            <h1>Music Provider</h1>
+            <section class="deck">
+
+                <div class="card {{'active' if music_provider == 'deezer' }}">
+                    <img src="static/img/deezer.svg"/>
+                    <h3>Deezer</h3>
+                </div>
+                <div class="card {{'active' if music_provider == 'spotify' }}">
+                    <img src="static/img/spotify.svg"/>
+                    <h3>Spotify</h3>
+                </div>
+            </section>
+
             <h1>SONOS</h1>
+
             <ul>
                 <li>Create a configuration file <b>config.ini</b> at the root of the snips-app-sonos folder</li>
                 <li>Make sure the configuration file has the following fields, in the <b>global section</b></li>
                 <pre>hostname={{hostname}}</pre>
             </ul>
+
             <h1>Accounts</h1>
+
             <h2><i class="fab fa-spotify"></i> Spotify</h2>
+
             <ul>
                 <li>Head over to your <a href="https://developer.spotify.com/dashboard/applications">Spotify Developper Dashboard</a></li>
                 <li>Create an application, give it a name, and add a <i>Redirect URIs</i> that has the following structure :</li>

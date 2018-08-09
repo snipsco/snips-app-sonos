@@ -18,6 +18,7 @@ HOSTNAME = CONFIGURATION["global"].get('hostname')
 CLIENT_ID = CONFIGURATION["secret"].get('client_id')
 CLIENT_SECRET = CONFIGURATION["secret"].get('client_secret')
 REDIRECT_URI = CONFIGURATION["secret"].get('redirect_uri')
+MUSIC_PROVIDER = CONFIGURATION["global"].get('music_provider')
 
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -27,7 +28,7 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     return render_template("index.html", client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI,
-                           hostname=HOSTNAME)
+                           hostname=HOSTNAME, music_provider=MUSIC_PROVIDER)
 
 
 @app.route("/callback/")
@@ -78,7 +79,7 @@ def get_devices():  # TODO : refactor this into a use case.
 @app.route("/deezer_callback/")
 def deezer_authorize_callback():
     if (not CLIENT_SECRET) or (not CLIENT_ID) or not (
-    REDIRECT_URI):  # There's a tight coupling with the I/O and the business logic ....
+            REDIRECT_URI):  # There's a tight coupling with the I/O and the business logic ....
         return render_template('error.html',
                                exception="The client_id, client_secret or redirect_uri is missing from the config.ini file. Please fill these and restart the server.")
 
