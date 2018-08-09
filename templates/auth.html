@@ -18,7 +18,9 @@
             <p>Here are your credentials that you'll have to write to the config.ini :</p>
                 <pre>
 access_token={{ access_token }}
+{% if refresh_token is defined %}
 refresh_token={{ refresh_token }}
+{% endif %}
 expires_in={{ expires_in }}
                 </pre>
 
