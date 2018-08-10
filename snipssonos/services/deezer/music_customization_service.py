@@ -21,13 +21,13 @@ class DeezerCustomizationService:
             .limit(self.ENTITY_NUMBER_LIMIT)
 
         data = self.client.execute_query(get_top_entities_by_type_query)
-        entities = [self.parse_entity(entity_type, entity_data) for entity_data in data]
+        entities = self.parse_entities(entity_type, data)
 
         return entities
 
 
     @staticmethod
-    def parse_entity(entity_type, entity_data):
+    def parse_entities(entity_type, entity_data):
         response = json.loads(entity_data)
 
         if entity_type == "artists":

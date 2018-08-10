@@ -403,7 +403,7 @@ def deezer_api_playlists_output():
 
 
 def test_customization_service_parser_track(deezer_api_tracks_output):
-    tracks = DeezerCustomizationService.parse_entity("tracks", deezer_api_tracks_output)
+    tracks = DeezerCustomizationService.parse_entities("tracks", deezer_api_tracks_output)
     assert len(tracks) == 3
     assert tracks[0].name == "SICKO MODE"
 
@@ -416,18 +416,18 @@ def test_customization_service_parser_track_empty():
         "total": 0
     }      
     '''
-    tracks = DeezerCustomizationService.parse_entity("tracks", data)
+    tracks = DeezerCustomizationService.parse_entities("tracks", data)
     assert len(tracks) == 0
 
 
 def test_customization_service_parser_artist(deezer_api_artists_output):
-    artists = DeezerCustomizationService.parse_entity("artists", deezer_api_artists_output)
+    artists = DeezerCustomizationService.parse_entities("artists", deezer_api_artists_output)
 
     assert len(artists) == 13
 
 
 def test_customization_service_parser_playlist(deezer_api_playlists_output):
-    playlists = DeezerCustomizationService.parse_entity("playlists", deezer_api_playlists_output)
+    playlists = DeezerCustomizationService.parse_entities("playlists", deezer_api_playlists_output)
     assert len(playlists) == 1
 
 
@@ -439,5 +439,5 @@ def test_customization_service_parser_playlist_empty():
         "total": 0
     }      
     '''
-    playlists = DeezerCustomizationService.parse_entity("playlists", data)
+    playlists = DeezerCustomizationService.parse_entities("playlists", data)
     assert len(playlists) == 0
