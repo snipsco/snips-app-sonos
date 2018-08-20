@@ -42,11 +42,11 @@ class ConfigurationValidator(object):
 
         for mandatory_field in self.mandatory_fields:
             if not (mandatory_field.name in configuration_dict[mandatory_field.category].keys()):
-                errors.append("Missing field : [{}]{} in config.ini file. ".format(mandatory_field.category, mandatory_field.name))
+                errors.append("Missing field : In section [{}], field {} is missing config.ini file. ".format(mandatory_field.category, mandatory_field.name))
 
         for value_field in self.value_fields:
             if not (value_field.name in configuration_dict[value_field.category].keys()):
-                errors.append("Missing fields : [{}]{} in  config.ini file. ".format(value_field.category, value_field.name))
+                errors.append("Missing field : In section [{}], field {} is missing config.ini file. ".format(value_field.category, value_field.name))
             else:
                 value = configuration_dict[value_field.category][value_field.name]
                 if value not in value_field.possible_values:

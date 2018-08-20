@@ -50,6 +50,11 @@ pre {
     padding-bottom : 50px;
 }
 
+.flash {
+    background-color:#65C6BB;
+    color: white;
+}
+
 nav {
     color: #ccc;
     text-transform: uppercase;

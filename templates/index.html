@@ -12,6 +12,22 @@
         </div>
     </nav>
     <div class="container">
+
+        <!-- Flashing messages -->
+        {% if configuration_file_errors|length > 0 %}
+        <div class="flash content">
+            <h3>⚠️ Warning</h3>
+            <h5>Some error(s) occured with your configuration file, please correct them :</h5>
+            <ul>
+                {% for error in configuration_file_errors %}
+                    <li>{{error}}</li>
+                {% endfor %}
+                <li></li>
+            </ul>
+        </div>
+        {% endif %}
+        <!-- End of flashing message -->
+
         <div class="content">
             <!-- CONTENT GOES HERE -->
 
