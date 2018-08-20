@@ -82,8 +82,7 @@ class DeezerClient(object):
             response = requests.get(
                 query.endpoint,
                 params={
-                    'access_token': self.access_token,
-                    'output': 'jsonp'
+                    'access_token': self.access_token
                 })
 
             if response.ok:
@@ -101,7 +100,7 @@ class DeezerClient(object):
 class DeezerAPIQueryBuilder(object):
     ENTITY_TYPES = ["artists", "tracks", "playlists"]
 
-    DEEZER_ENDPOINT = "https://api.deezer.com/user/"
+    DEEZER_ENDPOINT = "https://api.deezer.com/user"
     ME_ROUTE = "me"
 
     def __init__(self):
@@ -109,9 +108,14 @@ class DeezerAPIQueryBuilder(object):
 
     def set_user_data(self):
         self.endpoint = '{}/{}/'.format(self.DEEZER_ENDPOINT, self.ME_ROUTE)
+        return self
 
     def set_entity_type(self, entity_type):
         if entity_type not in self.ENTITY_TYPES:
             raise DeezerQueryBuilderException("The entity type : {} is NOT supported".format(entity_type))
 
-        self.endpoint = '{}/{}/'.format(self.endpoint, entity_type)
+        self.endpoint = '{}{}/'.format(self.endpoint, entity_type)
+        return self
+
+    def limit(self, max_results):
+        return self

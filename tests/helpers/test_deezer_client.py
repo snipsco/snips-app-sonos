@@ -1,7 +1,7 @@
 import pytest
 
-from snipssonos.exceptions import MusicSearchCredentialsError
-from snipssonos.helpers.deezer_client import DeezerClient
+from snipssonos.exceptions import MusicSearchCredentialsError, DeezerQueryBuilderException
+from snipssonos.helpers.deezer_client import DeezerClient, DeezerAPIQueryBuilder
 
 MOCK_APP_ID = "1234567890"
 MOCK_APP_SECRET = "A1Z2E3R4T5Y6U7I8O9P0"
@@ -29,3 +29,24 @@ def test_expires_in_extraction():
 
     extracted_expires_in = dz._extract_access_token_expiration(text_response)
     assert extracted_expires_in == expires_in
+
+
+
+def test_api_query_builder_set_user_data():
+    dz_qb = DeezerAPIQueryBuilder()
+    expected_URL = "https://api.deezer.com/user/me/"
+    assert expected_URL == dz_qb.set_user_data().endpoint
+
+
+def test_api_query_builder_set_entity_type():
+    dz_qb = DeezerAPIQueryBuilder()
+    expected_URL = "https://api.deezer.com/user/me/tracks/"
+    assert expected_URL == dz_qb.set_user_data().set_entity_type("tracks").endpoint
+
+
+def test_api_query_builder_set_entity_type_raises_exception_for_wrong_entity_type():
+    dz_qb = DeezerAPIQueryBuilder()
+    expected_URL = "https://api.deezer.com/user/me/tracks/"
+    with pytest.raises(DeezerQueryBuilderException):
+        dz_qb.set_user_data().set_entity_type("yolo")
+
