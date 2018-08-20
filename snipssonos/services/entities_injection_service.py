@@ -48,7 +48,7 @@ class EntitiesInjectionService(Service):
         try:
             return {
                 'snips/artist': [artist.name for artist in data],
-                'snips/song': [track.name for track in data],
+                'snips/track': [track.name for track in data],
                 'playlistNameFR': [playlist.name for playlist in data]
             }[entity_slot_name]
         except KeyError:

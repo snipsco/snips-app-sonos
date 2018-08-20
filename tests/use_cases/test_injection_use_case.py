@@ -7,7 +7,7 @@ from snipssonos.use_cases.request_objects import InjectEntitiesRequestFactory
 
 ENTITIES = {
     "artists": "snips/artist",
-    "tracks": "snips/song",
+    "tracks": "snips/track",
     "playlists": "playlistNameFR",
 }
 
@@ -22,6 +22,7 @@ def test_inject_entities_successful(custom_mock, injection_mock):
     injection_request_dict = {
         'entities_type': ENTITIES
     }
+
     inject_entities_request = InjectEntitiesRequestFactory.from_dict(injection_request_dict)
     inject_entities = InjectEntitiesUseCase(custom_mock_instance, injection_mock_instance)
 

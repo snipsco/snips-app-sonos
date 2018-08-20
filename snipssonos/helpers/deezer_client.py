@@ -4,7 +4,7 @@ import requests
 import time
 
 from snipssonos.exceptions import MusicSearchProviderConnectionError, MusicSearchCredentialsError, \
-    DeezerClientAuthorizationException, DeezerClientAuthRefreshAccessTokenException
+    DeezerClientAuthorizationException, DeezerClientAuthRefreshAccessTokenException, DeezerQueryBuilderException
 
 
 class DeezerClient(object):
@@ -16,10 +16,10 @@ class DeezerClient(object):
     """
     AUTH_SERVICE_ENDPOINT = "https://connect.deezer.com/oauth/access_token.php"
 
-    def __init__(self, app_id, secret):
+    def __init__(self, app_id, secret, access_token=None):
         self.app_id = str(app_id)
         self.secret = str(secret)
-        self.access_token = None
+        self.access_token = access_token
         self.access_token_expiration = None
 
         self._check_credentials_validity()
@@ -47,9 +47,9 @@ class DeezerClient(object):
 
             if response.ok:
                 logging.debug("Succesfully retrieved the refresh and access tokens.")
-
-                access_token = self._extract_access_token(response)
-                expires_in = self._extract_access_token_expiration(response)
+                response_text = response.text
+                access_token = self._extract_access_token(response_text)
+                expires_in = self._extract_access_token_expiration(response_text)
                 return access_token, expires_in
             else:
                 logging.error(
@@ -66,30 +66,24 @@ class DeezerClient(object):
             raise MusicSearchCredentialsError("Could not find client_id or client_secret")
 
     def _extract_access_token(self, response):
-        values = [param_value.split('=') for param_value in response.text.split('&')]
+        values = [param_value.split('=') for param_value in response.split('&')]
         return str(values[0][1])
 
     def _extract_access_token_expiration(self, response):
-        values = [param_value.split('=') for param_value in response.text.split('&')]
+        values = [param_value.split('=') for param_value in response.split('&')]
         return int(values[1][1])
 
     def _set_access_token_expiration_time(self, response):
         expires_in = self._extract_access_token_expiration(response)
         self.access_token_expiration = time.time() + expires_in
 
-    def authenticate(self):
-        """
-        This method is used to refresh the access token.
-        """
-        if self.access_token is None or time.time() > self.access_token_expiration:
-            self.access_token = self.retrieve_access_token()
-
     def execute_query(self, query):
         try:
-            self.authenticate()
             response = requests.get(
                 query.endpoint,
-                params=query.params_to_dict())
+                params={
+                    'access_token': self.access_token
+                })
 
             if response.ok:
                 return response.text
@@ -100,5 +94,28 @@ class DeezerClient(object):
                         .format(response.reason, response.status_code, query.endpoint))
         except requests.exceptions.ConnectionError as e:
             raise MusicSearchProviderConnectionError(
-                "There was a problem while querying to Deezer api: {}".format(e.message))
+                "There was a problem while querying to Deezer API: {}".format(e.message))
 
+
+class DeezerAPIQueryBuilder(object):
+    ENTITY_TYPES = ["artists", "tracks", "playlists"]
+
+    DEEZER_ENDPOINT = "https://api.deezer.com/user"
+    ME_ROUTE = "me"
+
+    def __init__(self):
+        self.endpoint = None
+
+    def set_user_data(self):
+        self.endpoint = '{}/{}/'.format(self.DEEZER_ENDPOINT, self.ME_ROUTE)
+        return self
+
+    def set_entity_type(self, entity_type):
+        if entity_type not in self.ENTITY_TYPES:
+            raise DeezerQueryBuilderException("The entity type : {} is NOT supported".format(entity_type))
+
+        self.endpoint = '{}{}/'.format(self.endpoint, entity_type)
+        return self
+
+    def limit(self, max_results):
+        return self

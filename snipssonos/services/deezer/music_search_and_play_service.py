@@ -24,7 +24,8 @@ class DeezerMusicSearchService(MusicSearchService, MusicPlaybackService):
         self.query_builder = DeezerNodeQueryBuilder(first_device.name)
 
     def search_album(self, album_name):
-        search_query = self.query_builder\
+        search_query = self.query_builder \
+            .reset_field_filters() \
             .add_album_result_type()\
             .add_album_filter(album_name)\
             .generate_search_query()
@@ -32,7 +33,8 @@ class DeezerMusicSearchService(MusicSearchService, MusicPlaybackService):
         return self.DUMMY_LIST
 
     def search_album_for_artist(self, album_name, artist_name):
-        search_query = self.query_builder\
+        search_query = self.query_builder \
+            .reset_field_filters() \
             .add_album_result_type()\
             .add_album_filter(album_name)\
             .add_artist_filter(artist_name)\
@@ -50,7 +52,8 @@ class DeezerMusicSearchService(MusicSearchService, MusicPlaybackService):
         return self.search_album_for_artist(album_name, artist_name)
 
     def search_track(self, track_name):
-        search_query = self.query_builder\
+        search_query = self.query_builder \
+            .reset_field_filters() \
             .add_track_result_type()\
             .add_track_filter(track_name)\
             .generate_search_query()
@@ -58,7 +61,8 @@ class DeezerMusicSearchService(MusicSearchService, MusicPlaybackService):
         return self.DUMMY_LIST
 
     def search_track_for_artist(self, track_name, artist_name):
-        search_query = self.query_builder\
+        search_query = self.query_builder \
+            .reset_field_filters() \
             .add_track_result_type()\
             .add_track_filter(track_name)\
             .add_artist_filter(artist_name)\
@@ -96,6 +100,7 @@ class DeezerMusicSearchService(MusicSearchService, MusicPlaybackService):
 
     def search_artist(self, artist_name):
         search_query = self.query_builder\
+            .reset_field_filters()\
             .add_track_result_type()\
             .add_artist_filter(artist_name)\
             .generate_search_query()
@@ -108,7 +113,8 @@ class DeezerMusicSearchService(MusicSearchService, MusicPlaybackService):
         return self.search_artist(artist_name)
 
     def search_playlist(self, playlist_name):
-        search_query = self.query_builder\
+        search_query = self.query_builder \
+            .reset_field_filters() \
             .add_playlist_result_type()\
             .add_playlist_filter(playlist_name)\
             .generate_search_query()

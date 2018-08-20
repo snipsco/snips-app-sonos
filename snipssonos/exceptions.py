@@ -101,14 +101,23 @@ class DeezerClientAuthRefreshAccessTokenException(DeezerClientException):
     """An error occured when retrieving code from Spotify"""
 
 
+class QueryBuilderException(Exception):
+    """An error occured while building a query"""
+
+
 # Spotify query builder
-class SpotifyQueryBuilderException(Exception):
+class SpotifyQueryBuilderException(QueryBuilderException):
     """An error occurred within the Spotify Query Builder"""
 
 
 class SpotifyQueryBuilderNonExistentTimeRange(SpotifyQueryBuilderException):
     """The time range used does not exist, please use valid time ranges:
     'long_term', 'medium_term', 'short_term'"""
+
+
+# Deezer
+class DeezerQueryBuilderException(QueryBuilderException):
+    """An error occured when building a query for the Deezer API. """
 
 
 # Adapters exceptions
