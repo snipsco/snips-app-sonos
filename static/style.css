@@ -36,6 +36,12 @@ pre {
   border-left: 2px solid #69c;
 }
 
+.inline_code {
+    color: #96281B;
+    font-family: Courier;
+    background-color: #ECF0F1;
+}
+
 .container {
     border-radius: 4px;
     background-color: white;
