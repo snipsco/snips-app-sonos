@@ -7,7 +7,7 @@ from snipssonos.use_cases.request_objects import InjectEntitiesRequestFactory
 
 ENTITIES = {
     "artists": "snips/artist",
-    "tracks": "snips/song",
+    "tracks": "snips/track",
     "playlists": "playlistNameFR",
 }
 

@@ -48,7 +48,7 @@ def test_inject_entities_parse_track_data_correctly(mqtt_mock, artist_data, trac
     inject_entities = EntitiesInjectionService(hermes_host)
 
     # TODO put into a global vars file
-    entity_name = "snips/song"
+    entity_name = "snips/track"
 
     parsed_data = inject_entities.parse_data(entity_name, track_data)
     expected_parsed_data = ["Kendrick Lamar", "Beyonce"]
@@ -120,11 +120,11 @@ def test_inject_entities_publisher_is_called_correctly_adding_up_entities_payloa
     mqtt_instance = mqtt_mock.return_value
     hermes_host = "localhost"
     artist_entity_name = "snips/artist"
-    track_entity_name = "snips/song"
+    track_entity_name = "snips/track"
 
     entities_type = {
         "artists": "snips/artist",
-        "tracks": "snips/song",
+        "tracks": "snips/track",
     }
 
     music_customization_service = mock.Mock()
