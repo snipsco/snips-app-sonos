@@ -14,8 +14,7 @@ class PlayAlbumUseCase(UseCase):
     def process_request(self, request_object):
 
         device = self.device_discovery_service.get()
-        self.music_search_service.set_query_builder(device.name, NodeQueryBuilder)
-
+        
         results_albums = list()
 
         if request_object.playlist_name and request_object.artist_name and request_object.album_name:  # Album, artist, playlist
