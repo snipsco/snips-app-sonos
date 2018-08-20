@@ -23,6 +23,10 @@ class NodeQueryBuilder(object):
                 "The {} is not available {} use instead"
                 .format(music_service, ','.join(self.AVAILABLE_MUSIC_SERVICES)))
 
+    def reset_field_filters(self):
+        self.field_filters = list()
+        return self
+
     def add_result_type(self, result_type):
         self.result_type = result_type
         return self
