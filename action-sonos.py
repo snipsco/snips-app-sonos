@@ -42,7 +42,6 @@ from snipssonos.services.deezer.music_search_and_play_service import DeezerMusic
 # Utils functions
 CONFIG_INI = "config.ini"
 
-
 # Configuration
 CONFIGURATION = read_configuration_file(CONFIG_INI)
 validate_configuration_file(CONFIGURATION)
@@ -58,14 +57,11 @@ HERMES_HOST = "{}:1883".format(HOSTNAME)
 LANGUAGE = CONFIGURATION['global'].get('language', "fr")
 
 # Logging
-LOG_LEVEL = CONFIGURATION['global']['log_level']
+LOG_LEVEL = CONFIGURATION['global'].get('log_level')
 if LOG_LEVEL == "info":
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-elif LOG_LEVEL == "debug":
-    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+    logging.getLogger().setLevel(level=logging.INFO)
 else:
-    logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
-
+    logging.getLogger().setLevel(level=logging.DEBUG)
 
 
 # Hotword callback
@@ -232,6 +228,9 @@ def volumeSet_callback(hermes, intentMessage):
     if not response:
         logging.info(response.value)
         hermes.publish_end_session(intentMessage.session_id, hermes.feedback_service.get_short_error_message())
+
+        # TODO : Restore the volume to the previous level.
+
     else:
         logging.info(response)
         hermes.publish_end_session(intentMessage.session_id, "")
@@ -327,6 +326,8 @@ if __name__ == "__main__":
         h.feedback_service = FeedbackService(LANGUAGE)
         h.music_search_service = get_music_search_service(MUSIC_PROVIDER, h.device_discovery_service)
         h.music_playback_service = get_playback_service(MUSIC_PROVIDER)
+
+        logging.info("All services initialized. Waiting for queries ...")
 
         h \
             .subscribe_session_started(hotword_detected_callback) \
