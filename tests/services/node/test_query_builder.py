@@ -82,6 +82,6 @@ def test_query_is_generated_correctly(query_builder):
         .add_album_filter("my favourite album")
 
     query = query_builder.generate_search_query()
-    expected_query = "{}/device_name/musicsearch/deezer/album/my favourite album".format(BASE_ENDPOINT)
+    expected_query = '{}/device_name/musicsearch/deezer/album/album:"my favourite album"'.format(BASE_ENDPOINT)
 
     assert query == expected_query

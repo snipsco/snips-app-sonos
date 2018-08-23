@@ -12,6 +12,7 @@ class FeedbackService:
             'playlist': EN_TTS_PLAYING_PLAYLIST_TEMPLATE,
             'track': EN_TTS_PLAYING_TRACK_TEMPLATE,
             'album': EN_TTS_PLAYING_ALBUM_TEMPLATE,
+            'album_short': EN_TTS_PLAYING_ALBUM_SHORT_TEMPLATE,
             'artist': EN_TTS_PLAYING_ARTIST_TEMPLATE,
             'track_info': EN_TTS_TRACK_INFO
         },
@@ -23,6 +24,7 @@ class FeedbackService:
             'playlist': FR_TTS_PLAYING_PLAYLIST_TEMPLATE,
             'track': FR_TTS_PLAYING_TRACK_TEMPLATE,
             'album': FR_TTS_PLAYING_ALBUM_TEMPLATE,
+            'album_short': FR_TTS_PLAYING_ALBUM_SHORT_TEMPLATE,
             'artist': FR_TTS_PLAYING_ARTIST_TEMPLATE,
             'track_info': FR_TTS_TRACK_INFO
         }
@@ -55,6 +57,9 @@ class FeedbackService:
 
     def get_album_template(self):
         return self.FEEDBACK_OBJECT[self.language]['album']
+
+    def get_album_short_template(self):
+        return self.FEEDBACK_OBJECT[self.language]['album_short']
 
     def get_artist_template(self):
         return self.FEEDBACK_OBJECT[self.language]['artist']

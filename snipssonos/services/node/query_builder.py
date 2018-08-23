@@ -27,6 +27,10 @@ class NodeQueryBuilder(object):
         self.field_filters = list()
         return self
 
+    def add_field_filter(self, music_field_key, music_field_value):
+        self.field_filters.append((music_field_key, music_field_value))
+        return self
+
     def add_result_type(self, result_type):
         self.result_type = result_type
         return self
@@ -41,26 +45,26 @@ class NodeQueryBuilder(object):
         return self.add_result_type("playlist")
 
     def add_track_filter(self, track_name):
-        self.field_filters.append(track_name)
+        self.add_field_filter("track", track_name)
         return self
 
     def add_artist_filter(self, artist_name):
-        self.field_filters.append(artist_name)
+        self.add_field_filter("artist", artist_name)
         return self
 
     def add_album_filter(self, album_name):
-        self.field_filters.append(album_name)
+        self.add_field_filter("album", album_name)
         return self
 
     def add_playlist_filter(self, playlist_name):
-        self.field_filters.append(playlist_name)
+        self.add_field_filter("playlist", playlist_name)
         return self
 
     def _generate_base_endpoint(self):
         return "{}{}:{}".format(self.PROTOCOL, self.HOST, self.PORT)
 
     def _generate_query_terms(self):
-        return ' '.join(self.field_filters).strip()
+        return ' '.join(map(lambda field_filter: '{}:"{}"'.format(field_filter[0], field_filter[1]), self.field_filters))
 
     def generate_search_query(self):
         device_name = self.device_name
