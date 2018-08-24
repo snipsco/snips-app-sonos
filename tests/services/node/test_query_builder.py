@@ -48,25 +48,25 @@ def test_add_playlist_result_type(query_builder):
 def test_add_track_filter(query_builder):
     query_builder.add_track_filter("HUMBLE")
 
-    assert "HUMBLE" in query_builder.field_filters
+    assert "HUMBLE" in [filter_value for (filter_type, filter_value) in query_builder.field_filters]
 
 
 def test_add_artist_filter(query_builder):
     query_builder.add_artist_filter("Madonna")
 
-    assert "Madonna" in query_builder.field_filters
+    assert "Madonna" in [filter_value for (filter_type, filter_value) in query_builder.field_filters]
 
 
 def test_add_album_filter(query_builder):
     query_builder.add_album_filter("Scorpion")
 
-    assert "Scorpion" in query_builder.field_filters
+    assert "Scorpion" in [filter_value for (filter_type, filter_value) in query_builder.field_filters]
 
 
 def test_add_playlist_filter(query_builder):
     query_builder.add_playlist_filter("Summer Vibes")
 
-    assert "Summer Vibes" in query_builder.field_filters
+    assert "Summer Vibes" in [filter_value for (filter_type, filter_value) in query_builder.field_filters]
 
 
 def test_composition_of_filters(query_builder):
@@ -74,7 +74,8 @@ def test_composition_of_filters(query_builder):
         .add_playlist_filter("Summer Vibes")\
         .add_artist_filter("Madonna")
 
-    assert "Summer Vibes" in query_builder.field_filters and "Madonna" in query_builder.field_filters
+    field_filters_values = [filter_value for (filter_type, filter_value) in query_builder.field_filters]
+    assert "Summer Vibes" in field_filters_values and "Madonna" in field_filters_values
 
 
 def test_query_is_generated_correctly(query_builder):
