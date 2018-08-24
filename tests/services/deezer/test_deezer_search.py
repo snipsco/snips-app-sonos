@@ -19,7 +19,6 @@ def connected_device():
 
 @pytest.fixture
 def deezer_music_search_service():
-
     connected_device = Device(
         name="Anthony's Sonos",
         identifier="RINCON_XXXX",
@@ -36,9 +35,6 @@ def deezer_music_search_service():
 @mock.patch('snipssonos.services.deezer.music_search_and_play_service.requests')
 def test_search_album(mock_requests, mock_response, deezer_music_search_service,
                       connected_device):
-
-    # This test is dumb, it mocks stuff after they are supposed to be called ...
-
     deezer_music_search_service.search_album("favourite album")
     expected_query = "{}/{}/musicsearch/{}/{}/{}".format(BASE_ENDPOINT, connected_device.name, "deezer",
                                                          "album", "favourite album")
@@ -51,7 +47,7 @@ def test_search_album_for_artist(mock_requests, mock_response, deezer_music_sear
     deezer_music_search_service.search_album_for_artist("favourite album", "favourite artist")
 
     expected_query = "{}/{}/musicsearch/{}/{}/{}".format(BASE_ENDPOINT, connected_device.name, "deezer",
-                                                         "album", "favourite album favourite artist")
+                                                         "album", 'album:"favourite album":artist:"favourite artist"')
 
     mock_requests.get.assert_called_with(expected_query)
 
@@ -73,7 +69,7 @@ def test_search_album_for_artist_and_for_playlist(mock_requests, mock_response, 
     deezer_music_search_service.search_album_for_artist_and_for_playlist("favourite album", "favourite artist",
                                                                          "balling")
     expected_query = "{}/{}/musicsearch/{}/{}/{}".format(BASE_ENDPOINT, connected_device.name, "deezer",
-                                                         "album", "favourite album favourite artist")
+                                                         "album", 'album:"favourite album":artist:"favourite artist"')
 
     mock_requests.get.assert_called_with(expected_query)
 
@@ -94,7 +90,7 @@ def test_search_track_for_artist(mock_requests, mock_response, deezer_music_sear
     deezer_music_search_service.search_track_for_artist("my fav track", "my fav artist")
 
     expected_query = "{}/{}/musicsearch/{}/{}/{}".format(BASE_ENDPOINT, connected_device.name, "deezer",
-                                                         "song", "my fav track my fav artist")
+                                                         "song", 'track:"my fav track":artist:"my fav artist"')
     mock_requests.get.assert_called_with(expected_query)
 
 
