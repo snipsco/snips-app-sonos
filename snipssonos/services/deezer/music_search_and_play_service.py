@@ -43,7 +43,7 @@ class DeezerMusicSearchService(MusicSearchService, MusicPlaybackService):
             .add_album_filter(album_name) \
             .add_artist_filter(artist_name) \
             .generate_search_query()
-        logging.info("antho , the search query is  :{}".format(search_query))
+
         self.execute_query(search_query)
         return [Album("", album_name, [Artist("", artist_name)])]
 
@@ -77,7 +77,15 @@ class DeezerMusicSearchService(MusicSearchService, MusicPlaybackService):
 
     def search_track_for_album(self, track_name, album_name):
         logging.info("The method search_track_for_album is not implemented, rerouting to search_track")
-        self.search_track(track_name)
+        search_query = self.query_builder \
+            .reset_field_filters() \
+            .add_track_result_type() \
+            .add_track_filter(track_name) \
+            .add_album_filter(album_name) \
+            .generate_search_query()
+
+        self.execute_query(search_query)
+        return [Track("", track_name)]
 
     def search_track_for_playlist(self, track_name, playlist_name):
         logging.info("The method search_track_for_playlist is not implemented, rerouting to search_track")
