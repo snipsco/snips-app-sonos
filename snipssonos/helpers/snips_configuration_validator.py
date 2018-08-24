@@ -37,3 +37,4 @@ def validate_configuration_file(configuration_file, validator=None):
         validator.add_mandatory_fields(secret_client_id, secret_client_secret)
 
         return validator.validate_configuration(configuration_file)
+

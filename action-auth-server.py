@@ -4,9 +4,11 @@ import logging
 from flask import Flask, request, render_template
 
 from snipssonos.exceptions import MusicSearchProviderConnectionError, SpotifyClientAuthorizationException, \
-    SpotifyClientAuthRefreshAccessTokenException, DeviceDiscoveryException, DeezerClientAuthorizationException
+    SpotifyClientAuthRefreshAccessTokenException, DeviceDiscoveryException, DeezerClientAuthorizationException, \
+    ConfigurationFileValidationException
 from snipssonos.helpers.deezer_client import DeezerClient
 from snipssonos.helpers.snips_config_parser import read_configuration_file
+from snipssonos.helpers.snips_configuration_validator import validate_configuration_file
 from snipssonos.helpers.spotify_client import SpotifyClient
 from snipssonos.services.node.device_discovery_service import NodeDeviceDiscoveryService
 
@@ -27,8 +29,14 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
+    configuration_file_errors = list()
+    try:
+        validate_configuration_file(CONFIGURATION)
+    except ConfigurationFileValidationException as e:
+        configuration_file_errors = e.message
+
     return render_template("index.html", client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI,
-                           hostname=HOSTNAME, music_provider=MUSIC_PROVIDER)
+                           hostname=HOSTNAME, music_provider=MUSIC_PROVIDER, configuration_file_errors=configuration_file_errors)
 
 
 @app.route("/callback/")

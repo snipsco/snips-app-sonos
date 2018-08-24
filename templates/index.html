@@ -12,10 +12,26 @@
         </div>
     </nav>
     <div class="container">
+
+        <!-- Flashing messages -->
+        {% if configuration_file_errors|length > 0 %}
+        <div class="flash content">
+            <h3>⚠️ Warning</h3>
+            <h5>Some error(s) occured with your configuration file, please correct them :</h5>
+            <ul>
+                {% for error in configuration_file_errors %}
+                    <li>{{error}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        <!-- End of flashing message -->
+
         <div class="content">
             <!-- CONTENT GOES HERE -->
 
             <h1>Music Provider</h1>
+            In your configuration file : <span class="inline_code">config.ini</span>
             <section class="deck">
 
                 <div class="card {{'active' if music_provider == 'deezer' }}">

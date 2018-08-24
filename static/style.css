@@ -36,6 +36,12 @@ pre {
   border-left: 2px solid #69c;
 }
 
+.inline_code {
+    color: #96281B;
+    font-family: Courier;
+    background-color: #ECF0F1;
+}
+
 .container {
     border-radius: 4px;
     background-color: white;
@@ -48,6 +54,11 @@ pre {
     padding-left : 3em;
     padding-right : 3em;
     padding-bottom : 50px;
+}
+
+.flash {
+    background-color:#65C6BB;
+    color: white;
 }
 
 nav {
