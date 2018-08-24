@@ -2,7 +2,6 @@ from snipssonos.exceptions import NodeQueryBuilderMissingQueryData, NodeQueryBui
 
 
 class NodeQueryBuilder(object):
-
     AVAILABLE_MUSIC_SERVICES = ["spotify", "deezer"]
 
     PORT = 5005
@@ -21,13 +20,16 @@ class NodeQueryBuilder(object):
         else:
             raise NodeQueryBuilderUnavailableMusicService(
                 "The {} is not available {} use instead"
-                .format(music_service, ','.join(self.AVAILABLE_MUSIC_SERVICES)))
+                    .format(music_service, ','.join(self.AVAILABLE_MUSIC_SERVICES)))
 
     def reset_field_filters(self):
         self.field_filters = list()
         return self
 
     def add_field_filter(self, music_field_key, music_field_value):
+        if (music_field_value is None) or len(music_field_value) == 0:
+            raise NodeQueryBuilderMissingQueryData("Music field : {} has an empty value. The query is not valid. ".format(music_field_key))
+
         self.field_filters.append((music_field_key, music_field_value))
         return self
 
@@ -64,7 +66,14 @@ class NodeQueryBuilder(object):
         return "{}{}:{}".format(self.PROTOCOL, self.HOST, self.PORT)
 
     def _generate_query_terms(self):
-        return ' '.join(map(lambda field_filter: '{}:"{}"'.format(field_filter[0], field_filter[1]), self.field_filters))
+        if len(self.field_filters) == 0:
+            return ''
+
+        if len(self.field_filters) == 1:  # There's a single search term.
+            return ''.join([filter_value for (filter_type, filter_value) in self.field_filters])
+
+        return ':'.join(
+            map(lambda field_filter: '{}:"{}"'.format(field_filter[0], field_filter[1]), self.field_filters))
 
     def generate_search_query(self):
         device_name = self.device_name
