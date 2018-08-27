@@ -1,4 +1,5 @@
 import mock, pytest
+import requests
 
 from snipssonos.entities.album import Album
 from snipssonos.entities.artist import Artist
@@ -36,9 +37,43 @@ def deezer_music_search_service():
 
 @mock.patch('snipssonos.services.deezer.music_search_and_play_service.requests.Response')
 @mock.patch('snipssonos.services.deezer.music_search_and_play_service.requests')
+def test_music_search_provider_raises_exception_for_wrong_query_to_deezer_api(mock_requests, mock_response,
+                                                                              deezer_music_search_service):
+    mock_response.ok = False
+    mock_requests.get.return_value = mock_response
+
+    search_query = deezer_music_search_service.query_builder \
+        .add_track_result_type() \
+        .add_track_filter("Track") \
+        .generate_search_query()
+
+    with pytest.raises(MusicSearchProviderConnectionError) as e:
+        deezer_music_search_service.execute_query(search_query)
+
+
+@mock.patch('snipssonos.services.deezer.music_search_and_play_service.requests')
+def test_music_search_provider_raises_exception_for_wrong_query_to_deezer_api(mock_requests,
+                                                                              deezer_music_search_service):
+    mock_requests.get.side_effect = requests.exceptions.ConnectionError
+
+    search_query = deezer_music_search_service.query_builder \
+        .add_track_result_type() \
+        .add_track_filter("Track") \
+        .generate_search_query()
+
+    with pytest.raises(MusicSearchProviderConnectionError) as e:
+        deezer_music_search_service.execute_query(search_query)
+
+
+@mock.patch('snipssonos.services.deezer.music_search_and_play_service.requests.Response')
+@mock.patch('snipssonos.services.deezer.music_search_and_play_service.requests')
 def test_search_album(mock_requests, mock_response, deezer_music_search_service,
                       connected_device):
+    # query builder
+    # execute query
+
     result = deezer_music_search_service.search_album("favourite album")
+
     expected_query = "{}/{}/musicsearch/{}/{}/{}".format(BASE_ENDPOINT, connected_device.name, "deezer",
                                                          "album", "favourite album")
     mock_requests.get.assert_called_with(expected_query)
@@ -254,8 +289,10 @@ def test_method_dispatch_search_track_for_artist_and_for_playlist_to_search_trac
     deezer_music_search_service.search_track_for_artist.assert_called()
 
 
-def test_method_dispatch_track_for_album_and_for_artist_and_for_playlist_to_track_for_artist(deezer_music_search_service): # TODO : THERE
+def test_method_dispatch_track_for_album_and_for_artist_and_for_playlist_to_track_for_artist(
+        deezer_music_search_service):
     deezer_music_search_service.search_track_for_artist = mock.Mock()
-    deezer_music_search_service.search_track_for_album_and_for_artist_and_for_playlist("track", "album_name", "artist", "playlist_name")
+    deezer_music_search_service.search_track_for_album_and_for_artist_and_for_playlist("track", "album_name", "artist",
+                                                                                       "playlist_name")
 
     deezer_music_search_service.search_track_for_artist.assert_called()

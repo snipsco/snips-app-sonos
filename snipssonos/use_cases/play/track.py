@@ -23,6 +23,8 @@ class PlayTrackUseCase(UseCase):
 
         results_tracks = list()
 
+        # TODO : routing tests. 
+
         if track_name and album_name and artist_name and playlist_name:  # Track - Album - Artist - Playlist
             results_tracks = self.music_search_service.search_track_for_album_and_for_artist_and_for_playlist(
                 track_name, album_name, artist_name, playlist_name)
@@ -49,7 +51,7 @@ class PlayTrackUseCase(UseCase):
         if track_name and not (artist_name or playlist_name or album_name):
             results_tracks = self.music_search_service.search_track(request_object.track_name)
 
-        if len(results_tracks):
+        if len(results_tracks):  # TODO : write feedback tests
             first_result = results_tracks[0]
             self.music_playback_service.clear_queue(device)
             self.music_playback_service.play(device, first_result)

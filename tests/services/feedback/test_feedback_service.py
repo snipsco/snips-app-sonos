@@ -1,4 +1,5 @@
 import pytest
+from mock import mock
 
 from snipssonos.entities.artist import Artist
 from snipssonos.shared.response_object import ResponseFailure, ResponseSuccess
@@ -107,3 +108,32 @@ def test_concatenate_artist_entity_names():
     artist_names = feedback_service.concatenate_artists_in_string(artists)
     assert artist_names == "Drake, Kendrick Lamar, Alicia Keys"
 
+
+def test_feedback_get_album_feedback_without_artist_name():
+    feedback_service = FeedbackService('fr')
+
+    feedback_service.get_album_short_template = mock.Mock()
+
+    album_name = "In a Sentimental Mood"
+
+    feedback_service.get_album_message(album_name)
+    assert feedback_service.get_album_short_template.assert_called()
+
+
+def test_feedback_get_album_feedback_with_artist_name():
+    feedback_service = FeedbackService('fr')
+
+    feedback_service.get_album_template = mock.Mock()
+
+    album_name = "In a Sentimental Mood"
+
+    feedback_service.get_album_message(album_name, artist_name)
+    assert feedback_service.get_album_template.assert_called()
+
+
+def test_feedback_get_album_feedback_with_artist_name_produces_correct_output():
+    feedback_service = FeedbackService('fr')
+    album_name = "In a Sentimental Mood"
+    artist_name = "Alicia Keys, Kanye West"
+    actual_message = feedback_service.get_album_message(album_name, artist_name)
+    assert "In a Sentimental Mood par Alicia Keys, Kanye West" == actual_message
