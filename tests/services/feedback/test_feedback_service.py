@@ -126,7 +126,7 @@ def test_feedback_get_album_feedback_with_artist_name():
     feedback_service.get_album_template = mock.Mock()
 
     album_name = "In a Sentimental Mood"
-
+    artist_name = "Nina Simone"
     feedback_service.get_album_message(album_name, artist_name)
     assert feedback_service.get_album_template.assert_called()
 

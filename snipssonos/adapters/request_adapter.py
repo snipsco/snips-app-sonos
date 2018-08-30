@@ -38,9 +38,9 @@ class VolumeSetRequestAdapter(object):
     @staticmethod
     def extract_slots_dictionary(intentMessage):
         if len(intentMessage.slots.volume_set_percentage):
-            return {'volume_level': int(intentMessage.slots.volume_set_percentage.first().value)}
+            return {'volume_level': int(intentMessage.slots.volume_set_percentage.first().value.decode('utf-8'))}
         elif len(intentMessage.slots.volume_set_absolute):
-            return {'volume_level': int(intentMessage.slots.volume_set_absolute.first().value)}
+            return {'volume_level': int(intentMessage.slots.volume_set_absolute.first().value.decode('utf-8'))}
         else:
             return dict()
 
@@ -123,16 +123,16 @@ class PlayTrackRequestAdapter(object):
         slots_dict = dict()
 
         if len(intentMessage.slots.song_name):
-            slots_dict.update({'track_name': intentMessage.slots.song_name.first().value})
+            slots_dict.update({'track_name': intentMessage.slots.song_name.first().value.decode('utf-8')})
 
         if len(intentMessage.slots.artist_name):
-            slots_dict.update({'artist_name': intentMessage.slots.artist_name.first().value})
+            slots_dict.update({'artist_name': intentMessage.slots.artist_name.first().value.decode('utf-8')})
 
         if len(intentMessage.slots.album_name):
-            slots_dict.update({'album_name': intentMessage.slots.album_name.first().value})
+            slots_dict.update({'album_name': intentMessage.slots.album_name.first().value.decode('utf-8')})
 
         if len(intentMessage.slots.playlist_name):
-            slots_dict.update({'playlist_name': intentMessage.slots.playlist_name.first().value})
+            slots_dict.update({'playlist_name': intentMessage.slots.playlist_name.first().value.decode('utf-8')})
 
         return slots_dict
 
@@ -149,10 +149,10 @@ class PlayArtistRequestAdapter(object):
         slots_dict = dict()
 
         if len(intentMessage.slots.playlist_name):
-            slots_dict.update({'playlist_name': intentMessage.slots.playlist_name.first().value})
+            slots_dict.update({'playlist_name': intentMessage.slots.playlist_name.first().value.decode('utf-8')})
 
         if len(intentMessage.slots.artist_name):
-            slots_dict.update({'artist_name': intentMessage.slots.artist_name.first().value})
+            slots_dict.update({'artist_name': intentMessage.slots.artist_name.first().value.decode('utf-8')})
 
         return slots_dict
 
@@ -169,7 +169,7 @@ class PlayPlaylistRequestAdapter(object):
         slots_dict = dict()
 
         if len(intentMessage.slots.playlist_name):
-            slots_dict.update({'playlist_name': intentMessage.slots.playlist_name.first().value})
+            slots_dict.update({'playlist_name': intentMessage.slots.playlist_name.first().value.decode('utf-8')})
 
         return slots_dict
 
@@ -185,13 +185,13 @@ class PlayAlbumRequestAdapter(object):
         slots_dict = dict()
 
         if len(intentMessage.slots.album_name):
-            slots_dict.update({'album_name': intentMessage.slots.album_name.first().value})
+            slots_dict.update({'album_name': intentMessage.slots.album_name.first().value.decode('utf-8')})
 
         if len(intentMessage.slots.artist_name):
-            slots_dict.update({'artist_name': intentMessage.slots.artist_name.first().value})
+            slots_dict.update({'artist_name': intentMessage.slots.artist_name.first().value.decode('utf-8')})
 
         if len(intentMessage.slots.playlist_name):
-            slots_dict.update({'playlist_name': intentMessage.slots.playlist_name.first().value})
+            slots_dict.update({'playlist_name': intentMessage.slots.playlist_name.first().value.decode('utf-8')})
 
         return slots_dict
 
@@ -207,15 +207,15 @@ class PlayMusicRequestAdapter(object):
         slots_dict = dict()
 
         if len(intentMessage.slots.album_name):
-            slots_dict.update({'album_name': intentMessage.slots.album_name.first().value})
+            slots_dict.update({'album_name': intentMessage.slots.album_name.first().value.decode('utf-8')})
 
         if len(intentMessage.slots.artist_name):
-            slots_dict.update({'artist_name': intentMessage.slots.artist_name.first().value})
+            slots_dict.update({'artist_name': intentMessage.slots.artist_name.first().value.decode('utf-8')})
 
         if len(intentMessage.slots.playlist_name):
-            slots_dict.update({'playlist_name': intentMessage.slots.playlist_name.first().value})
+            slots_dict.update({'playlist_name': intentMessage.slots.playlist_name.first().value.decode('utf-8')})
 
         if len(intentMessage.slots.song_name):
-            slots_dict.update({'track_name': intentMessage.slots.song_name.first().value})
+            slots_dict.update({'track_name': intentMessage.slots.song_name.first().value.decode('utf-8')})
 
         return slots_dict

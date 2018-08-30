@@ -16,7 +16,7 @@ class PlayAlbumUseCase(UseCase):
         device = self.device_discovery_service.get()
         results_albums = list()
 
-        # TODO : routing tests. 
+        # TODO : routing tests.
 
         if request_object.playlist_name and request_object.artist_name and request_object.album_name:  # Album, artist, playlist
             results_albums = self.music_search_service.search_album_for_artist_and_for_playlist(
