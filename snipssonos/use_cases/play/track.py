@@ -23,39 +23,45 @@ class PlayTrackUseCase(UseCase):
 
         results_tracks = list()
 
+        # TODO : routing tests. 
+
         if track_name and album_name and artist_name and playlist_name:  # Track - Album - Artist - Playlist
             results_tracks = self.music_search_service.search_track_for_album_and_for_artist_and_for_playlist(
                 track_name, album_name, artist_name, playlist_name)
 
         if track_name and album_name and artist_name:  # Track - Album - Artist
-            results_tracks = self.music_search_service.search_track_for_album_and_for_artist
+            results_tracks = self.music_search_service.search_track_for_album_and_for_artist(track_name, album_name, artist_name)
 
         if track_name and album_name and playlist_name:  # Track - Album - Playlist
-            results_tracks = self.music_search_service.search_track_for_album_and_for_playlist
+            results_tracks = self.music_search_service.search_track_for_album_and_for_playlist(track_name, album_name, playlist_name)
 
         if track_name and artist_name and playlist_name:  # Track - Artist - Playlist
-            results_tracks = self.music_search_service.search_track_for_artist_and_for_playlist
+            results_tracks = self.music_search_service.search_track_for_artist_and_for_playlist(track_name, artist_name, playlist_name)
 
         if track_name and playlist_name:  # Track - Playlist
-            results_tracks = self.music_search_service.search_track_for_playlist()
+            results_tracks = self.music_search_service.search_track_for_playlist(track_name, playlist_name)
 
         if track_name and artist_name:  # Track - Artist
-            results_tracks = self.music_search_service.search_track_for_artist
+            results_tracks = self.music_search_service.search_track_for_artist(track_name, artist_name)
 
         if track_name and album_name:  # Track - Album
-            results_tracks = self.music_search_service.search_track_for_album
+            results_tracks = self.music_search_service.search_track_for_album(track_name, album_name)
 
         # Track
         if track_name and not (artist_name or playlist_name or album_name):
             results_tracks = self.music_search_service.search_track(request_object.track_name)
 
-        if len(results_tracks):
+        if len(results_tracks):  # TODO : write feedback tests
             first_result = results_tracks[0]
             self.music_playback_service.clear_queue(device)
             self.music_playback_service.play(device, first_result)
-            artist_names = self.feedback_service.concatenate_artists_in_string(first_result.artists)
-            tts_feedback = self.feedback_service.get_track_template()\
-                .format(first_result.name, artist_names)
+
+            if first_result.artists is None:
+                tts_feedback = ""
+            else:
+                artist_names = self.feedback_service.concatenate_artists_in_string(first_result.artists)
+                tts_feedback = self.feedback_service.get_track_template() \
+                    .format(first_result.name, artist_names)
             return ResponseSuccess(feedback=tts_feedback)
 
         return ResponseFailure.build_resource_error(self.feedback_service.get_generic_error_message())

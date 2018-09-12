@@ -229,7 +229,15 @@ def volumeSet_callback(hermes, intentMessage):
         logging.info(response.value)
         hermes.publish_end_session(intentMessage.session_id, hermes.feedback_service.get_short_error_message())
 
-        # TODO : Restore the volume to the previous level.
+        # Restore the volume to the previous level.
+        use_case = HotwordRestoreVolumeUseCase(hermes.device_discovery_service, hermes.device_transport_control_service,
+                                               hermes.state_persistence_service)
+        request_object = HotwordRestoreVolumeRequestObject()
+        response = use_case.execute(request_object)
+
+        if not response:
+            logging.error("Error when recovering the volume")
+            logging.error(response.message)
 
     else:
         logging.info(response)

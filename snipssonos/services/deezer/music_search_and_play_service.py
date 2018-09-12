@@ -1,6 +1,12 @@
 import requests
 import logging
 
+from requests import ConnectionError
+
+from snipssonos.entities.album import Album
+from snipssonos.entities.artist import Artist
+from snipssonos.entities.playlist import Playlist
+from snipssonos.entities.track import Track
 from snipssonos.services.node.query_builder import DeezerNodeQueryBuilder
 from snipssonos.services.music.search_service import MusicSearchService
 from snipssonos.services.music.playback_service import MusicPlaybackService
@@ -26,21 +32,22 @@ class DeezerMusicSearchService(MusicSearchService, MusicPlaybackService):
     def search_album(self, album_name):
         search_query = self.query_builder \
             .reset_field_filters() \
-            .add_album_result_type()\
-            .add_album_filter(album_name)\
+            .add_album_result_type() \
+            .add_album_filter(album_name) \
             .generate_search_query()
         self.execute_query(search_query)
-        return self.DUMMY_LIST
+        return [Album("", album_name)]
 
     def search_album_for_artist(self, album_name, artist_name):
         search_query = self.query_builder \
             .reset_field_filters() \
-            .add_album_result_type()\
-            .add_album_filter(album_name)\
-            .add_artist_filter(artist_name)\
+            .add_album_result_type() \
+            .add_album_filter(album_name) \
+            .add_artist_filter(artist_name) \
             .generate_search_query()
+
         self.execute_query(search_query)
-        return self.DUMMY_LIST
+        return [Album("", album_name, [Artist("", artist_name)])]
 
     def search_album_in_playlist(self, album_name, playlist_name):
         logging.info("The method search_album_in_playlist is not implemented, rerouting to search_album")
@@ -54,25 +61,33 @@ class DeezerMusicSearchService(MusicSearchService, MusicPlaybackService):
     def search_track(self, track_name):
         search_query = self.query_builder \
             .reset_field_filters() \
-            .add_track_result_type()\
-            .add_track_filter(track_name)\
+            .add_track_result_type() \
+            .add_track_filter(track_name) \
             .generate_search_query()
         self.execute_query(search_query)
-        return self.DUMMY_LIST
+        return [Track("", track_name)]
 
     def search_track_for_artist(self, track_name, artist_name):
         search_query = self.query_builder \
             .reset_field_filters() \
-            .add_track_result_type()\
-            .add_track_filter(track_name)\
-            .add_artist_filter(artist_name)\
+            .add_track_result_type() \
+            .add_track_filter(track_name) \
+            .add_artist_filter(artist_name) \
             .generate_search_query()
         self.execute_query(search_query)
-        return self.DUMMY_LIST
+        return [Track("", track_name, [Artist("", artist_name)])]
 
     def search_track_for_album(self, track_name, album_name):
         logging.info("The method search_track_for_album is not implemented, rerouting to search_track")
-        self.search_track(track_name)
+        search_query = self.query_builder \
+            .reset_field_filters() \
+            .add_track_result_type() \
+            .add_track_filter(track_name) \
+            .add_album_filter(album_name) \
+            .generate_search_query()
+
+        self.execute_query(search_query)
+        return [Track("", track_name)]
 
     def search_track_for_playlist(self, track_name, playlist_name):
         logging.info("The method search_track_for_playlist is not implemented, rerouting to search_track")
@@ -99,13 +114,13 @@ class DeezerMusicSearchService(MusicSearchService, MusicPlaybackService):
         return self.search_track_for_artist(track_name, artist_name)
 
     def search_artist(self, artist_name):
-        search_query = self.query_builder\
-            .reset_field_filters()\
-            .add_track_result_type()\
-            .add_artist_filter(artist_name)\
+        search_query = self.query_builder \
+            .reset_field_filters() \
+            .add_track_result_type() \
+            .add_artist_filter(artist_name) \
             .generate_search_query()
         self.execute_query(search_query)
-        return self.DUMMY_LIST
+        return [Artist("", artist_name)]
 
     def search_artist_for_playlist(self, artist_name, playlist_name):
         logging.info("The method search_artist_for_playlist is not implemented, rerouting "
@@ -115,11 +130,11 @@ class DeezerMusicSearchService(MusicSearchService, MusicPlaybackService):
     def search_playlist(self, playlist_name):
         search_query = self.query_builder \
             .reset_field_filters() \
-            .add_playlist_result_type()\
-            .add_playlist_filter(playlist_name)\
+            .add_playlist_result_type() \
+            .add_playlist_filter(playlist_name) \
             .generate_search_query()
         self.execute_query(search_query)
-        return self.DUMMY_LIST
+        return [Playlist("", playlist_name)]
 
     def execute_query(self, query):
         try:
@@ -128,11 +143,7 @@ class DeezerMusicSearchService(MusicSearchService, MusicPlaybackService):
                 raise MusicSearchProviderConnectionError(
                     "There was a problem while making a request to the Node server: '{} with status code {}',"
                     " while hitting the endpoint {}"
-                    .format(response.reason, response.status_code, query))
-        except requests.exceptions.ConnectionError as e:
+                        .format(response.reason, response.status_code, query))
+        except ConnectionError as e:
             raise MusicSearchProviderConnectionError(
                 "There was a problem while querying to Node server api: {}".format(e.message))
-
-
-
-

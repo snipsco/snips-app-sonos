@@ -62,3 +62,26 @@ def test_use_case_with_track_name_failure_tts(connected_device, feedback_service
     response = use_case.execute(req_obj)
 
     assert response.message == FR_TTS_GENERIC_ERROR
+
+
+def test_use_case_feedback(connected_device, feedback_service):
+    req_obj = PlayAlbumRequestFactory.from_dict(
+        {'album_name': 'Ash'})
+    mock_device_discovery_service = mock.Mock()
+    mock_device_discovery_service.get.return_value = connected_device  # We mock the device discovery service
+
+    mock_music_search_service = mock.Mock()
+
+    artists = [Artist(name="Ibeyi")]
+    mock_music_search_service.search_album.return_value = [Album("URI", "Ash", artists)]
+
+    mock_music_playback_service = mock.Mock()
+
+    use_case = PlayAlbumUseCase(mock_device_discovery_service, mock_music_search_service,
+                                mock_music_playback_service, feedback_service)
+    response = use_case.execute(req_obj)
+
+    feedback_service = FeedbackService('fr')
+    assert response.feedback == feedback_service.get_album_message("Ash", "Ibeyi")
+
+

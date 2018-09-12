@@ -22,6 +22,10 @@ FR_TTS_PLAYING_ARTIST_TEMPLATE = u"Lecture de la musique par {}"
 EN_TTS_PLAYING_ALBUM_TEMPLATE = u"Playing the album {} by artist {}"
 FR_TTS_PLAYING_ALBUM_TEMPLATE = u"Lecture de l'album {} par {}"
 
+EN_TTS_PLAYING_ALBUM_SHORT_TEMPLATE = u"Playing the album {}"
+FR_TTS_PLAYING_ALBUM_SHORT_TEMPLATE = u"Lecture de l'album {}"
+
+
 # Device Discovery
 FR_TTS_DEVICE_DISCOVERY_SERVICE_UNREACHABLE = u"Le service de découverte d'équipement n'est pas disponible ... Veuillez consulter la documentation pour plus d'information"
 EN_TTS_DEVICE_DISCOVERY_SERVICE_UNREACHABLE = u"The Device Discovery service is unreachable ... Please read our documentation for more information"

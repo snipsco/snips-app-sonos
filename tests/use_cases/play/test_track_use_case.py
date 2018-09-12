@@ -357,3 +357,6 @@ def test_use_case_with_track_name_failure_tts(connected_device, feedback_service
     response = use_case.execute(req_obj)
 
     assert response.message == FR_TTS_GENERIC_ERROR
+
+def test_use_case_feedback(connected_device, feedback_service):
+    assert False

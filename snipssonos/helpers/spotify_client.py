@@ -241,7 +241,7 @@ class SpotifyAPISearchQueryBuilder(object):
         return self
 
     def _get_query_from_field_filters(self):
-        return ''.join(["{}:{} ".format(field_filter[0], field_filter[1]) for field_filter in
+        return u''.join([u"{}:{} ".format(field_filter[0], field_filter[1]) for field_filter in
                         self.field_filters]).strip()
 
     def params_to_dict(self):
