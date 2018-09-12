@@ -117,7 +117,7 @@ def test_feedback_get_album_feedback_without_artist_name():
     album_name = "In a Sentimental Mood"
 
     feedback_service.get_album_message(album_name)
-    assert feedback_service.get_album_short_template.assert_called()
+    feedback_service.get_album_short_template.assert_called()
 
 
 def test_feedback_get_album_feedback_with_artist_name():
@@ -128,7 +128,7 @@ def test_feedback_get_album_feedback_with_artist_name():
     album_name = "In a Sentimental Mood"
     artist_name = "Nina Simone"
     feedback_service.get_album_message(album_name, artist_name)
-    assert feedback_service.get_album_template.assert_called()
+    feedback_service.get_album_template.assert_called()
 
 
 def test_feedback_get_album_feedback_with_artist_name_produces_correct_output():
@@ -136,4 +136,4 @@ def test_feedback_get_album_feedback_with_artist_name_produces_correct_output():
     album_name = "In a Sentimental Mood"
     artist_name = "Alicia Keys, Kanye West"
     actual_message = feedback_service.get_album_message(album_name, artist_name)
-    assert "In a Sentimental Mood par Alicia Keys, Kanye West" == actual_message
+    assert "Lecture de l'album In a Sentimental Mood par Alicia Keys, Kanye West" == actual_message

@@ -99,6 +99,8 @@ class FeedbackService:
             return self.get_short_error_message()
 
     def get_album_message(self, album_name, artist_name=None):
-        return ""
+        if not(artist_name is None):
+            return self.get_album_template().format(album_name, artist_name)
+        return self.get_album_short_template().format(album_name)
 
 

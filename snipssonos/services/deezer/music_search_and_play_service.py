@@ -1,6 +1,8 @@
 import requests
 import logging
 
+from requests import ConnectionError
+
 from snipssonos.entities.album import Album
 from snipssonos.entities.artist import Artist
 from snipssonos.entities.playlist import Playlist
@@ -142,6 +144,6 @@ class DeezerMusicSearchService(MusicSearchService, MusicPlaybackService):
                     "There was a problem while making a request to the Node server: '{} with status code {}',"
                     " while hitting the endpoint {}"
                         .format(response.reason, response.status_code, query))
-        except requests.exceptions.ConnectionError as e:
+        except ConnectionError as e:
             raise MusicSearchProviderConnectionError(
                 "There was a problem while querying to Node server api: {}".format(e.message))
