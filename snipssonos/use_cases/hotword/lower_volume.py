@@ -6,7 +6,7 @@ from snipssonos.use_cases.volume.set import VolumeSetUseCase
 
 
 class HotwordLowerVolumeUseCase(UseCase):
-    DEFAULT_LOW_VOLUME = 10
+    DEFAULT_LOW_VOLUME = 8
 
     def __init__(self, device_discovery_service, device_transport_control_service, state_persistence_service):
         self.device_discovery_service = device_discovery_service
