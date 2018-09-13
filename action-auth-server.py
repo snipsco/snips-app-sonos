@@ -30,13 +30,20 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     configuration_file_errors = list()
+    device_discovery_errors = list()
+    devices = list()
     try:
         validate_configuration_file(CONFIGURATION)
+        device_discovery_service = NodeDeviceDiscoveryService(CONFIGURATION)
+        devices = device_discovery_service.get_devices()
     except ConfigurationFileValidationException as e:
         configuration_file_errors = e.message
+    except DeviceDiscoveryException as e:
+        device_discovery_errors = ["Could not connect to the Node SONOS API ... "]
+
 
     return render_template("index.html", client_id=CLIENT_ID, client_secret=CLIENT_SECRET, redirect_uri=REDIRECT_URI,
-                           hostname=HOSTNAME, music_provider=MUSIC_PROVIDER, configuration_file_errors=configuration_file_errors)
+                           hostname=HOSTNAME, music_provider=MUSIC_PROVIDER, configuration_file_errors=configuration_file_errors, devices=devices, device_discovery_errors=device_discovery_errors)
 
 
 @app.route("/callback/")
