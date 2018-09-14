@@ -12,10 +12,10 @@
         </div>
     </nav>
     <div class="container">
-        <    class="content">
+        <div class="content">
 
-            <h1><i class="far fa-check-circle"></i> Success</h1>
-            <p>Here are your credentials that you'll have to write to the config.ini :</p>
+            <h1>Success</h1>
+            <p>Here are your credentials that you'll have to write to <b>secret section</b> of the <span class="inline_code">config.ini</span> file:</p>
                 <pre>
 access_token={{ access_token }}
 {% if refresh_token is defined %}
@@ -23,9 +23,7 @@ refresh_token={{ refresh_token }}
 {% endif %}
 expires_in={{ expires_in }}
                 </pre>
-
             <br/>
-
         <br>
         <a href="/">Back to home</a>
         </div>
