@@ -25,53 +25,62 @@
             </ul>
         </div>
         {% endif %}
+        {% if device_discovery_errors|length > 0 %}
+        <div class="flash content">
+            <h3>⚠️ Warning</h3>
+            <h5>Some error(s) occured with the device discovery service:</h5>
+            <ul>
+                {% for error in device_discovery_errors %}
+                    <li>{{error}}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
         <!-- End of flashing message -->
 
         <div class="content">
             <!-- CONTENT GOES HERE -->
 
-            <h1>Music Provider</h1>
-            In your configuration file : <span class="inline_code">config.ini</span>
-            <section class="deck">
-
-                <div class="card {{'active' if music_provider == 'deezer' }}">
-                    <img src="static/img/deezer.svg"/>
-                    <h3>Deezer</h3>
-                </div>
-                <div class="card {{'active' if music_provider == 'spotify' }}">
-                    <img src="static/img/spotify.svg"/>
-                    <h3>Spotify</h3>
-                </div>
-            </section>
-
-            <h1>SONOS</h1>
-
+            <h1>Jukebox</h1>
+            <br>
+            👋 You are using the jukebox project at version : <span class="inline_code">2.0.0</span>.<br>
+            📻 The Sonos devices that are detected are :  {% if devices %}{% for device in devices %}<span class="inline_code">{{device.name}}<i>#{{device.identifier}}</i></span>{% endfor %} {% else %}<i>No connected devices</i>{% endif %}<br>
+            ⚡️ You are streaming music from : <span class="inline_code">{{music_provider}}</span>.<br>
+            <br>
+            <h1>Setup Instructions</h1>
+            <h3>Creating a configuration file</h3>
+            <i>[On your Raspberry Pi]</i>
             <ul>
-                <li>Create a configuration file <b>config.ini</b> at the root of the snips-app-sonos folder</li>
-                <li>Make sure the configuration file has the following fields, in the <b>global section</b></li>
+                <li>Create a configuration file <b>config.ini</b> at the root of the <span class="inline_code">snips-app-sonos</span> folder</li>
+                <li>Make sure the configuration file has the following fields, in the <b>global</b> section</li>
                 <pre>hostname={{hostname}}</pre>
             </ul>
 
-            <h1>Accounts</h1>
-
-            <h2><i class="fab fa-spotify"></i> Spotify</h2>
-
+            <h3>Linking your Spotify Account</h3>
+            <i>[On your computer]</i>
             <ul>
-                <li>Head over to your <a href="https://developer.spotify.com/dashboard/applications">Spotify Developper Dashboard</a></li>
-                <li>Create an application, give it a name, and add a <i>Redirect URIs</i> that has the following structure :</li>
+                <li>Head over to your <a target="_blank" href="https://developer.spotify.com/dashboard/applications">Spotify Developper Dashboard</a> in your web browser</li>
+                <li>Create an application and give it a name. Make sure to tick the <i>"I don't know"</i> option when asked what you are building.</li>
+                <li>In the <i>Edit settings</i> section, add a <i>Redirect URIs</i> with the <b>EXACT</b> following value : </li>
                 <pre>http://{{hostname}}:5000/callback/</pre>
-                <li>You are now ready to edit your configuration file on your raspberry pi</li>
-                <li>Make sure the configuration file has the following fields, in the <b>global section</b></li>
-                <pre>redirect_uri</pre>
-                <li>Make sure the configuration file has the following fields, in the <b>secret section</b></li>
-                <pre>client_id</pre>
-                <pre>client_secret</pre>
-                <pre>redirect_uri</pre>
             </ul>
-            <a class="btn" href="https://accounts.spotify.com/authorize/?client_id={{client_id}}&response_type=code&scope=user-read-private%20user-top-read%20user-library-read%20playlist-read-private&redirect_uri={{redirect_uri|urlencode}}">Connect Spotify Account</a>
+            <i>[On your Raspberry Pi]</i>
+            <ul>
+                <li>Make sure the configuration file has the following fields, in the <b>secret section</b></li>
+                <pre>client_id=&ltyour client id&gt</pre>
+                <pre>client_secret=&ltyour client secret&gt</pre>
+                <pre>redirect_uri=&ltyour redirect URI&gt</pre>
+            </ul>
+            <i>[On your Computer]</i>
+            <ul>
+                <li>Link your Spotify account by clicking here : <a class="btn" href="https://accounts.spotify.com/authorize/?client_id={{client_id}}&response_type=code&scope=user-read-private%20user-top-read%20user-library-read%20playlist-read-private&redirect_uri={{redirect_uri|urlencode}}">Connect Spotify Account</a></li>
+                <li>Once you entered the credentials, restart the skill server</li>
+            </ul>
+            <br>
+            <b>You should be all set 😎 !</b>
+            <br>
+            <h1></h1>
 
-            <h2><i class="fab fa-deezer"></i> Deezer</h2>
-            <a href="https://connect.deezer.com/oauth/auth.php?app_id={{client_id}}&redirect_uri={{redirect_uri|urlencode}}&perms=basic_access,offline_access">Connnect Deezer account</a>
 
             <!-- CONTENT ENDS HERE -->
 
@@ -79,5 +88,6 @@
     </div>
     <p style="text-align:center">Made by <a href="https://snips.ai/">Snips</a></p>
     <p style="text-align:center"><i class="fab fa-github"></i><a href="https://github.com/snipsco/snips-app-sonos"> Source code </a></p>
+    <p style="text-align:center"><a href="https://connect.deezer.com/oauth/auth.php?app_id={{client_id}}&redirect_uri={{redirect_uri|urlencode}}&perms=basic_access,offline_access">Connnect Deezer account</a></p>
     </body>
 </html>
