@@ -7,7 +7,7 @@ from snipssonos.services.service import Service
 
 
 class EntitiesInjectionService(Service):
-    MQTT_TOPIC_INJECT = 'hermes/asr/inject'
+    MQTT_TOPIC_INJECT = 'hermes/injection/perform'
 
     def __init__(self, hermes_host):
         self.mqtt_client = MqttClient(hermes_host)
