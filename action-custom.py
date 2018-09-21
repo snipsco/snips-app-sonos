@@ -16,8 +16,8 @@ from snipssonos.use_cases.inject_entities import InjectEntitiesUseCase
 SECONDS_IN_A_DAY = 86400.0
 
 ENTITIES = {
-    "artists": "snips/artist",
-    "tracks": "snips/track",
+    "artists": "snips/musicArtist",
+    "tracks": "snips/musicTrack",
     "playlists": "playlistNameFR",
 }
 
