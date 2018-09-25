@@ -49,7 +49,6 @@ class EntitiesInjectionService(Service):
             return {
                 'snips/musicArtist': [artist.name for artist in data],
                 'snips/musicTrack': [track.name for track in data],
-                'playlistNameFR': [playlist.name for playlist in data]
             }[entity_slot_name]
         except KeyError:
             raise InvalidEntitySlotName("The entity slot name {} has not been defined"
