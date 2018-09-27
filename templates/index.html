@@ -48,6 +48,17 @@
             ⚡️ You are streaming music from : <span class="inline_code">{{music_provider}}</span>.<br>
             <br>
             <h1>Setup Instructions</h1>
+            <p>Instructions for :
+            <select id="music_provider_select">
+              <option value="deezer">Deezer</option>
+              <option value="spotify">Spotify</option>
+            </select>
+            </p>
+            <div id="no_instructions">
+                <p>Please, select a Music Provider here 👆</p>
+            </div>
+
+            <div id="deezer_instructions" class="gone">
             <h3>Creating a configuration file</h3>
             <i>[On your Raspberry Pi]</i>
             <ul>
@@ -55,39 +66,91 @@
                 <li>Make sure the configuration file has the following fields, in the <b>global</b> section</li>
                 <pre>hostname={{hostname}}</pre>
             </ul>
+                <h3>Linking your Deezer Account</h3>
+                <i>[On your computer]</i>
+                <ul>
+                    <li>Head over to your <a target="_blank" href="https://developers.deezer.com/">Deezer Developper Dashboard</a> in your web browser</li>
+                    <li>Create an application and give it a name.
+                    <li>In the <i>Redirect URI</i> field, fill in this <b>EXACT</b> following value : </li>
+                    <pre>http://{{hostname}}:5000/callback/</pre>
+                </ul>
+                <i>[On your Raspberry Pi]</i>
+                <ul>
+                    <li>Make sure the configuration file has the following fields, in the <b>secret section</b></li>
+                    <pre>client_id=&ltyour client id&gt</pre>
+                    <pre>client_secret=&ltyour client secret&gt</pre>
+                    <pre>redirect_uri=&ltyour redirect URI&gt</pre>
+                </ul>
+                <i>[On your Computer]</i>
+                <ul>
+                    <li>Link your Spotify account by clicking here : <a class="btn" href="https://connect.deezer.com/oauth/auth.php?app_id={{client_id}}&redirect_uri={{redirect_uri|urlencode}}&perms=basic_access,offline_access">Connect Deezer Account</a></li>
+                    <li>Once you entered the credentials, restart the skill server</li>
+                </ul>
+                <br>
+                <b>You should be all set 😎 !</b>
+                <br>
+            </div>
 
-            <h3>Linking your Spotify Account</h3>
-            <i>[On your computer]</i>
-            <ul>
-                <li>Head over to your <a target="_blank" href="https://developer.spotify.com/dashboard/applications">Spotify Developper Dashboard</a> in your web browser</li>
-                <li>Create an application and give it a name. Make sure to tick the <i>"I don't know"</i> option when asked what you are building.</li>
-                <li>In the <i>Edit settings</i> section, add a <i>Redirect URIs</i> with the <b>EXACT</b> following value : </li>
-                <pre>http://{{hostname}}:5000/callback/</pre>
-            </ul>
-            <i>[On your Raspberry Pi]</i>
-            <ul>
-                <li>Make sure the configuration file has the following fields, in the <b>secret section</b></li>
-                <pre>client_id=&ltyour client id&gt</pre>
-                <pre>client_secret=&ltyour client secret&gt</pre>
-                <pre>redirect_uri=&ltyour redirect URI&gt</pre>
-            </ul>
-            <i>[On your Computer]</i>
-            <ul>
-                <li>Link your Spotify account by clicking here : <a class="btn" href="https://accounts.spotify.com/authorize/?client_id={{client_id}}&response_type=code&scope=user-read-private%20user-top-read%20user-library-read%20playlist-read-private&redirect_uri={{redirect_uri|urlencode}}">Connect Spotify Account</a></li>
-                <li>Once you entered the credentials, restart the skill server</li>
-            </ul>
-            <br>
-            <b>You should be all set 😎 !</b>
-            <br>
-            <h1></h1>
+            <div id="spotify_instructions" class="gone">
+                <h3>Creating a configuration file</h3>
+                <i>[On your Raspberry Pi]</i>
+                <ul>
+                    <li>Create a configuration file <b>config.ini</b> at the root of the <span class="inline_code">snips-app-sonos</span> folder</li>
+                    <li>Make sure the configuration file has the following fields, in the <b>global</b> section</li>
+                    <pre>hostname={{hostname}}</pre>
+                </ul>
 
+                <h3>Linking your Spotify Account</h3>
+                <i>[On your computer]</i>
+                <ul>
+                    <li>Head over to your <a target="_blank" href="https://developer.spotify.com/dashboard/applications">Spotify Developper Dashboard</a> in your web browser</li>
+                    <li>Create an application and give it a name. Make sure to tick the <i>"I don't know"</i> option when asked what you are building.</li>
+                    <li>In the <i>Edit settings</i> section, add a <i>Redirect URIs</i> with the <b>EXACT</b> following value : </li>
+                    <pre>http://{{hostname}}:5000/callback/</pre>
+                </ul>
+                <i>[On your Raspberry Pi]</i>
+                <ul>
+                    <li>Make sure the configuration file has the following fields, in the <b>secret section</b></li>
+                    <pre>client_id=&ltyour client id&gt</pre>
+                    <pre>client_secret=&ltyour client secret&gt</pre>
+                    <pre>redirect_uri=&ltyour redirect URI&gt</pre>
+                </ul>
+                <i>[On your Computer]</i>
+                <ul>
+                    <li>Link your Spotify account by clicking here : <a class="btn" href="https://accounts.spotify.com/authorize/?client_id={{client_id}}&response_type=code&scope=user-read-private%20user-top-read%20user-library-read%20playlist-read-private&redirect_uri={{redirect_uri|urlencode}}">Connect Spotify Account</a></li>
+                    <li>Once you entered the credentials, restart the skill server</li>
+                </ul>
+                <br>
+                <b>You should be all set 😎 !</b>
+                <br>
 
+            </div>
             <!-- CONTENT ENDS HERE -->
 
         </div>
     </div>
     <p style="text-align:center">Made by <a href="https://snips.ai/">Snips</a></p>
     <p style="text-align:center"><i class="fab fa-github"></i><a href="https://github.com/snipsco/snips-app-sonos"> Source code </a></p>
-    <p style="text-align:center"><a href="https://connect.deezer.com/oauth/auth.php?app_id={{client_id}}&redirect_uri={{redirect_uri|urlencode}}&perms=basic_access,offline_access">Connnect Deezer account</a></p>
     </body>
+    <script>
+        document.getElementById("music_provider_select").onchange = function(value){
+            var selected_value = value.target.value;
+
+            var deezer_instructions_container = document.getElementById("deezer_instructions")
+            var spotify_instructions_container = document.getElementById("spotify_instructions")
+            var no_instructions_container = document.getElementById("no_instructions")
+
+
+            if (selected_value == "spotify") {
+                no_instructions_container.classList.add("gone")
+                spotify_instructions_container.classList.remove("gone")
+                deezer_instructions_container.classList.add("gone")
+            }
+            if (selected_value == "deezer") {
+                no_instructions_container.classList.add("gone")
+                spotify_instructions_container.classList.add("gone")
+                deezer_instructions_container.classList.remove("gone")
+            }
+        }
+    </script>
 </html>
