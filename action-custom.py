@@ -3,6 +3,7 @@
 
 import logging
 import time
+import sys
 
 from snipssonos.helpers.snips_configuration_validator import validate_configuration_file
 from snipssonos.services.deezer.music_customization_service import DeezerCustomizationService
@@ -36,6 +37,33 @@ else:
 
 MUSIC_PROVIDER = CONFIGURATION['global']['music_provider']
 
+
+def perform_injection():
+    # TODO first call get all top user data for the different time ranges
+    # then in the loop just keep getting short term top data
+    inject_entities_request = InjectEntitiesRequestFactory \
+        .from_dict(entities)
+
+    use_case = InjectEntitiesUseCase(music_customization_service, entities_injection_service)
+
+    response = use_case.execute(inject_entities_request)
+    return response
+
+def report_injection_results(response):
+    logging.info("Response: {}".format(bool(response)))
+    if response:
+        logging.info("The injection was successful")
+    else:
+        logging.error("The injection was not successfull")
+        logging.error("Response type: {}".format(response.type))
+        logging.error("Response message: {}".format(response.message))
+        logging.error("Response exception: {}".format(response.exception))
+        exit(1)
+
+        if response.type == ResponseFailure.SYSTEM_ERROR:
+            logging.error(response.tb)
+
+
 if __name__ == "__main__":
     entities = {
         'entities_type': ENTITIES
@@ -55,27 +83,14 @@ if __name__ == "__main__":
 
     entities_injection_service = EntitiesInjectionService(HOSTNAME)
 
-    starttime = time.time()
-    # Code for scheduling taken from: https://stackoverflow.com/a/25251804
-    # TODO first call get all top user data for the different time ranges
-    # then in the loop just keep getting short term top data
-    while True:
-        inject_entities_request = InjectEntitiesRequestFactory \
-            .from_dict(entities)
+    if "--daemon" in sys.argv:
+        starttime = time.time()
+        while True:
+            response = perform_injection()
+            report_injection_results(response)
+            time.sleep(SECONDS_IN_A_DAY - ((time.time() - starttime) % SECONDS_IN_A_DAY))
+    else:
+        response = perform_injection()
+        report_injection_results(response)
 
-        use_case = InjectEntitiesUseCase(music_customization_service, entities_injection_service)
 
-        response = use_case.execute(inject_entities_request)
-        logging.info("Response: {}".format(bool(response)))
-        if response:
-            logging.info("The injection was successful")
-        else:
-            logging.error("The injection was not successfull")
-            logging.error("Response type: {}".format(response.type))
-            logging.error("Response message: {}".format(response.message))
-            logging.error("Response exception: {}".format(response.exception))
-
-            if response.type == ResponseFailure.SYSTEM_ERROR:
-                logging.error(response.tb)
-
-        time.sleep(SECONDS_IN_A_DAY - ((time.time() - starttime) % SECONDS_IN_A_DAY))
