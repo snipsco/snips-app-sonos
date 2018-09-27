@@ -7,7 +7,7 @@ from snipssonos.entities.track import Track
 from snipssonos.entities.playlist import Playlist
 from snipssonos.exceptions import InvalidEntitySlotName
 
-MQTT_TOPIC_INJECT = 'hermes/asr/inject'
+MQTT_TOPIC_INJECT = 'hermes/injection/perform'
 
 
 @pytest.fixture
@@ -34,7 +34,7 @@ def test_inject_entities_parse_artist_data_correctly(mqtt_mock, artist_data):
     inject_entities = EntitiesInjectionService(hermes_host)
 
     # TODO put into a global vars file
-    entity_name = "snips/artist"
+    entity_name = "snips/musicArtist"
 
     parsed_data = inject_entities.parse_data(entity_name, artist_data)
     expected_parsed_data = ["Kendrick Lamar", "Beyonce"]
@@ -48,23 +48,9 @@ def test_inject_entities_parse_track_data_correctly(mqtt_mock, artist_data, trac
     inject_entities = EntitiesInjectionService(hermes_host)
 
     # TODO put into a global vars file
-    entity_name = "snips/track"
+    entity_name = "snips/musicTrack"
 
     parsed_data = inject_entities.parse_data(entity_name, track_data)
-    expected_parsed_data = ["Kendrick Lamar", "Beyonce"]
-    assert len(parsed_data) == len(expected_parsed_data)
-    assert parsed_data == expected_parsed_data
-
-
-@mock.patch('snipssonos.services.entities_injection_service.MqttClient')
-def test_inject_entities_parse_playlist_data_correctly(mqtt_mock, artist_data, track_data, playlist_data):
-    hermes_host = "localhost"
-    inject_entities = EntitiesInjectionService(hermes_host)
-
-    # TODO put into a global vars file
-    entity_name = "playlistNameFR"
-
-    parsed_data = inject_entities.parse_data(entity_name, playlist_data)
     expected_parsed_data = ["Kendrick Lamar", "Beyonce"]
     assert len(parsed_data) == len(expected_parsed_data)
     assert parsed_data == expected_parsed_data
@@ -84,7 +70,7 @@ def test_inject_entities_parse_unknown_data_correctly(mqtt_mock):
 @mock.patch('snipssonos.services.entities_injection_service.MqttClient')
 def test_inject_entities_payload_has_correct_format(mqtt_mock, artist_data):
     hermes_host = "localhost"
-    artist_entity_name = "snips/artist"
+    artist_entity_name = "snips/musicArtist"
 
     inject_entities = EntitiesInjectionService(hermes_host)
     inject_entities.build_entities_payload(artist_entity_name, artist_data)
@@ -97,10 +83,10 @@ def test_inject_entities_payload_has_correct_format(mqtt_mock, artist_data):
 def test_inject_entities_publisher_is_called_correctly(mqtt_mock, artist_data):
     mqtt_instance = mqtt_mock.return_value
     hermes_host = "localhost"
-    artist_entity_name = "snips/artist"
+    artist_entity_name = "snips/musicArtist"
 
     entities_type = {
-        "artists": "snips/artist",
+        "artists": "snips/musicArtist",
     }
 
     music_customization_service = mock.Mock()
@@ -119,12 +105,12 @@ def test_inject_entities_publisher_is_called_correctly(mqtt_mock, artist_data):
 def test_inject_entities_publisher_is_called_correctly_adding_up_entities_payload(mqtt_mock, artist_data):
     mqtt_instance = mqtt_mock.return_value
     hermes_host = "localhost"
-    artist_entity_name = "snips/artist"
-    track_entity_name = "snips/track"
+    artist_entity_name = "snips/musicArtist"
+    track_entity_name = "snips/musicTrack"
 
     entities_type = {
-        "artists": "snips/artist",
-        "tracks": "snips/track",
+        "artists": "snips/musicArtist",
+        "tracks": "snips/musicTrack",
     }
 
     music_customization_service = mock.Mock()
