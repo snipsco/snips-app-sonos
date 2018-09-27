@@ -34,7 +34,7 @@ Setting up the Sonos API service
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Running tests
-~~~~~~~~~~~~~
+-------------
 
 Create a virtual environment, and run:
 
