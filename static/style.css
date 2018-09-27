@@ -36,6 +36,13 @@ pre {
   border-left: 2px solid #69c;
 }
 
+.gone {
+    display: none;
+}
+.hidden {
+    visibility: hidden;
+}
+
 .inline_code {
     color: #96281B;
     font-family: Courier;
