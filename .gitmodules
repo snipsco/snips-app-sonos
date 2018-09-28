@@ -1,0 +1,3 @@
+[submodule "node-sonos-http-api"]
+	path = node-sonos-http-api
+	url = git@github.com:snipsco-forks/node-sonos-http-api.git
