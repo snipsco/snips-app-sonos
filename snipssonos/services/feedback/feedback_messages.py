@@ -1,4 +1,6 @@
 # coding:utf-8
+from __future__ import unicode_literals
+
 
 EN_TTS_GENERIC_ERROR = u"Sorry, I couln't find any music with those parameters. Please try asking it a different way, or try with other music !"
 FR_TTS_GENERIC_ERROR = u"Désolé, je ne trouve pas de musique correspondant à votre recherche. Veuillez formuler votre requête différemment."
