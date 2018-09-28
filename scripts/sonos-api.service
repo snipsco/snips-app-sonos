@@ -1,0 +1,17 @@
+[Unit]
+Description=SONOS API Server
+After=network.target
+
+[Service]
+Group=pi
+User=pi
+ExecStart=/usr/bin/node /var/lib/snips/skills/snips-app-sonos/node-sonos-http-api/server.js
+Restart=always
+RestartSec=5
+ProtectSystem=strict
+ProtectHome=true
+ProtectControlGroups=true
+ReadWritePaths=/var/lib/snips/skills
+
+[Install]
+WantedBy=multi-user.target
