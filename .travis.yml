@@ -8,3 +8,6 @@ install:
 - python -m pip install tox
 script:
 - tox
+
+git:
+  submodules: false
