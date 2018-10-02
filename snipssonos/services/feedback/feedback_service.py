@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 from snipssonos.services.feedback.feedback_messages import *
 import snipssonos.exceptions
 

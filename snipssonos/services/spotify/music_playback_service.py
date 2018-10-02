@@ -1,3 +1,5 @@
+from __future__ import unicode_literals
+
 import requests
 from requests_futures.sessions import FuturesSession
 
