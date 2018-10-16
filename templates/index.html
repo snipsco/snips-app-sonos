@@ -80,6 +80,7 @@
                     <pre>client_id=&ltyour client id&gt</pre>
                     <pre>client_secret=&ltyour client secret&gt</pre>
                     <pre>redirect_uri=&ltyour redirect URI&gt</pre>
+		    <li>Restart the web server (sudo systemctl restart snips-skill-server.service or sudo systemctl restart snips-sonos-web.service)</li>
                 </ul>
                 <i>[On your Computer]</i>
                 <ul>
@@ -114,7 +115,8 @@
                     <pre>client_id=&ltyour client id&gt</pre>
                     <pre>client_secret=&ltyour client secret&gt</pre>
                     <pre>redirect_uri=&ltyour redirect URI&gt</pre>
-                </ul>
+                </ul>	
+		<li>Restart the web server (sudo systemctl restart snips-skill-server.service or sudo systemctl restart snips-sonos-web.service)</li>
                 <i>[On your Computer]</i>
                 <ul>
                     <li>Link your Spotify account by clicking here : <a class="btn" href="https://accounts.spotify.com/authorize/?client_id={{client_id}}&response_type=code&scope=user-read-private%20user-top-read%20user-library-read%20playlist-read-private&redirect_uri={{redirect_uri|urlencode}}">Connect Spotify Account</a></li>
