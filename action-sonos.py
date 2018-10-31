@@ -33,11 +33,13 @@ from snipssonos.services.node.device_discovery_service import NodeDeviceDiscover
 from snipssonos.services.node.device_transport_control import NodeDeviceTransportControlService
 from snipssonos.services.spotify.music_playback_service import SpotifyNodeMusicPlaybackService
 from snipssonos.services.deezer.music_playback_service import DeezerNodeMusicPlaybackService
+from snipssonos.services.local_library.music_playback_service import LocalLibraryNodeMusicPlaybackService
 from snipssonos.services.spotify.music_search_service import SpotifyMusicSearchService
 from snipssonos.services.hermes.state_persistence import HermesStatePersistence
 from snipssonos.services.feedback.feedback_service import FeedbackService
 
 from snipssonos.services.deezer.music_search_and_play_service import DeezerMusicSearchService
+from snipssonos.services.local_library.music_search_and_play_service import LocalLibraryMusicSearchService
 
 # Utils functions
 CONFIG_INI = "config.ini"
@@ -328,6 +330,8 @@ def playMusic_callback(hermes, intentMessage):
 
 
 def get_playback_service(music_provider):
+    if music_provider == "local":
+        return LocalLibraryNodeMusicPlaybackService()
     if music_provider == "deezer":
         return DeezerNodeMusicPlaybackService()
     if music_provider == "spotify":
@@ -337,6 +341,8 @@ def get_playback_service(music_provider):
 def get_music_search_service(music_provider, device_disco_service):
     if music_provider == "spotify":
         return SpotifyMusicSearchService(CLIENT_ID, CLIENT_SECRET, REFRESH_TOKEN)
+    if music_provider == "local":
+        return LocalLibraryMusicSearchService(device_disco_service)
     if music_provider == "deezer":
         return DeezerMusicSearchService(device_disco_service)
 

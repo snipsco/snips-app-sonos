@@ -4,7 +4,7 @@ from snipssonos.exceptions import NodeQueryBuilderMissingQueryData, NodeQueryBui
 
 
 class NodeQueryBuilder(object):
-    AVAILABLE_MUSIC_SERVICES = ["spotify", "deezer"]
+    AVAILABLE_MUSIC_SERVICES = ["spotify", "deezer", "library"]
 
     PORT = 5005
     HOST = "localhost"
@@ -95,6 +95,9 @@ class DeezerNodeQueryBuilder(NodeQueryBuilder):
     def __init__(self, device_name):
         super(DeezerNodeQueryBuilder, self).__init__(device_name, "deezer")
 
+class LocalLibraryNodeQueryBuilder(DeezerNodeQueryBuilder):
+    def __init__(self, device_name):
+        super(DeezerNodeQueryBuilder, self).__init__(device_name, "library")
 
 class SpotifyNodeQueryBuilder():
     def __init__(self, device_name):

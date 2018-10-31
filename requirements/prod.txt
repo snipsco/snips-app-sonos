@@ -1,3 +1,4 @@
+future==0.16
 apiwrapper
 hermes_python
 requests
