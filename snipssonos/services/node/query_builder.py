@@ -98,6 +98,15 @@ class DeezerNodeQueryBuilder(NodeQueryBuilder):
 class LocalLibraryNodeQueryBuilder(DeezerNodeQueryBuilder):
     def __init__(self, device_name):
         super(DeezerNodeQueryBuilder, self).__init__(device_name, "library")
+    
+    def generate_search_playlist_query(self, playlist_name):
+        device_name = self.device_name
+        base_endpoint = self._generate_base_endpoint()
+        fields_query = self._generate_query_terms()
+        if playlist_name:
+            return "{}/{}/playlist/{}".format(base_endpoint, device_name, playlist_name)
+        else:
+            raise NodeQueryBuilderMissingQueryData("Result type and/or field filters have not been set")
 
 class SpotifyNodeQueryBuilder():
     def __init__(self, device_name):

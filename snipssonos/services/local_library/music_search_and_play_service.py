@@ -1,5 +1,6 @@
 from __future__ import unicode_literals
 
+from snipssonos.entities.playlist import Playlist
 from snipssonos.services.node.query_builder import LocalLibraryNodeQueryBuilder
 from snipssonos.services.deezer.music_search_and_play_service import DeezerMusicSearchService
 
@@ -16,3 +17,8 @@ class LocalLibraryMusicSearchService(DeezerMusicSearchService):
         self.device_discovery_service = device_discovery_service
         first_device = self.device_discovery_service.get()
         self.query_builder = LocalLibraryNodeQueryBuilder(first_device.name)
+    
+    def search_playlist(self, playlist_name):
+        search_query = self.query_builder.generate_search_playlist_query(playlist_name)
+        self.execute_query(search_query)
+        return [Playlist("", playlist_name)]
